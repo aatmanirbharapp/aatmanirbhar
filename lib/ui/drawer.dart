@@ -1,7 +1,8 @@
+import 'package:atamnirbharapp/main.dart';
 import 'package:atamnirbharapp/ui/aboutus.dart';
 import 'package:atamnirbharapp/ui/faq.dart';
 import 'package:atamnirbharapp/ui/helpandsupport.dart';
-import 'package:atamnirbharapp/ui/main.dart';
+
 import 'package:atamnirbharapp/ui/privacy.dart';
 import 'package:atamnirbharapp/ui/userauthentication/loginpage.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';

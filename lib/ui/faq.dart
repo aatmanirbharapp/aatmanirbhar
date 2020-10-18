@@ -1,48 +1,75 @@
+import 'package:atamnirbharapp/http/faqrequest.dart';
 import 'package:atamnirbharapp/ui/components/sliverappbarwidget.dart';
 import 'package:atamnirbharapp/ui/drawer.dart';
-
+import 'package:flutter_html_view/flutter_html_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Faq extends StatelessWidget {
+  final _faqGetRequest = FaqHttpRequest();
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> _scaffoldKey =
         new GlobalKey<ScaffoldState>();
     return Scaffold(
       key: _scaffoldKey,
-      drawer: DrawerClass(),
-      body: SafeArea(
-          top: false,
-          bottom: false,
-          child: Container(
-            decoration: BoxDecoration(
-                image: DecorationImage(
-              image: AssetImage("assets/images/BG_Color.jpeg"),
-              fit: BoxFit.cover,
-            )),
-            child: CustomScrollView(slivers: [
-              CustomSliverAppBar(scaffoldKey: _scaffoldKey),
-              SliverList(
-                  delegate: SliverChildListDelegate([
-                RichText(
-                    text: TextSpan(
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold),
-                        text: 'Frequently Asked Questions: \n\n\n',
-                        children: [
-                      TextSpan(
-                          text: "Q1) What is the purpose of this app?\n\n\n",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold)),
-                      TextSpan(
-                          text:
-                              "Ans: This app is built to support Government of India’s initiative to make India self-reliant and transform into a major exporter. The app aims at making Indian consumers better informed and to transform their buying habits. \nThe app has four unique features: \n1) it tells about the country that is primarily benefitting from a company or a product, \n2) for foreign companies and products the app provides Indian alternatives, \n3) inspiring and interesting stories/facts are shared through this app, and \n 4) the app provides a voice to the local companies for sharing about themselves and their products.")
-                    ]))
-              ]))
-            ]),
-          )),
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: Image.asset("assets/images/Final_AatmNirbhar_logo.png"),
+            iconSize: 70,
+            onPressed: () {},
+          ),
+        ],
+        leading: IconButton(
+          color: Colors.black,
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        elevation: 10,
+        backgroundColor: Colors.orange[50],
+        centerTitle: true,
+        title: Text(
+          "FAQ's",
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        ),
+      ),
+      body: StreamBuilder<List>(
+          stream: _faqGetRequest.mapDataToState(),
+          builder: (context, snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.none:
+                return Text('Press button to start.');
+              case ConnectionState.active:
+              case ConnectionState.waiting:
+                return Align(
+                  alignment: Alignment.center,
+                  child: CircularProgressIndicator(
+                    backgroundColor: Colors.black,
+                    strokeWidth: 15,
+                  ),
+                );
+              case ConnectionState.done:
+                if (snapshot.hasError) return Text('Error: ${snapshot.error}');
+
+                return SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Container(
+                    padding: EdgeInsets.all(10),
+                    height: MediaQuery.of(context).size.height,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                      image: AssetImage("assets/images/BG_Color.jpeg"),
+                      fit: BoxFit.cover,
+                    )),
+                    child: HtmlView(
+                        data: '${snapshot.data[0]["description"]}',
+                        scrollable: true),
+                  ),
+                );
+            }
+          }),
     );
   }
 }
