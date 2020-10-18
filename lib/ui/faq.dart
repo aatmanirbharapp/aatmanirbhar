@@ -1,6 +1,5 @@
-import 'package:atamnirbharapp/components/sliverappbarwidget.dart';
-
-import 'package:atamnirbharapp/drawer.dart';
+import 'package:atamnirbharapp/ui/components/sliverappbarwidget.dart';
+import 'package:atamnirbharapp/ui/drawer.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

@@ -1,9 +1,9 @@
-import 'package:atamnirbharapp/components/sliverappbarwidget.dart';
-import 'package:atamnirbharapp/drawer.dart';
+import 'package:atamnirbharapp/ui/components/sliverappbarwidget.dart';
+import 'package:atamnirbharapp/ui/drawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class ContactUs extends StatelessWidget {
+class HelpAndSupport extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {

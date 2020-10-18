@@ -1,8 +1,8 @@
-import 'package:atamnirbharapp/aboutus.dart';
-import 'package:atamnirbharapp/contact_us.dart';
-import 'package:atamnirbharapp/faq.dart';
-import 'package:atamnirbharapp/helpandsupport.dart';
-import 'package:atamnirbharapp/privacy.dart';
+import 'package:atamnirbharapp/ui/aboutus.dart';
+import 'package:atamnirbharapp/ui/contact_us.dart';
+import 'package:atamnirbharapp/ui/faq.dart';
+import 'package:atamnirbharapp/ui/helpandsupport.dart';
+import 'package:atamnirbharapp/ui/privacy.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

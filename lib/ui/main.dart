@@ -1,8 +1,6 @@
-import 'package:atamnirbharapp/components/sliverappbarwidget.dart';
-
-import 'package:atamnirbharapp/drawer.dart';
-
-import 'package:atamnirbharapp/screens/homescreen.dart';
+import 'package:atamnirbharapp/ui/components/sliverappbarwidget.dart';
+import 'package:atamnirbharapp/ui/drawer.dart';
+import 'package:atamnirbharapp/ui/screens/homescreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 

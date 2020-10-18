@@ -1,5 +1,5 @@
-import 'package:atamnirbharapp/aboutus.dart';
-import 'package:atamnirbharapp/faq.dart';
+import 'package:atamnirbharapp/ui/aboutus.dart';
+import 'package:atamnirbharapp/ui/faq.dart';
 import 'package:flutter/material.dart';
 
 class FancyFab extends StatefulWidget {
@@ -87,9 +87,8 @@ class _FancyFabState extends State<FancyFab>
     return Container(
       child: FloatingActionButton(
         backgroundColor: Colors.transparent,
-        onPressed: () => Navigator.of(context).push(new MaterialPageRoute(
-                  builder: (context) => Faq()
-              )),
+        onPressed: () => Navigator.of(context)
+            .push(new MaterialPageRoute(builder: (context) => Faq())),
         tooltip: 'Image',
         child: Icon(Icons.image),
         heroTag: null,
@@ -100,9 +99,8 @@ class _FancyFabState extends State<FancyFab>
   Widget inbox() {
     return Container(
       child: FloatingActionButton(
-        onPressed: () => Navigator.of(context).push(new MaterialPageRoute(
-                  builder: (context) => Aboutus()
-              )),
+        onPressed: () => Navigator.of(context)
+            .push(new MaterialPageRoute(builder: (context) => Aboutus())),
         tooltip: 'Inbox',
         child: Icon(Icons.inbox),
         heroTag: null,

@@ -1,5 +1,5 @@
-import 'package:atamnirbharapp/components/footerwidget.dart';
-import 'package:atamnirbharapp/screens/indiancompanyscreen.dart';
+import 'package:atamnirbharapp/ui/components/footerwidget.dart';
+import 'package:atamnirbharapp/ui/screens/indiancompanyscreen.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

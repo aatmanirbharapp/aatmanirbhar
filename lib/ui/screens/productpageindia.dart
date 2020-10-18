@@ -1,13 +1,12 @@
-import 'package:atamnirbharapp/components/innerpageappbar.dart';
-import 'package:atamnirbharapp/components/middlelogorow.dart';
-import 'package:atamnirbharapp/components/peoplewidget.dart';
-import 'package:atamnirbharapp/components/sliverappbarwidget.dart';
-import 'package:atamnirbharapp/drawer.dart';
-import 'package:atamnirbharapp/screens/productpageindia.dart';
+import 'package:atamnirbharapp/ui/components/innerpageappbar.dart';
+import 'package:atamnirbharapp/ui/components/middlelogorow.dart';
+import 'package:atamnirbharapp/ui/components/peoplewidget.dart';
+import 'package:atamnirbharapp/ui/drawer.dart';
 import 'package:flutter/material.dart';
 
-class IndianCompany extends StatelessWidget {
+class IndiaProductPage extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,28 +50,11 @@ class IndianCompany extends StatelessWidget {
                       border: Border.all(color: Colors.black26)),
                   height: 100,
                   width: MediaQuery.of(context).size.width,
-                  child: CompanyHeader(),
+                  child: ProductHeader(),
                 ),
                 Container(
                   height: 120,
                   child: MiddleRow(),
-                ),
-                Container(
-                  margin: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(width: 2, color: Colors.black38)),
-                  height: 200,
-                  width: MediaQuery.of(context).size.width,
-                  child: ListView(children: [
-                    Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          "About Company",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 15),
-                        ))
-                  ]),
                 ),
                 PeopleRow(),
                 MaterialButton(
@@ -87,8 +69,8 @@ class IndianCompany extends StatelessWidget {
   }
 }
 
-class CompanyHeader extends StatelessWidget {
-  const CompanyHeader({
+class ProductHeader extends StatelessWidget {
+  const ProductHeader({
     Key key,
   }) : super(key: key);
 
@@ -113,7 +95,7 @@ class CompanyHeader extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    "Bajaj Consumer care ltd.",
+                    "Bajaj Nomarks Ayurveda Antimarks \nSunscreen.",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   )
                 ],
@@ -144,21 +126,7 @@ class CompanyHeader extends StatelessWidget {
                   ),
                   Column(
                     children: [
-                      IconButton(
-                          iconSize: 10,
-                          icon: Image.asset("assets/images/Fact_Icon.png"),
-                          onPressed: null),
-                      Text("Story & Facts", style: TextStyle(fontSize: 10))
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      IconButton(
-                          icon: Icon(Icons.add_shopping_cart),
-                          onPressed: () => Navigator.push(
-                              context,
-                              new MaterialPageRoute(
-                                  builder: (context) => IndiaProductPage()))),
+                      Icon(Icons.add_shopping_cart),
                       Text("Products", style: TextStyle(fontSize: 10))
                     ],
                   )

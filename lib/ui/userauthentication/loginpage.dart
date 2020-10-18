@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
-import 'package:flutter_otp/flutter_otp.dart';
+import 'package:flutter_otp/flutter_otp.dart' as otp;
 
 class LoginPage extends StatefulWidget {
   @override
@@ -77,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
                   GestureDetector(
                       onTap: () {
                         String number = _controller.text;
-                        sendOtp(number);
+
                         if (number != null) {
                           Navigator.push(
                               context,
@@ -93,7 +93,7 @@ class _LoginPageState extends State<LoginPage> {
                             style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.grey),
+                                color: Colors.black),
                           ),
                         ),
                         height: 50,

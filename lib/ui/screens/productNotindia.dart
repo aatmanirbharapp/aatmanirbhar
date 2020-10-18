@@ -1,8 +1,9 @@
-import 'package:atamnirbharapp/components/innerpageappbar.dart';
-import 'package:atamnirbharapp/components/middlelogorow.dart';
-import 'package:atamnirbharapp/components/peoplewidget.dart';
-import 'package:atamnirbharapp/drawer.dart';
-import 'package:atamnirbharapp/screens/productpageindia.dart';
+import 'package:atamnirbharapp/ui/components/innerpageappbar.dart';
+import 'package:atamnirbharapp/ui/components/middlelogorow.dart';
+import 'package:atamnirbharapp/ui/components/peoplewidget.dart';
+import 'package:atamnirbharapp/ui/drawer.dart';
+import 'package:atamnirbharapp/ui/screens/productpageindia.dart';
+
 import 'package:flutter/material.dart';
 
 class ProductPageNonIndia extends StatelessWidget {

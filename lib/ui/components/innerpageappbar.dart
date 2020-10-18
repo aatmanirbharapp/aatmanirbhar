@@ -1,10 +1,8 @@
-import 'package:atamnirbharapp/components/searchbarwidget.dart';
-import 'package:atamnirbharapp/components/titlewidget.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:atamnirbharapp/ui/components/searchbarwidget.dart';
 import 'package:flutter/material.dart';
 
-class CustomSliverAppBar extends StatelessWidget {
-  const CustomSliverAppBar({
+class InnerSliverAppBar extends StatelessWidget {
+  const InnerSliverAppBar({
     Key key,
     @required GlobalKey<ScaffoldState> scaffoldKey,
   })  : _scaffoldKey = scaffoldKey,
@@ -28,13 +26,11 @@ class CustomSliverAppBar extends StatelessWidget {
       ),
       pinned: true,
       floating: true,
-      title: TitleWidget(),
-      bottom: PreferredSize(
-          child: SearchBarWidget(), preferredSize: const Size.fromHeight(60)),
+      title: SearchBarWidget(),
       actions: [
         IconButton(
-          icon: Image.asset("assets/images/Final_AatmNirbhar_logo.png"),
-          iconSize: 70,
+          icon: Image.asset("assets/images/MakeInIndiaLogo.png"),
+          iconSize: 50,
           onPressed: () {},
         ),
       ],
