@@ -1,3 +1,4 @@
+import 'package:atamnirbharapp/ui/screens/indiancompanyscreen.dart';
 import 'package:flutter/material.dart';
 
 class DataSearch extends SearchDelegate<String> {
@@ -41,13 +42,13 @@ class DataSearch extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    // TODO: implement buildResults
-    throw UnimplementedError();
+    return IndianCompany();
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
     final suggestionList = query.isEmpty ? recentList : companies;
+
     return ListView.builder(
       itemBuilder: (context, index) => ListTile(
         leading: Icon(Icons.search),

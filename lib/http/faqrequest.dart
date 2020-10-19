@@ -5,8 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 class FaqHttpRequest {
-  Stream<List> mapDataToState() async* {
-    Map<String, String> body = {'action': 'GET_ALL'};
+  Future<List> mapDataToState(String tablename) async {
+    Map<String, String> body = {'action': 'GET_ALL', 'table': tablename};
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String url = '${AppContants.url}';
     http.Response response = await http
@@ -14,7 +14,7 @@ class FaqHttpRequest {
 
     if (response.statusCode == 200) {
       List<dynamic> jsondata = json.decode(response.body);
-      yield jsondata;
+      return jsondata;
     }
   }
 }
