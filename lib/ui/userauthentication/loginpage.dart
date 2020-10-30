@@ -1,7 +1,13 @@
+import 'package:atamnirbharapp/main.dart';
+import 'package:atamnirbharapp/ui/userauthentication/verification.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:flutter_otp/flutter_otp.dart' as otp;
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 
 class LoginPage extends StatefulWidget {
   @override
@@ -10,10 +16,20 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _controller = TextEditingController();
-
+  final _codeController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  var onTapRecognizer;
   @override
   void initState() {
+    onTapRecognizer = TapGestureRecognizer()
+      ..onTap = () {
+        Navigator.pop(context);
+      };
     super.initState();
+    Firebase.initializeApp().whenComplete(() {
+      print("completed");
+      setState(() {});
+    });
   }
 
   @override
@@ -44,45 +60,49 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 15.0, right: 15),
-                    child: TextFormField(
-                      style: new TextStyle(
-                        fontFamily: "Poppins",
-                      ),
-                      keyboardType: TextInputType.number,
-                      controller: _controller,
-                      autocorrect: true,
-                      validator: (val) {
-                        if (val.length == 0) {
-                          return "Number cant be empty";
-                        } else {
-                          return null;
-                        }
-                      },
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(
-                          Icons.call,
-                          color: Colors.grey,
+                    child: Form(
+                      key: _formKey,
+                      child: TextFormField(
+                        style: new TextStyle(
+                          fontFamily: "Poppins",
                         ),
-                        hintText: "Enter Phone Number",
-                        fillColor: Colors.orange[50],
-                        labelText: "Mobile Number",
-                        labelStyle: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.black45),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
+                        keyboardType: TextInputType.number,
+                        controller: _controller,
+                        autocorrect: true,
+                        validator: (val) {
+                          if (val.length == 0) {
+                            return "Number cant be empty";
+                          } else {
+                            return null;
+                          }
+                        },
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.call,
+                            color: Colors.grey,
+                          ),
+                          hintText: "Enter Phone Number",
+                          fillColor: Colors.orange[50],
+                          labelText: "Mobile Number",
+                          labelStyle: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black45),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
                         ),
                       ),
                     ),
                   ),
                   GestureDetector(
                       onTap: () {
-                        String number = _controller.text;
+                        if (_formKey.currentState.validate()) {
+                          String number = "+91" + _controller.text.trim();
 
-                        if (number != null) {
                           Navigator.push(
                               context,
                               new MaterialPageRoute(
-                                  builder: (context) => LoginPage()));
+                                  builder: (context) => Verification(number)));
                         }
                       },
                       child: Container(

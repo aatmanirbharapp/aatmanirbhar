@@ -4,6 +4,7 @@ import 'package:atamnirbharapp/ui/faq.dart';
 import 'package:atamnirbharapp/ui/helpandsupport.dart';
 
 import 'package:atamnirbharapp/ui/privacy.dart';
+import 'package:atamnirbharapp/ui/screens/addcompany.dart';
 import 'package:atamnirbharapp/ui/userauthentication/loginpage.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +38,14 @@ class DrawerClass extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => MyHomePage())),
                 title: new Text("Dashboard"),
                 leading: new Icon(Icons.list),
+                trailing: new Icon(Icons.arrow_right),
+              ),
+              Divider(),
+              new ListTile(
+                onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => AddCompany())),
+                title: new Text("Add Company"),
+                leading: new Icon(Icons.help),
                 trailing: new Icon(Icons.arrow_right),
               ),
               Divider(),

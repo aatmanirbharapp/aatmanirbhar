@@ -1,13 +1,29 @@
 import 'package:atamnirbharapp/ui/components/footerwidget.dart';
 import 'package:atamnirbharapp/ui/screens/indiancompanyscreen.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class CompanyCardView extends StatelessWidget {
+class CompanyCardView extends StatefulWidget {
   const CompanyCardView({
     Key key,
   }) : super(key: key);
+
+  @override
+  _CompanyCardViewState createState() => _CompanyCardViewState();
+}
+
+class _CompanyCardViewState extends State<CompanyCardView> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Firebase.initializeApp().whenComplete(() {
+      print("completed");
+      setState(() {});
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +66,9 @@ class CompanyCardView extends StatelessWidget {
                     onTap: () => Navigator.push(
                         context,
                         new MaterialPageRoute(
-                            builder: (context) => IndianCompany())),
+                            builder: (context) => IndianCompany(
+                                  companyName: "test",
+                                ))),
                     child: Stack(
                       children: [
                         ClipRRect(

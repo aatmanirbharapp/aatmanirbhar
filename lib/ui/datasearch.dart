@@ -42,7 +42,9 @@ class DataSearch extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    return IndianCompany();
+    return IndianCompany(
+      companyName: 'test',
+    );
   }
 
   @override
