@@ -1,6 +1,5 @@
 import 'dart:async';
-
-import 'package:atamnirbharapp/main.dart';
+import 'package:atamnirbharapp/ui/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +25,12 @@ class _VerificationState extends State<Verification> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final formKey = GlobalKey<FormState>();
 
+  User _firebaseUser;
+  String _status;
+
+  AuthCredential _phoneAuthCredential;
+  String _verificationId;
+
   bool isLoading = false;
   @override
   void initState() {
@@ -35,13 +40,21 @@ class _VerificationState extends State<Verification> {
       };
     errorController = StreamController<ErrorAnimationType>();
     super.initState();
+    print(widget.number);
+    _submitPhoneNumber();
+  }
+
+  void _handleError(e) {
+    print(e.message);
+    setState(() {
+      _status += e.message + '\n';
+    });
   }
 
   @override
   void dispose() {
     textEditingController.dispose();
     errorController.close();
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -151,12 +164,13 @@ class _VerificationState extends State<Verification> {
                         child: FlatButton(
                           onPressed: () {
                             if (formKey.currentState.validate()) {
-                              registerUser(widget.number,
-                                  textEditingController.text, context);
-                              // Triggering error shake animation
-                              setState(() {
-                                isLoading = true;
-                              });
+                              _submitOTP();
+                              if (_firebaseUser != null)
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => MyHomePage(),
+                                    ));
                             } else {
                               errorController.add(ErrorAnimationType.shake);
                             }
@@ -195,49 +209,101 @@ class _VerificationState extends State<Verification> {
     );
   }
 
-  Future registerUser(String mobile, String otp, BuildContext context) async {
-    FirebaseAuth _auth = FirebaseAuth.instance;
+  Future<void> _login() async {
+    /// This method is used to login the user
+    /// `AuthCredential`(`_phoneAuthCredential`) is needed for the signIn method
+    /// After the signIn method from `AuthResult` we can get `FirebaserUser`(`_firebaseUser`)
+    try {
+      await FirebaseAuth.instance
+          .signInWithCredential(this._phoneAuthCredential)
+          .then((authRes) {
+        _firebaseUser = authRes.user;
+      }).catchError((e) => _handleError(e));
+      setState(() {
+        _status += 'Signed In\n';
+      });
+    } catch (e) {
+      _handleError(e);
+    }
+  }
 
-    _auth.verifyPhoneNumber(
-        phoneNumber: mobile,
-        timeout: Duration(seconds: 60),
-        verificationCompleted: (AuthCredential authCredential) async {
-          await _auth.signInWithCredential(authCredential);
-        },
-        verificationFailed: (FirebaseAuthException authException) {
-          setState(() {
-            isLoading = false;
-            SnackBar(
-              content: Text("Invalid OTP " + authException.message),
-            );
-          });
-        },
-        codeSent: (String verificationId, int resendToken) async {
-          PhoneAuthCredential phoneAuthCredential =
-              PhoneAuthProvider.credential(
-                  verificationId: verificationId, smsCode: otp);
+  Future<void> _logout() async {
+    /// Method to Logout the `FirebaseUser` (`_firebaseUser`)
+    try {
+      // signout code
+      await FirebaseAuth.instance.signOut();
+      _firebaseUser = null;
+      setState(() {
+        _status += 'Signed out\n';
+      });
+    } catch (e) {
+      _handleError(e);
+    }
+  }
 
-          await _auth
-              .signInWithCredential(phoneAuthCredential)
-              .then((value) => {
-                    Navigator.push(
-                        context,
-                        new MaterialPageRoute(
-                            builder: (context) => MyHomePage()))
-                  })
-              .catchError((error) => {
-                    setState(() {
-                      isLoading = false;
-                      SnackBar(
-                        content: Text("Invalid OTP " + error),
-                      );
-                    })
-                  });
-        },
-        codeAutoRetrievalTimeout: (String verificationId) {
-          verificationId = verificationId;
-          print(verificationId);
-          print("Timout");
-        });
+  Future<void> _submitPhoneNumber() async {
+    void verificationCompleted(AuthCredential phoneAuthCredential) {
+      print('verificationCompleted');
+      setState(() {
+        _status += 'verificationCompleted\n';
+      });
+      this._phoneAuthCredential = phoneAuthCredential;
+      print(phoneAuthCredential);
+    }
+
+    void verificationFailed(FirebaseAuthException error) {
+      print('verificationFailed');
+      _handleError(error);
+    }
+
+    void codeSent(String verificationId, [int code]) {
+      print('codeSent');
+      this._verificationId = verificationId;
+      print(verificationId);
+
+      print(code.toString());
+      setState(() {
+        _status += 'Code Sent\n';
+      });
+    }
+
+    void codeAutoRetrievalTimeout(String verificationId) {
+      print('codeAutoRetrievalTimeout');
+      setState(() {
+        _status += 'codeAutoRetrievalTimeout\n';
+      });
+      print(verificationId);
+    }
+
+    await FirebaseAuth.instance.verifyPhoneNumber(
+      /// Make sure to prefix with your country code
+      phoneNumber: widget.number,
+
+      /// `seconds` didn't work. The underlying implementation code only reads in `millisenconds`
+      timeout: Duration(milliseconds: 10000),
+
+      /// If the SIM (with phoneNumber) is in the current device this function is called.
+      /// This function gives `AuthCredential`. Moreover `login` function can be called from this callback
+      /// When this function is called there is no need to enter the OTP, you can click on Login button to sigin directly as the device is now verified
+      verificationCompleted: verificationCompleted,
+
+      /// Called when the verification is failed
+      verificationFailed: verificationFailed,
+
+      /// This is called after the OTP is sent. Gives a `verificationId` and `code`
+      codeSent: codeSent,
+
+      /// After automatic code retrival `tmeout` this function is called
+      codeAutoRetrievalTimeout: codeAutoRetrievalTimeout,
+    ); // All the callbacks are above
+  }
+
+  void _submitOTP() {
+    /// get the `smsCode` from the user
+    String smsCode = textEditingController.text.toString().trim();
+    this._phoneAuthCredential = PhoneAuthProvider.credential(
+        verificationId: this._verificationId, smsCode: smsCode);
+
+    _login();
   }
 }

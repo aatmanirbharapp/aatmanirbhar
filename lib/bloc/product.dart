@@ -1,13 +1,13 @@
-class Company {
+class Product {
   String id;
 
-  String companyId;
+  String productId;
 
-  String companyName;
+  String productName;
 
   String wikiPage;
 
-  String aboutCompany;
+  String aboutproduct;
 
   String addedByImage;
 
@@ -39,29 +39,28 @@ class Company {
 
   String country;
 
-  int isService;
-
   String description;
-
-  String story;
 
   String logoFileName;
 
-  int makesInIndia;
-  Company(
+  String manufacture;
+
+  String keywords;
+
+  int makeInIndia;
+  Product(
       {this.id,
-      this.companyId,
-      this.companyName,
+      this.productId,
+      this.productName,
       this.wikiPage,
       this.website,
       this.keyPerson,
       this.sector,
       this.country,
-      this.story,
       this.description,
       this.logoFileName,
-      this.makesInIndia,
-      this.aboutCompany,
+      this.makeInIndia,
+      this.aboutproduct,
       this.addedByImage,
       this.addedByName,
       this.addedByPlace,
@@ -69,26 +68,27 @@ class Company {
       this.dateUpdated,
       this.image,
       this.isActive,
-      this.isService,
       this.moderatorByImage,
       this.moderatorByName,
       this.moderatorByPlace,
+      this.manufacture,
+      this.keywords,
       this.firstCountry});
 
-  Company.fromJson(Map<String, dynamic> json) {
+  Product.fromJson(Map<String, dynamic> json) {
     id = json['id'] as String;
-    companyId = json['companyId'] as String;
-    companyName = json['companyName'] as String;
+    productId = json['productId'] as String;
+    productName = json['productName'] as String;
     wikiPage = json['wikiPage'] as String;
     website = json['website'] as String;
     keyPerson = json['keyPerson'] as String;
     sector = json['sector'] as String;
     country = json['country'] as String;
-    story = json['story'] as String;
+
     description = json['description'] as String;
     logoFileName = json['logoFileName'] as String;
-    makesInIndia = json['makesInIndia'] as int;
-    aboutCompany = json['aboutCompany'] as String;
+    makeInIndia = json['makeInIndia'] as int;
+    aboutproduct = json['aboutproduct'] as String;
     addedByImage = json['addedByImage'] as String;
     addedByName = json['addedByName'] as String;
     addedByPlace = json['addedByPlace'] as String;
@@ -100,23 +100,23 @@ class Company {
     moderatorByName = json['moderatorByName'] as String;
     moderatorByPlace = json['moderatorByPlace'] as String;
     firstCountry = json['firstCountry'] as String;
-    isService = json['isService'] as int;
+    manufacture = json['manufacture'] as String;
+    keywords = json['keywords'] as String;
   }
 
   Map<String, dynamic> toJson() => {
         'id': id,
-        'companyId': companyId,
-        'companyName': companyName,
+        'productId': productId,
+        'productName': productName,
         'wikiPage': wikiPage,
         'website': website,
         'keyPerson': keyPerson,
         'sector': sector,
         'country': country,
-        'story': story,
         'description': description,
         'logoFileName': logoFileName,
-        'makesInIndia': makesInIndia,
-        'aboutCompany': aboutCompany,
+        'makeInIndia': makeInIndia,
+        'aboutproduct': aboutproduct,
         'addedByImage': addedByImage,
         'addedByName': addedByName,
         'addedByPlace': addedByPlace,
@@ -127,7 +127,8 @@ class Company {
         'moderatorByImage': moderatorByImage,
         'moderatorByName': moderatorByName,
         'moderatorByPlace': moderatorByPlace,
+        'manufacture': manufacture,
+        'keywords': keywords,
         'firstCountry': firstCountry,
-        'isService': isService
       };
 }

@@ -1,10 +1,12 @@
+import 'package:atamnirbharapp/bloc/cloud_firestore.dart';
 import 'package:atamnirbharapp/http/faqrequest.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html_view/flutter_html_view.dart';
 
 class Privacy extends StatelessWidget {
-  final _faqGetRequest = FaqHttpRequest();
+  final _faqGetRequest = CommanGetCalls();
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> _scaffoldKey =
@@ -32,8 +34,8 @@ class Privacy extends StatelessWidget {
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
       ),
-      body: FutureBuilder<List>(
-          future: _faqGetRequest.mapDataToState('privacy'),
+      body: FutureBuilder<QuerySnapshot>(
+          future: _faqGetRequest.getPrivacy(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return SingleChildScrollView(
@@ -48,7 +50,7 @@ class Privacy extends StatelessWidget {
                     fit: BoxFit.cover,
                   )),
                   child: HtmlView(
-                      data: '${snapshot.data[0]["description"]}',
+                      data: '${snapshot.data.docs.first.data()['description']}',
                       scrollable: true),
                 ),
               );

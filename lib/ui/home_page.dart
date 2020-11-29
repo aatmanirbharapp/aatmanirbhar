@@ -1,10 +1,12 @@
 import 'package:atamnirbharapp/ui/components/sliverappbarwidget.dart';
 import 'package:atamnirbharapp/ui/drawer.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:atamnirbharapp/ui/screens/homescreen.dart';
+
 import 'package:flutter/material.dart';
 
-class HelpAndSupport extends StatelessWidget {
+class MyHomePage extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,6 +23,8 @@ class HelpAndSupport extends StatelessWidget {
             )),
             child: CustomScrollView(slivers: [
               CustomSliverAppBar(scaffoldKey: _scaffoldKey),
+              SliverList(
+                  delegate: SliverChildListDelegate([CompanyCardView()])),
             ]),
           )),
     );

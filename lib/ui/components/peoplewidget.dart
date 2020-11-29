@@ -1,9 +1,13 @@
+import 'package:atamnirbharapp/utils/comman_widgets.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class PeopleRow extends StatelessWidget {
-  const PeopleRow({
-    Key key,
-  }) : super(key: key);
+  final company;
+
+  PeopleRow({Key key, this.company}) : super(key: key);
+
+  final storageRef = FirebaseStorage();
 
   @override
   Widget build(BuildContext context) {
@@ -11,58 +15,82 @@ class PeopleRow extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
-          height: 250,
+          height: 200,
           width: MediaQuery.of(context).size.width * 0.5,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Container(
-                  height: 150,
-                  width: MediaQuery.of(context).size.width * 0.45,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(width: 2, color: Colors.black38),
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: AssetImage("assets/images/Dani.jpeg"),
-                      )),
-                  child: null),
+                height: 100,
+                width: MediaQuery.of(context).size.width * 0.45,
+                child: FutureBuilder<Object>(
+                    future: storageRef
+                        .ref()
+                        .child("Team/" + company.addedByImage)
+                        .getDownloadURL(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData)
+                        return CircleAvatar(
+                          child: ClipOval(
+                            child: Image.network(
+                              snapshot.data,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          radius: 30.0,
+                        );
+                      return CommanWidgets().getCircularProgressIndicator();
+                    }),
+              ),
               Column(
                 children: [
                   Text(
-                    "Added BY",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    "Added By",
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  Text("Danial Rugeles"),
-                  Text("USA")
+                  Text(company.addedByName),
+                  Text(company.addedByPlace)
                 ],
               )
             ],
           ),
         ),
         Container(
-          height: 250,
+          height: 200,
           width: MediaQuery.of(context).size.width * 0.45,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Container(
-                  height: 150,
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(width: 2, color: Colors.black38),
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: AssetImage("assets/images/Prathm.jpg"),
-                      )),
-                  child: null),
+                height: 100,
+                width: MediaQuery.of(context).size.width * 0.5,
+                child: FutureBuilder<Object>(
+                    future: storageRef
+                        .ref()
+                        .child("Team/" + company.moderatorByImage)
+                        .getDownloadURL(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData)
+                        return CircleAvatar(
+                          child: ClipOval(
+                            child: Image.network(
+                              snapshot.data,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          radius: 30.0,
+                        );
+                      return CommanWidgets().getCircularProgressIndicator();
+                    }),
+              ),
               Column(
                 children: [
                   Text(
-                    "Moderator By",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    "Moderated By",
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  Text("Danial Rugeles"),
-                  Text("USA")
+                  Text(company.moderatorByName),
+                  Text(company.moderatorByPlace)
                 ],
               )
             ],

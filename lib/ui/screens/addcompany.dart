@@ -1,8 +1,13 @@
 import 'dart:io';
 
 import 'package:atamnirbharapp/bloc/company.dart';
-import 'package:atamnirbharapp/ui/screens/indiancompanyscreen.dart';
+import 'package:atamnirbharapp/bloc/company_repo.dart';
+import 'package:atamnirbharapp/bloc/user_details.dart';
+import 'package:atamnirbharapp/bloc/user_repo.dart';
+import 'package:atamnirbharapp/ui/home_page.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_country_picker/flutter_country_picker.dart';
@@ -17,19 +22,29 @@ class AddCompany extends StatefulWidget {
 class _AddCompanyState extends State<AddCompany> {
   FirebaseFirestore store = FirebaseFirestore.instance;
   var _scafolldKey = GlobalKey<ScaffoldState>();
+
+  CompanyRepository _companyRepository = CompanyRepository();
+  String name,
+      website,
+      keyPerson,
+      wikiUrl,
+      facts,
+      description,
+      sector,
+      fileUrl,
+      userName,
+      userEmail;
+
+  int makesInIndia;
   var formkey = GlobalKey<FormState>();
-  var nameController = TextEditingController();
-  var websiteController = TextEditingController();
-  var keyPersonController = TextEditingController();
-  var wikipediaController = TextEditingController();
-  var factsController = TextEditingController();
-  var descriptionController = TextEditingController();
-  var sectorController = TextEditingController();
   PickedFile image;
-  var website;
-  String fileUrl;
   Country _selected;
   var radioValue = 1;
+  bool isLoading = false;
+  UserDetails userDetails;
+  var userNameController;
+  UserRepository userRepository = new UserRepository();
+  var emailController;
 
   _imgFromCamera() {
     setState(() async {
@@ -43,6 +58,7 @@ class _AddCompanyState extends State<AddCompany> {
     });
   }
 
+  BuildContext context;
   Future storeImage(File imageFile) async {
     var fileName = basename(image.path);
     print('Inside Store method' + fileName);
@@ -57,8 +73,31 @@ class _AddCompanyState extends State<AddCompany> {
     });
   }
 
+  getUserData(userId) async {
+    await userRepository.getUserById(userId).then((value) => {
+          setState(() {
+            userDetails = UserDetails.fromJson(value.data());
+            userNameController = TextEditingController(text: userDetails.name);
+            emailController = TextEditingController(text: userDetails.email);
+          })
+        });
+  }
+
+  @override
+  void initState() {
+    var firebaseUser = FirebaseAuth.instance.currentUser;
+    getUserData(firebaseUser.uid);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    setState(() => this.context = context);
     return Scaffold(
       body: SafeArea(
           top: false,
@@ -71,114 +110,210 @@ class _AddCompanyState extends State<AddCompany> {
                 image: AssetImage("assets/images/BG_Color.jpeg"),
                 fit: BoxFit.cover,
               )),
-              child: ListView(children: [
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: IconButton(
-                      iconSize: MediaQuery.of(context).size.height * 0.2,
-                      onPressed: () {},
-                      icon: Image.asset(
-                          "assets/images/Final_AatmNirbhar_logo.png")),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(8),
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      "Add Company",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black45,
-                          fontSize: 20),
-                    ),
-                  ),
-                ),
-                Form(
-                  key: formkey,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        _companyName(),
-                        _selectCountry(),
-                        _radioButton(),
-                        _wikiPage(),
-                        _keyPerson(),
-                        _websitePage(),
-                        _enterSector(),
-                        _companyLogo(),
-                        _factsAndStories(),
-                        _description()
-                      ],
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.symmetric(
-                      vertical: 16.0, horizontal: 30),
-                  child: ButtonTheme(
-                    height: 50,
-                    child: FlatButton(
-                      onPressed: () async {
-                        if (formkey.currentState.validate()) {
-                          await storeImage(File(image.path));
-                          var company = Company(
-                              name: nameController.text,
-                              website: website,
-                              country: _selected,
-                              keyPerson: keyPersonController.text,
-                              sector: sectorController.text,
-                              stories: factsController.text,
-                              description: descriptionController.text,
-                              logoFileName: fileUrl);
-
-                          await store
-                              .collection("company")
-                              .add(company.toJson())
-                              .then((value) => {
-                                    CircularProgressIndicator(),
-                                    Navigator.of(context).pushAndRemoveUntil(
-                                        MaterialPageRoute(
-                                            builder: (context) => IndianCompany(
-                                                companyName:
-                                                    nameController.text)),
-                                        (route) => false)
-                                  })
-                              .catchError((value) => {
-                                    Scaffold.of(context).showSnackBar(SnackBar(
-                                      backgroundColor:
-                                          Theme.of(context).errorColor,
-                                      content: Text(
-                                          "Failed to add company, Please Try Again!"),
-                                    ))
-                                  });
-                        }
-                      },
-                      child: Center(
+              child: isLoading
+                  ? Center(
+                      heightFactor: 20,
+                      widthFactor: 20,
+                      child: CircularProgressIndicator(
+                        value: 10,
+                        backgroundColor: Colors.orange,
+                      ),
+                    )
+                  : ListView(children: [
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: IconButton(
+                            iconSize: MediaQuery.of(context).size.height * 0.2,
+                            onPressed: () {},
+                            icon: Image.asset(
+                                "assets/images/Final_AatmNirbhar_logo.png")),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8),
+                        child: Align(
+                          alignment: Alignment.center,
                           child: Text(
-                        "VERIFY".toUpperCase(),
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold),
-                      )),
-                    ),
-                  ),
-                  decoration: BoxDecoration(
-                      color: Color.fromRGBO(0, 0, 136, 1),
-                      borderRadius: BorderRadius.circular(5),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.green.shade200,
-                            offset: Offset(1, -2),
-                            blurRadius: 5),
-                        BoxShadow(
-                            color: Colors.green.shade200,
-                            offset: Offset(-1, 2),
-                            blurRadius: 5)
-                      ]),
-                )
-              ]))),
+                            "Add Company",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black45,
+                                fontSize: 20),
+                          ),
+                        ),
+                      ),
+                      Form(
+                        key: formkey,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              _companyName(),
+                              _selectCountry(),
+                              _radioButton(),
+                              _wikiPage(),
+                              _keyPerson(),
+                              _websitePage(),
+                              _enterSector(),
+                              _companyLogo(),
+                              _factsAndStories(),
+                              _description()
+                            ],
+                          ),
+                        ),
+                      ),
+                      Form(
+                        child: ExpansionTile(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Card(
+                                elevation: 10,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15)),
+                                color: Colors.white,
+                                child: TextFormField(
+                                  enabled: userDetails.email == null ||
+                                      userDetails.email.isEmpty,
+                                  autocorrect: true,
+                                  controller: emailController,
+                                  onSaved: (newValue) {
+                                    userEmail = newValue;
+                                  },
+                                  decoration: InputDecoration(
+                                    prefixIcon: Icon(
+                                      Icons.email,
+                                      color: Colors.grey,
+                                    ),
+                                    hintText: "Enter your email Id",
+                                    fillColor: Colors.orange[50],
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Card(
+                                elevation: 10,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15)),
+                                color: Colors.white,
+                                child: TextFormField(
+                                  enabled: userDetails.phonenumber == null ||
+                                      userDetails.phonenumber.isEmpty,
+                                  autocorrect: true,
+                                  controller: userNameController,
+                                  onSaved: (newValue) {
+                                    userName = newValue;
+                                  },
+                                  decoration: InputDecoration(
+                                    prefixIcon: Icon(
+                                      Icons.call,
+                                      color: Colors.grey,
+                                    ),
+                                    hintText: "Enter your Phone number",
+                                    fillColor: Colors.orange[50],
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                          initiallyExpanded: true,
+                          title: Text("Personal Details"),
+                          leading: Icon(Icons.menu),
+                          trailing: Icon(Icons.arrow_drop_down),
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 16.0, horizontal: 30),
+                        child: ButtonTheme(
+                          height: 50,
+                          child: FlatButton(
+                            onPressed: () async {
+                              if (formkey.currentState.validate() &&
+                                  image != null &&
+                                  image.path.length != 0) {
+                                formkey.currentState.save();
+                                var company = Company(
+                                    companyName: name,
+                                    website: website,
+                                    country: _selected.toString(),
+                                    keyPerson: keyPerson,
+                                    sector: sector,
+                                    story: facts,
+                                    wikiPage: wikiUrl,
+                                    description: description,
+                                    logoFileName: fileUrl,
+                                    makesInIndia: makesInIndia);
+                                setState(() {
+                                  isLoading = true;
+                                });
+                                await storeImage(File(image.path));
+                                await _companyRepository
+                                    .addOrUpdateCompany(company)
+                                    .then((value) => {
+                                          setState(() {
+                                            isLoading = false;
+                                          }),
+                                          Navigator.pop(context),
+                                          Navigator.of(this.context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      MyHomePage()))
+                                        })
+                                    .catchError((error) => {
+                                          setState(() {
+                                            isLoading = false;
+                                          }),
+                                          Scaffold.of(this.context)
+                                              .showSnackBar(SnackBar(
+                                            backgroundColor:
+                                                Theme.of(this.context)
+                                                    .errorColor,
+                                            content: Text(
+                                                "Failed to add company, Please try to sumbit again"),
+                                          ))
+                                        });
+                              } else {
+                                Scaffold.of(_scafolldKey.currentContext)
+                                    .showSnackBar(SnackBar(
+                                  backgroundColor: Theme.of(context).errorColor,
+                                  content: Text(
+                                      "Failed to add company, Image is not selected"),
+                                ));
+                              }
+                            },
+                            child: Center(
+                                child: Text(
+                              "Add".toUpperCase(),
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold),
+                            )),
+                          ),
+                        ),
+                        decoration: BoxDecoration(
+                            color: Color.fromRGBO(0, 0, 136, 1),
+                            borderRadius: BorderRadius.circular(5),
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.green.shade200,
+                                  offset: Offset(1, -2),
+                                  blurRadius: 5),
+                              BoxShadow(
+                                  color: Colors.green.shade200,
+                                  offset: Offset(-1, 2),
+                                  blurRadius: 5)
+                            ]),
+                      )
+                    ]))),
     );
   }
 
@@ -192,10 +327,12 @@ class _AddCompanyState extends State<AddCompany> {
         keyboardType: TextInputType.text,
         autocorrect: true,
         cursorHeight: 10,
-        controller: nameController,
         validator: (String value) {
           if (value == null || value.isEmpty) return "Please enter valid Name";
           return null;
+        },
+        onSaved: (value) {
+          name = value;
         },
         decoration: InputDecoration(
           prefixIcon: Icon(
@@ -259,7 +396,9 @@ class _AddCompanyState extends State<AddCompany> {
         keyboardType: TextInputType.url,
         autocorrect: true,
         cursorHeight: 10,
-        controller: wikipediaController,
+        onSaved: (value) {
+          wikiUrl = value;
+        },
         validator: (String value) {
           if (value == null || value.isEmpty)
             return "Please enter valid wikipedia Page";
@@ -302,6 +441,7 @@ class _AddCompanyState extends State<AddCompany> {
             onChanged: (value) {
               setState(() {
                 radioValue = value;
+                makesInIndia = value;
               });
             },
           ),
@@ -313,6 +453,7 @@ class _AddCompanyState extends State<AddCompany> {
             onChanged: (value) {
               setState(() {
                 radioValue = value;
+                makesInIndia = value;
               });
             },
           ),
@@ -331,7 +472,9 @@ class _AddCompanyState extends State<AddCompany> {
         keyboardType: TextInputType.text,
         autocorrect: true,
         cursorHeight: 10,
-        controller: sectorController,
+        onSaved: (value) {
+          sector = value;
+        },
         decoration: InputDecoration(
           prefixIcon: Icon(
             Icons.featured_play_list,
@@ -360,7 +503,9 @@ class _AddCompanyState extends State<AddCompany> {
         keyboardType: TextInputType.url,
         autocorrect: true,
         cursorHeight: 10,
-        controller: websiteController,
+        onSaved: (value) {
+          website = value;
+        },
         decoration: InputDecoration(
           prefixIcon: Icon(
             Icons.link,
@@ -389,7 +534,9 @@ class _AddCompanyState extends State<AddCompany> {
         keyboardType: TextInputType.text,
         autocorrect: true,
         cursorHeight: 10,
-        controller: keyPersonController,
+        onSaved: (value) {
+          keyPerson = value;
+        },
         validator: (String value) {
           if (value == null || value.isEmpty) return "Please enter valid Name";
           return null;
@@ -472,7 +619,9 @@ class _AddCompanyState extends State<AddCompany> {
         autocorrect: true,
         maxLines: null,
         cursorHeight: 10,
-        controller: factsController,
+        onSaved: (value) {
+          facts = value;
+        },
         validator: (String value) {
           if (value == null || value.isEmpty)
             return "Please enter valid Stroies ";
@@ -500,13 +649,16 @@ class _AddCompanyState extends State<AddCompany> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
+        maxLines: null,
         style: new TextStyle(
           fontFamily: "Poppins",
         ),
         keyboardType: TextInputType.text,
         autocorrect: true,
         cursorHeight: 10,
-        controller: descriptionController,
+        onSaved: (value) {
+          description = value;
+        },
         validator: (String value) {
           if (value == null || value.isEmpty)
             return "Please enter valid Description";

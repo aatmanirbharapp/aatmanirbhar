@@ -23,7 +23,6 @@ class ContactUs extends StatelessWidget {
               CustomSliverAppBar(scaffoldKey: _scaffoldKey),
             ]),
           )),
-    ); // TODO: implement build
-    throw UnimplementedError();
+    );
   }
 }

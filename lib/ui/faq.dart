@@ -1,24 +1,11 @@
-import 'package:atamnirbharapp/http/faqrequest.dart';
+import 'package:atamnirbharapp/bloc/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_html_view/flutter_html_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class Faq extends StatefulWidget {
-  @override
-  _FaqState createState() => _FaqState();
-}
-
-class _FaqState extends State<Faq> {
-  final _faqGetRequest = FaqHttpRequest();
-
-  Future<List> futureString;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    futureString = _faqGetRequest.mapDataToState('faq');
-  }
+class Faq extends StatelessWidget {
+  final CommanGetCalls _firebaseCall = CommanGetCalls();
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +34,8 @@ class _FaqState extends State<Faq> {
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
       ),
-      body: FutureBuilder<List>(
-          future: futureString,
+      body: FutureBuilder<QuerySnapshot>(
+          future: _firebaseCall.getFaq(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return SingleChildScrollView(
@@ -63,7 +50,7 @@ class _FaqState extends State<Faq> {
                     fit: BoxFit.cover,
                   )),
                   child: HtmlView(
-                      data: '${snapshot.data[0]["description"]}',
+                      data: '${snapshot.data.docs.first.data()['description']}',
                       scrollable: true),
                 ),
               );

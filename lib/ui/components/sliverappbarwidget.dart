@@ -17,10 +17,7 @@ class CustomSliverAppBar extends StatelessWidget {
     return SliverAppBar(
       backgroundColor: Colors.orange[100],
       leading: IconButton(
-        icon: Icon(
-          Icons.menu,
-          color: Colors.red,
-        ),
+        icon: Image.asset("assets/images/indian_flag_icon.png"),
         onPressed: () {
           print("your menu action here");
           _scaffoldKey.currentState.openDrawer();

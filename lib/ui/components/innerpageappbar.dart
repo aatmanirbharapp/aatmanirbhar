@@ -1,5 +1,6 @@
-import 'package:atamnirbharapp/ui/components/searchbarwidget.dart';
+import 'package:atamnirbharapp/ui/datasearch.dart';
 import 'package:flutter/material.dart';
+import 'dart:ui' as ui;
 
 class InnerSliverAppBar extends StatelessWidget {
   const InnerSliverAppBar({
@@ -15,19 +16,50 @@ class InnerSliverAppBar extends StatelessWidget {
     return SliverAppBar(
       backgroundColor: Colors.orange[100],
       leading: IconButton(
-        icon: Icon(
-          Icons.menu,
-          color: Colors.red,
-        ),
+        iconSize: 10,
+        icon: Image.asset("assets/images/indian_flag_icon.png"),
         onPressed: () {
-          print("your menu action here");
           _scaffoldKey.currentState.openDrawer();
         },
       ),
       pinned: true,
       floating: true,
-      title: SearchBarWidget(),
+      centerTitle: true,
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          IconButton(
+            iconSize: 15,
+            icon: Image.asset("assets/images/Final_AatmNirbhar_logo.png"),
+            onPressed: null,
+          ),
+          Text(
+            "Aatmanirbhar",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontStyle: FontStyle.italic,
+                fontSize: 22,
+                foreground: Paint()
+                  ..shader = ui.Gradient.linear(
+                    const Offset(60, 100),
+                    const Offset(50, 35),
+                    <Color>[
+                      Colors.orange,
+                      Colors.green,
+                    ],
+                  )),
+          ),
+        ],
+      ),
       actions: [
+        IconButton(
+          icon: Icon(Icons.search),
+          color: Colors.black,
+          onPressed: () {
+            Navigator.push(context,
+                new MaterialPageRoute(builder: (context) => DataSearch()));
+          },
+        ),
         IconButton(
           icon: Image.asset("assets/images/MakeInIndiaLogo.png"),
           iconSize: 50,

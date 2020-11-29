@@ -14,26 +14,19 @@ class WebViewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SafeArea(
-            top: false,
-            bottom: false,
-            child: Container(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                  image: AssetImage("assets/images/BG_Color.jpeg"),
-                  fit: BoxFit.cover,
-                )),
-                child: WebView(
-                  initialUrl: url,
-                  onPageStarted: (String url) {
-                    print('Page started loading: $url');
-                  },
-                  onPageFinished: (String url) {
-                    print('Page finished loading: $url');
-                  },
-                  gestureNavigationEnabled: true,
-                ))));
+        appBar: AppBar(
+          backgroundColor: Colors.orange[100],
+          title: Text("Website demo"),
+        ),
+        body: WebView(
+          initialUrl: url,
+          onPageStarted: (String url) {
+            print('Page started loading: $url');
+          },
+          onPageFinished: (String url) {
+            print('Page finished loading: $url');
+          },
+          gestureNavigationEnabled: true,
+        ));
   }
 }

@@ -1,50 +1,33 @@
-import 'package:atamnirbharapp/ui/components/sliverappbarwidget.dart';
-import 'package:atamnirbharapp/ui/drawer.dart';
-import 'package:atamnirbharapp/ui/screens/homescreen.dart';
+import 'package:atamnirbharapp/ui/home_page.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   // This widget is the root of your application.
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    Firebase.initializeApp();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      drawer: DrawerClass(),
-      body: SafeArea(
-          top: false,
-          bottom: false,
-          child: Container(
-            decoration: BoxDecoration(
-                image: DecorationImage(
-              image: AssetImage("assets/images/BG_Color.jpeg"),
-              fit: BoxFit.cover,
-            )),
-            child: CustomScrollView(slivers: [
-              CustomSliverAppBar(scaffoldKey: _scaffoldKey),
-              SliverList(
-                  delegate: SliverChildListDelegate([CompanyCardView()])),
-            ]),
-          )),
-    );
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: MyHomePage());
   }
 }

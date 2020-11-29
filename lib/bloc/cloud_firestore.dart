@@ -1,14 +1,46 @@
-import 'package:atamnirbharapp/bloc/company.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
-class FirebaseStore {
+class CommanGetCalls {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  FirebaseStorage storageRef = FirebaseStorage.instance;
 
   Future<DocumentReference> addCompany(Map<String, Object> company) async {
     return _firestore.collection("company").add(company);
   }
 
-  Future<Company> getCompany(String name) async {
-    await _firestore.collection("company").where("name", isEqualTo: name);
+  getImage(String fileName) async {
+    return await storageRef.ref().child(fileName).getDownloadURL();
+  }
+
+  Future<QuerySnapshot> getAboutUs() async {
+    Query query = _firestore.collection("aboutUs");
+    return query.get(GetOptions(source: Source.cache)).then((value) =>
+        value.docs.length == 0
+            ? query
+                .get(GetOptions(source: Source.serverAndCache))
+                .then((value) => value)
+            : value);
+  }
+
+  Future<QuerySnapshot> getPrivacy() async {
+    Query query = _firestore.collection("privacy");
+    return query.get(GetOptions(source: Source.cache)).then((value) =>
+        value.docs.length == 0
+            ? query
+                .get(GetOptions(source: Source.serverAndCache))
+                .then((value) => value)
+            : value);
+  }
+
+  Future<QuerySnapshot> getFaq() async {
+    Query query = _firestore.collection("faq");
+    return query.get(GetOptions(source: Source.cache)).then((value) =>
+        value.docs.length == 0
+            ? query
+                .get(GetOptions(source: Source.serverAndCache))
+                .then((value) => value)
+            : value);
   }
 }

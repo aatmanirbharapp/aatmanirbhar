@@ -47,6 +47,10 @@ dependencies:
   firebase_storage: ^4.0.1
   path: ^1.7.0
   webview_flutter: ^1.0.5
+  google_sign_in: ^4.5.3
+  timer_button: ^1.0.1
+  intl: ^0.16.1
+  auto_size_text: ^2.1.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -91,6 +95,11 @@ flutter:
     - assets/images/Website_Icon.png
     - assets/images/Dani.jpeg
     - assets/images/Prathm.jpg
+    - assets/images/glogo.png
+    - assets/images/indian_flag_icon.png
+    - assets/images/Products_Icon.png
+    - assets/images/Imported_Icon.png
+    - assets/images/alternatives_icon.png
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

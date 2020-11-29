@@ -1,192 +1,129 @@
 import 'package:atamnirbharapp/bloc/company.dart';
+import 'package:atamnirbharapp/bloc/company_repo.dart';
+import 'package:atamnirbharapp/ui/components/company_header.dart';
 import 'package:atamnirbharapp/ui/components/innerpageappbar.dart';
 import 'package:atamnirbharapp/ui/components/middlelogorow.dart';
 import 'package:atamnirbharapp/ui/components/peoplewidget.dart';
 import 'package:atamnirbharapp/ui/drawer.dart';
 import 'package:atamnirbharapp/ui/screens/addcompany.dart';
-import 'package:atamnirbharapp/ui/screens/productpageindia.dart';
-import 'package:atamnirbharapp/ui/screens/show_web_view.dart';
+import 'package:atamnirbharapp/ui/userauthentication/loginpage.dart';
+import 'package:atamnirbharapp/utils/comman_widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class IndianCompany extends StatelessWidget {
-  final String companyName;
+  final String companyId;
 
-  IndianCompany({Key key, @required this.companyName}) : super(key: key);
-
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  IndianCompany({Key key, @required this.companyId}) : super(key: key);
+  var companyRepo = CompanyRepository();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
       drawer: DrawerClass(),
-      body: SafeArea(
-          top: false,
-          bottom: false,
-          child: Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-              image: AssetImage("assets/images/BG_Color.jpeg"),
-              fit: BoxFit.cover,
-            )),
-            child: StreamBuilder<Company>(
-                stream: null,
+      body: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+              image: DecorationImage(
+            image: AssetImage("assets/images/BG_Color.jpeg"),
+            fit: BoxFit.cover,
+          )),
+          child: CustomScrollView(slivers: [
+            InnerSliverAppBar(scaffoldKey: _scaffoldKey),
+            FutureBuilder<List<QueryDocumentSnapshot>>(
+                future: companyRepo.getCompany(companyId),
                 builder: (context, snapshot) {
-                  return CustomScrollView(slivers: [
-                    InnerSliverAppBar(scaffoldKey: _scaffoldKey),
-                    SliverList(
+                  if (snapshot.hasData) {
+                    final Company company =
+                        Company.fromJson(snapshot.data.first.data());
+                    return SliverList(
                         delegate: SliverChildListDelegate([
-                      Container(
-                          height: 200,
-                          width: MediaQuery.of(context).size.width,
-                          child: Column(
-                            children: [
-                              IconButton(
-                                  icon: Image.asset(
-                                      "assets/images/Final_AatmNirbhar_logo.png"),
-                                  iconSize: 150,
-                                  onPressed: () {}),
-                              Text(
-                                "Be Desi, Support Swadesi",
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          )),
-                      Container(
-                        margin: const EdgeInsets.all(15.0),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: Colors.black26)),
-                        height: 100,
-                        width: MediaQuery.of(context).size.width,
-                        child: CompanyHeader(),
+                      CompanyHeader(
+                        company: company,
                       ),
                       Container(
                         height: 120,
-                        child: MiddleRow(),
+                        child: MiddleRow(
+                          company: company,
+                        ),
                       ),
                       Container(
-                        margin: EdgeInsets.all(10),
+                        margin: EdgeInsets.all(8),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
                             border:
                                 Border.all(width: 2, color: Colors.black38)),
-                        height: 200,
+                        height: 150,
                         width: MediaQuery.of(context).size.width,
                         child: ListView(children: [
-                          Align(
-                              alignment: Alignment.center,
-                              child: Text(
-                                "About Company",
+                          RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                                text: "About Company",
+                                children: [
+                                  TextSpan(
+                                      text: "\n\n" + company.aboutCompany,
+                                      style: TextStyle(
+                                          color: Colors.grey,
+                                          fontWeight: FontWeight.w600))
+                                ],
                                 style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 15),
-                              ))
+                                    fontWeight: FontWeight.bold,
+                                    color: Color.fromRGBO(37, 14, 98, 1))),
+                          )
                         ]),
                       ),
-                      PeopleRow(),
-                      MaterialButton(
-                        color: Colors.green[100],
-                        onPressed: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (context) => AddCompany())),
-                        child: Text("Suggest Changes"),
-                      )
-                    ]))
-                  ]);
-                }),
-          )),
-    );
-  }
-}
-
-class CompanyHeader extends StatelessWidget {
-  final Company company;
-
-  const CompanyHeader({Key key, this.company}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          width: MediaQuery.of(context).size.width * 0.25,
-          child: IconButton(
-              iconSize: MediaQuery.of(context).size.width,
-              icon: Image.asset("assets/images/Bajaj_Company_logo.png"),
-              onPressed: () {}),
-        ),
-        Container(
-          width: MediaQuery.of(context).size.width * 0.65,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    "Bajaj Consumer Ltd.",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  )
-                ],
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Column(
-                    children: [
-                      IconButton(
-                        iconSize: 10,
-                        icon: Image.asset("assets/images/Website_Icon.png"),
-                        onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => WebViewPage(
-                              url: 'google.com',
-                            ),
-                          ));
+                      PeopleRow(
+                        company: company,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          if (_auth.currentUser != null) {
+                            Navigator.push(
+                                context,
+                                new MaterialPageRoute(
+                                    builder: (context) => AddCompany()));
+                          } else {
+                            Navigator.push(
+                                context,
+                                new MaterialPageRoute(
+                                    builder: (context) => LoginPage()));
+                          }
                         },
-                      ),
-                      Text("Website", style: TextStyle(fontSize: 10))
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      IconButton(
-                        iconSize: 15,
-                        icon: Image.asset("assets/images/Wikipedia_Icon.png"),
-                        onPressed: () {},
-                      ),
-                      Text("Wikipedia", style: TextStyle(fontSize: 10))
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      IconButton(
-                          iconSize: 10,
-                          icon: Image.asset("assets/images/Fact_Icon.png"),
-                          onPressed: null),
-                      Text("Story & Facts", style: TextStyle(fontSize: 10))
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      IconButton(
-                          icon: Icon(Icons.add_shopping_cart),
-                          onPressed: () => Navigator.push(
-                              context,
-                              new MaterialPageRoute(
-                                  builder: (context) => IndiaProductPage()))),
-                      Text("Products", style: TextStyle(fontSize: 10))
-                    ],
-                  )
-                ],
-              ),
-            ],
-          ),
-        ),
-      ],
+                        child: Container(
+                          child: Center(
+                            child: Text(
+                              "Suggest Changes",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black),
+                            ),
+                          ),
+                          height: 50,
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                              colors: [Colors.orange[100], Colors.green[100]],
+                            ),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                          ),
+                          margin: EdgeInsets.all(20),
+                        ),
+                      )
+                    ]));
+                  }
+                  return CommanWidgets().getCircularProgressIndicator();
+                })
+          ])),
     );
   }
 }
