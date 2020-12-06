@@ -1,6 +1,8 @@
 import 'package:atamnirbharapp/bloc/company.dart';
 import 'package:atamnirbharapp/bloc/company_sql.dart';
 import 'package:atamnirbharapp/http/faqrequest.dart';
+import 'package:atamnirbharapp/ui/screens/forein_product_screen.dart';
+import 'package:atamnirbharapp/ui/screens/india_product_screen.dart';
 import 'package:atamnirbharapp/ui/screens/indiancompanyscreen.dart';
 
 import 'package:atamnirbharapp/ui/screens/outside_india_company.dart';
@@ -17,7 +19,7 @@ class _DataSearchState extends State<DataSearch> {
   List<QueryDocumentSnapshot> data;
   String _searchText = "";
   final _controller = TextEditingController();
-  String index;
+  String type;
 
   final _httpReq = SqlResponse();
 
@@ -40,7 +42,7 @@ class _DataSearchState extends State<DataSearch> {
     super.initState();
 
     setState(() {
-      index = "0";
+      type = "company";
     });
   }
 
@@ -81,19 +83,18 @@ class _DataSearchState extends State<DataSearch> {
               String value = await showMenu(
                 elevation: 8,
                 context: context,
-                initialValue: "company",
                 position: buttonMenuPosition(context),
                 items: <PopupMenuItem<String>>[
                   const PopupMenuItem<String>(
                       child: Text('Company'), value: 'company'),
                   const PopupMenuItem<String>(
                       child: Text('Product'), value: 'product'),
-                  const PopupMenuItem<String>(
-                      child: Text('Product By Type'), value: 'Product By Type'),
                 ],
               );
               setState(() {
-                index = value;
+                type = value;
+                _searchText = "";
+                _controller.text = "";
               });
             },
             icon: Icon(Icons.list, color: Colors.black),
@@ -109,37 +110,52 @@ class _DataSearchState extends State<DataSearch> {
           controller: _controller,
           enableSuggestions: true,
           decoration: InputDecoration(
-              border: InputBorder.none,
-              focusedBorder: InputBorder.none,
-              enabledBorder: InputBorder.none,
-              errorBorder: InputBorder.none,
-              disabledBorder: InputBorder.none,
-              hintText: "Search ..",
-              hintStyle: TextStyle(color: Colors.black)),
+            border: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            enabledBorder: InputBorder.none,
+            errorBorder: InputBorder.none,
+            disabledBorder: InputBorder.none,
+            hintText: "Search by " + type + "...",
+          ),
         ),
       ),
       body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        color: Colors.white,
-        child: FutureBuilder(
-          future: _httpReq.searchByCompany(index, _searchText),
-          builder: (BuildContext context, snapshot) {
-            if (snapshot.hasData) return _buildSearchList(snapshot.data);
-            return CommanWidgets().getCircularProgressIndicator();
-          },
-        ),
-      ),
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          color: Colors.white,
+          child: type.isNotEmpty
+              ? FutureBuilder(
+                  future: type.contains('product')
+                      ? _httpReq.searchByProduct(type, _searchText)
+                      : _httpReq.searchByCompany(type, _searchText),
+                  builder: (BuildContext context, snapshot) {
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.waiting:
+                        return CommanWidgets()
+                            .getCircularProgressIndicator(context);
+                      default:
+                        if (snapshot.hasError) {
+                          return Center(
+                            child: Text(
+                                "Error Occured please check your connection"),
+                          );
+                        } else {
+                          return createListView(snapshot.data);
+                        }
+                    }
+                  },
+                )
+              : CommanWidgets().getCircularProgressIndicator(context)),
     );
   }
 
   Widget _buildSearchList(List data) {
-    List<CompanySql> searchList = List();
+    List<Map> searchList = List();
     if (_searchText.isNotEmpty) {
       for (int i = 0; i < data.length; i++) {
-        final company = CompanySql.fromJson(data.elementAt(i));
-        print(company);
-        if (company.companyName
+        final Map company = data.elementAt(i);
+
+        if (company[type + '_name']
             .toLowerCase()
             .contains(_searchText.toLowerCase())) {
           searchList.add(company);
@@ -150,7 +166,7 @@ class _DataSearchState extends State<DataSearch> {
     return createListView(searchList);
   }
 
-  Widget createListView(List<CompanySql> datalist) {
+  Widget createListView(List datalist) {
     return ListView.builder(
         shrinkWrap: true,
         itemCount: datalist == null ? 0 : datalist.length,
@@ -160,30 +176,47 @@ class _DataSearchState extends State<DataSearch> {
             padding: const EdgeInsets.all(10.0),
             child: ListTile(
               onTap: () {
-                datalist
-                        .elementAt(index)
-                        .country
-                        .toLowerCase()
-                        .contains("india")
-                    ? Navigator.push(
-                        context,
-                        new MaterialPageRoute(
-                            builder: (context) => IndianCompany(
-                                  companyId: datalist
-                                      .elementAt(index)
-                                      .logoFileName
-                                      .split(".")
-                                      .first,
-                                )))
-                    : Navigator.push(
-                        context,
-                        new MaterialPageRoute(
-                            builder: (context) =>
-                                OutsideIndiaCompany(company: null)));
+                type.contains('product')
+                    ? datalist
+                            .elementAt(index)['country']
+                            .toLowerCase()
+                            .contains("india")
+                        ? Navigator.push(
+                            context,
+                            new MaterialPageRoute(
+                                builder: (context) => IndianProduct(
+                                      productId:
+                                          datalist.elementAt(index)['image'],
+                                    )))
+                        : Navigator.push(
+                            context,
+                            new MaterialPageRoute(
+                                builder: (context) => ForeinProductPage(
+                                      productId:
+                                          datalist.elementAt(index)['image'],
+                                    )))
+                    : datalist
+                            .elementAt(index)['country']
+                            .toLowerCase()
+                            .contains("india")
+                        ? Navigator.push(
+                            context,
+                            new MaterialPageRoute(
+                                builder: (context) => IndianCompany(
+                                      companyId: datalist
+                                          .elementAt(index)['company_logo'],
+                                    )))
+                        : Navigator.push(
+                            context,
+                            new MaterialPageRoute(
+                                builder: (context) => OutsideIndiaCompany(
+                                      companyId: datalist
+                                          .elementAt(index)['company_logo'],
+                                    )));
               },
               leading:
                   IconButton(onPressed: () => null, icon: Icon(Icons.search)),
-              title: Text(datalist.elementAt(index).companyName),
+              title: Text(datalist.elementAt(index)[type + '_name']),
             ),
           );
         });

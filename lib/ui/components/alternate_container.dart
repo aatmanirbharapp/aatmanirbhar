@@ -52,7 +52,7 @@ Widget AlternateContainer(BuildContext context, Product product) {
               } else if (snapshot.hasError) {
                 return Text("Error Occured");
               } else
-                return CommanWidgets().getCircularProgressIndicator();
+                return CommanWidgets().getCircularProgressIndicator(context);
             })
       ],
     ),

@@ -39,7 +39,8 @@ class PeopleRow extends StatelessWidget {
                           ),
                           radius: 30.0,
                         );
-                      return CommanWidgets().getCircularProgressIndicator();
+                      return CommanWidgets()
+                          .getCircularProgressIndicator(context);
                     }),
               ),
               Column(
@@ -80,7 +81,8 @@ class PeopleRow extends StatelessWidget {
                           ),
                           radius: 30.0,
                         );
-                      return CommanWidgets().getCircularProgressIndicator();
+                      return CommanWidgets()
+                          .getCircularProgressIndicator(context);
                     }),
               ),
               Column(

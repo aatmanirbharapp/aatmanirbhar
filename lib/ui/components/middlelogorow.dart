@@ -105,7 +105,8 @@ class MiddleRow extends StatelessWidget {
                               fit: BoxFit.fill,
                             ),
                           );
-                        return CommanWidgets().getCircularProgressIndicator();
+                        return CommanWidgets()
+                            .getCircularProgressIndicator(context);
                       }),
             ),
             Text(

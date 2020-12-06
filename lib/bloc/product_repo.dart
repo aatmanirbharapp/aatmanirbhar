@@ -16,12 +16,12 @@ class ProductRepository {
             : value.docs);
   }
 
-  Future<Product> getProduct(String productId) async {
+  Future<List<QueryDocumentSnapshot>> getProduct(String productId) async {
     return await _firestore
         .collection('product')
-        .doc(productId)
+        .where('image', isEqualTo: productId)
         .get(GetOptions(source: Source.serverAndCache))
-        .then((value) => Product.fromJson(value.data()));
+        .then((value) => value.docs);
   }
 
   Future<List<QueryDocumentSnapshot>> getProductByKeyword(

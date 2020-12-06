@@ -1,4 +1,5 @@
 import 'package:atamnirbharapp/bloc/company.dart';
+import 'package:atamnirbharapp/http/faqrequest.dart';
 import 'package:atamnirbharapp/ui/reviews/review_screen.dart';
 import 'package:atamnirbharapp/ui/screens/comapny_product_list.dart';
 import 'package:atamnirbharapp/ui/screens/show_web_view.dart';
@@ -9,7 +10,9 @@ import 'package:flutter/material.dart';
 class CompanyHeader extends StatelessWidget {
   final Company company;
 
-  const CompanyHeader({Key key, this.company}) : super(key: key);
+  CompanyHeader({Key key, this.company}) : super(key: key);
+
+  final _httpReq = SqlResponse();
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +38,7 @@ class CompanyHeader extends StatelessWidget {
                         iconSize: MediaQuery.of(context).size.width,
                         icon: Image.network(snapshot.data),
                         onPressed: () {});
-                  return CommanWidgets().getCircularProgressIndicator();
+                  return CommanWidgets().getCircularProgressIndicator(context);
                 }),
           ),
           Container(
@@ -81,10 +84,29 @@ class CompanyHeader extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text("4.2",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white)),
+                              FutureBuilder(
+                                  future: _httpReq
+                                      .getRatingCount(company.companyId),
+                                  builder: (context, snapshot) {
+                                    switch (snapshot.connectionState) {
+                                      case ConnectionState.waiting:
+                                        return Text("0.0",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white));
+                                      default:
+                                        if (snapshot.hasData) {
+                                          return Text("4.2",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white));
+                                        } else if (snapshot.hasError)
+                                          return Text("0.0",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white));
+                                    }
+                                  }),
                               Icon(
                                 Icons.star,
                                 color: Colors.white,
@@ -163,6 +185,7 @@ class CompanyHeader extends StatelessWidget {
                               child: InkWell(
                                   onTap: () {
                                     showAboutDialog(
+                                        context: context,
                                         applicationName: "Facts And Stories",
                                         children: [
                                           Text(

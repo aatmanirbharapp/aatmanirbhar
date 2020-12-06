@@ -85,8 +85,6 @@ class _AddCompanyState extends State<AddCompany> {
 
   @override
   void initState() {
-    var firebaseUser = FirebaseAuth.instance.currentUser;
-    getUserData(firebaseUser.uid);
     super.initState();
   }
 
@@ -159,74 +157,6 @@ class _AddCompanyState extends State<AddCompany> {
                               _description()
                             ],
                           ),
-                        ),
-                      ),
-                      Form(
-                        child: ExpansionTile(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Card(
-                                elevation: 10,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15)),
-                                color: Colors.white,
-                                child: TextFormField(
-                                  enabled: userDetails.email == null ||
-                                      userDetails.email.isEmpty,
-                                  autocorrect: true,
-                                  controller: emailController,
-                                  onSaved: (newValue) {
-                                    userEmail = newValue;
-                                  },
-                                  decoration: InputDecoration(
-                                    prefixIcon: Icon(
-                                      Icons.email,
-                                      color: Colors.grey,
-                                    ),
-                                    hintText: "Enter your email Id",
-                                    fillColor: Colors.orange[50],
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Card(
-                                elevation: 10,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15)),
-                                color: Colors.white,
-                                child: TextFormField(
-                                  enabled: userDetails.phonenumber == null ||
-                                      userDetails.phonenumber.isEmpty,
-                                  autocorrect: true,
-                                  controller: userNameController,
-                                  onSaved: (newValue) {
-                                    userName = newValue;
-                                  },
-                                  decoration: InputDecoration(
-                                    prefixIcon: Icon(
-                                      Icons.call,
-                                      color: Colors.grey,
-                                    ),
-                                    hintText: "Enter your Phone number",
-                                    fillColor: Colors.orange[50],
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            )
-                          ],
-                          initiallyExpanded: true,
-                          title: Text("Personal Details"),
-                          leading: Icon(Icons.menu),
-                          trailing: Icon(Icons.arrow_drop_down),
                         ),
                       ),
                       Container(

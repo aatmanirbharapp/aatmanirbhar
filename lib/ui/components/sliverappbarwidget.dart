@@ -29,11 +29,12 @@ class CustomSliverAppBar extends StatelessWidget {
       bottom: PreferredSize(
           child: SearchBarWidget(), preferredSize: const Size.fromHeight(60)),
       actions: [
-        IconButton(
-          icon: Image.asset("assets/images/Final_AatmNirbhar_logo.png"),
-          iconSize: 70,
-          onPressed: () {},
-        ),
+        ClipOval(
+          child: Image.asset(
+            "assets/images/Final_AatmNirbhar_logo.png",
+            fit: BoxFit.cover,
+          ),
+        )
       ],
     );
   }

@@ -3,176 +3,158 @@ import 'package:atamnirbharapp/ui/home_page.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-class CompanyCardView extends StatelessWidget {
+class CompanyCardView extends StatefulWidget {
+  @override
+  _CompanyCardViewState createState() => _CompanyCardViewState();
+}
+
+class _CompanyCardViewState extends State<CompanyCardView> {
+  YoutubePlayerController _controller;
+  bool _muted = false;
+  bool _isPlayerReady = false;
+  PlayerState _playerState;
+
+  YoutubeMetaData _videoMetaData;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = YoutubePlayerController(
+      initialVideoId: YoutubePlayer.convertUrlToId(
+          "https://www.youtube.com/watch?v=BBAyRBTfsOU"),
+      flags: const YoutubePlayerFlags(
+        mute: false,
+        autoPlay: true,
+        disableDragSeek: false,
+        loop: false,
+        isLive: false,
+        forceHD: false,
+        enableCaption: true,
+      ),
+    )..addListener(listener);
+
+    _videoMetaData = const YoutubeMetaData();
+    _playerState = PlayerState.unknown;
+  }
+
+  void listener() {
+    if (_isPlayerReady && mounted && !_controller.value.isFullScreen) {
+      setState(() {
+        _playerState = _controller.value.playerState;
+        _videoMetaData = _controller.metadata;
+      });
+    }
+  }
+
+  @override
+  void deactivate() {
+    // Pauses video while navigating to next page.
+    _controller.pause();
+    super.deactivate();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: EdgeInsets.all(10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Newly added Indian companies",
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black54),
-                textAlign: TextAlign.left,
-              ),
-              Container(
-                  height: 2,
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  color: Colors.black)
-            ],
-          ),
+        Container(
+          height: MediaQuery.of(context).size.height * 0.3,
+          width: MediaQuery.of(context).size.width,
+          child: Padding(
+              padding: EdgeInsets.all(5),
+              child: YoutubePlayerBuilder(
+                onExitFullScreen: () {
+                  // The player forces portraitUp after exiting fullscreen. This overrides the behaviour.
+                  SystemChrome.setPreferredOrientations(
+                      DeviceOrientation.values);
+                },
+                builder: (context, player) => Container(),
+                player: YoutubePlayer(
+                  controller: _controller,
+                  showVideoProgressIndicator: true,
+                  progressIndicatorColor: Colors.blueAccent,
+                  topActions: <Widget>[
+                    const SizedBox(width: 8.0),
+                    Expanded(
+                      child: Text(
+                        _controller.metadata.title,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.0,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(
+                        Icons.settings,
+                        color: Colors.white,
+                        size: 25.0,
+                      ),
+                      onPressed: () {},
+                    ),
+                  ],
+                  onReady: () {
+                    _isPlayerReady = true;
+                  },
+                  onEnded: (data) {},
+                ),
+              )),
         ),
         Container(
             height: MediaQuery.of(context).size.height * 0.3,
             width: MediaQuery.of(context).size.width,
+            padding: EdgeInsets.all(10),
             child: CarouselSlider(
-              options: CarouselOptions(
-                enlargeCenterPage: true,
-                autoPlay: true,
-                height: MediaQuery.of(context).size.height * 0.3,
-              ),
               items: [
                 Padding(
-                  padding: EdgeInsets.all(10),
-                  child: GestureDetector(
-                    onTap: () => Navigator.push(
-                        context,
-                        new MaterialPageRoute(
-                            builder: (context) => MyHomePage())),
-                    child: Stack(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(10.0),
-                          child: Image.asset("assets/images/backimage.jpg"),
-                        ),
-                        Positioned(
-                            bottom: 10,
-                            left: 30,
-                            child: Row(
-                              children: [
-                                FlatButton(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      side: BorderSide()),
-                                  color: Colors.blue[50],
-                                  onPressed: () {},
-                                  child: Text(
-                                    "HERSHEYS",
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                ),
-                              ],
-                            ))
-                      ],
-                    ),
-                  ),
-                ),
-                Stack(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(10.0),
-                      child: Image.asset("assets/images/britannia.png"),
-                    ),
-                    Positioned(
-                        bottom: 10,
-                        left: 30,
-                        child: Row(
-                          children: [
-                            FlatButton(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  side: BorderSide()),
-                              color: Colors.blue[50],
-                              onPressed: () {},
-                              child: Text(
-                                "BRITANNIA",
-                                style: TextStyle(color: Colors.black),
-                              ),
-                            ),
-                          ],
-                        ))
-                  ],
-                )
+                    padding: EdgeInsets.all(8),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Image.asset("assets/images/IM1_English.png"),
+                    )),
+                Padding(
+                    padding: EdgeInsets.all(8),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Image.asset("assets/images/IM2_English.png"),
+                    )),
+                Padding(
+                    padding: EdgeInsets.all(8),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Image.asset("assets/images/IM3_English.png"),
+                    )),
+                Padding(
+                    padding: EdgeInsets.all(8),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Image.asset("assets/images/IM4_English.png"),
+                    )),
+                Padding(
+                    padding: EdgeInsets.all(8),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Image.asset("assets/images/IM5_English.png"),
+                    ))
               ],
+              options: CarouselOptions(
+                autoPlay: true,
+                pauseAutoPlayOnTouch: true,
+              ),
             )),
-        Padding(
-          padding: EdgeInsets.only(left: 10, top: 10, bottom: 5),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Search by category",
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black54),
-                textAlign: TextAlign.left,
-              ),
-              Container(
-                  height: 2,
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  color: Colors.black)
-            ],
-          ),
-        ),
-        Container(
-          height: MediaQuery.of(context).size.height * 0.25,
-          width: MediaQuery.of(context).size.width,
-          padding: EdgeInsets.all(10),
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                  colors: [Colors.orange[50], Colors.green[50]],
-                )),
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width * 0.8,
-                child: Stack(children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
-                    child: Image.asset("assets/images/Cars.png"),
-                  ),
-                  Positioned(
-                      left: 10,
-                      bottom: 10,
-                      child: Text(
-                        "Automobiles ",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                      ))
-                ]),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 10),
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  height: MediaQuery.of(context).size.height,
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                    colors: [Colors.orange[50], Colors.green[50]],
-                  )),
-                  child: Stack(children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(10.0),
-                      child: Image.asset("assets/images/Toys.png"),
-                    ),
-                  ]),
-                ),
-              ),
-            ],
-          ),
-        ),
         FooterWidget()
       ],
     );

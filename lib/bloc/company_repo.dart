@@ -37,4 +37,11 @@ class CompanyRepository {
                 .then((value) => value)
             : value);
   }
+
+  void updateRatingCompany(String id, String rating) async {
+    DocumentReference query = _firestore.collection("company").doc(id);
+    await _firestore.runTransaction((transaction) async {
+      transaction.set(query, {"ratings": rating}, SetOptions(merge: true));
+    });
+  }
 }

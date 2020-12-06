@@ -1,37 +1,33 @@
 import 'package:atamnirbharapp/bloc/company.dart';
+import 'package:atamnirbharapp/bloc/product.dart';
 import 'package:atamnirbharapp/ui/screens/forein_product_screen.dart';
 import 'package:atamnirbharapp/ui/screens/india_product_screen.dart';
-import 'package:auto_size_text/auto_size_text.dart';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class AlternateCompanyHeader extends StatelessWidget {
-  final product;
-  final Company company;
+  final Product product;
 
-  AlternateCompanyHeader({Key key, this.product, this.company})
-      : super(key: key);
+  AlternateCompanyHeader({Key key, this.product}) : super(key: key);
 
   final FirebaseStorage storageRef = FirebaseStorage.instance;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        company.firstCountry.toLowerCase().contains("india")
+        product.firstCountry.toLowerCase().contains("india")
             ? Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => IndianProduct(
-                          product: product,
-                          company: company,
+                          productId: product.image,
                         )))
             : Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => ForeinProductPage(
-                          product: product,
-                          company: company,
-                        )));
+                    builder: (context) =>
+                        ForeinProductPage(productId: product.image)));
       },
       child: Container(
         margin: const EdgeInsets.all(15.0),
@@ -74,11 +70,20 @@ class AlternateCompanyHeader extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      AutoSizeText(
-                        product.productName,
-                        maxLines: 2,
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      )
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.65 - 50,
+                        child: SingleChildScrollView(
+                          padding: EdgeInsets.only(top: 8),
+                          child: Text(
+                            product.productName,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                            overflow: TextOverflow.visible,
+                            softWrap: true,
+                            maxLines: null,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ],

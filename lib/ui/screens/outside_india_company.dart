@@ -8,14 +8,15 @@ import 'package:atamnirbharapp/ui/drawer.dart';
 import 'package:atamnirbharapp/ui/screens/addcompany.dart';
 import 'package:atamnirbharapp/ui/userauthentication/loginpage.dart';
 import 'package:atamnirbharapp/utils/comman_widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class OutsideIndiaCompany extends StatelessWidget {
-  final Company company;
+  final String companyId;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  OutsideIndiaCompany({Key key, @required this.company}) : super(key: key);
+  OutsideIndiaCompany({Key key, @required this.companyId}) : super(key: key);
 
   final companyRepo = CompanyRepository();
 
@@ -36,87 +37,110 @@ class OutsideIndiaCompany extends StatelessWidget {
                 image: AssetImage("assets/images/BG_Color.jpeg"),
                 fit: BoxFit.cover,
               )),
-              child: CustomScrollView(slivers: [
-                InnerSliverAppBar(scaffoldKey: _scaffoldKey),
-                SliverList(
-                    delegate: SliverChildListDelegate([
-                  CompanyHeader(
-                    company: company,
-                  ),
-                  Container(
-                    height: 120,
-                    child: MiddleRow(
-                      company: company,
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(width: 2, color: Colors.black38)),
-                    height: 150,
-                    width: MediaQuery.of(context).size.width,
-                    child: ListView(children: [
-                      RichText(
-                          textAlign: TextAlign.center,
-                          text: TextSpan(
-                            text: "About Company",
-                            children: [
-                              TextSpan(
-                                  text: "\n\n" + company.aboutCompany,
-                                  style: TextStyle(
-                                      color: Colors.grey,
-                                      fontWeight: FontWeight.w600))
-                            ],
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromARGB(255, 0, 0, 128)),
-                          ))
-                    ]),
-                  ),
-                  PeopleRow(
-                    company: company,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      if (_auth.currentUser != null) {
-                        Navigator.push(
-                            context,
-                            new MaterialPageRoute(
-                                builder: (context) => AddCompany()));
-                      } else {
-                        Navigator.push(
-                            context,
-                            new MaterialPageRoute(
-                                builder: (context) => LoginPage()));
-                      }
-                    },
-                    child: Container(
-                      child: Center(
-                        child: Text(
-                          "Suggest Changes",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black),
-                        ),
-                      ),
-                      height: 50,
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                          colors: [Colors.orange[100], Colors.green[100]],
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      ),
-                      margin: EdgeInsets.all(20),
-                    ),
-                  )
-                ]))
-              ]))),
+              child: FutureBuilder<List<QueryDocumentSnapshot>>(
+                  future: companyRepo.getCompany(companyId.split('.').first),
+                  builder: (context, snapshot) {
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.waiting:
+                        return CommanWidgets()
+                            .getCircularProgressIndicator(context);
+                      default:
+                        if (snapshot.hasData) {
+                          Company company =
+                              Company.fromJson(snapshot.data.first.data());
+                          return CustomScrollView(slivers: [
+                            InnerSliverAppBar(scaffoldKey: _scaffoldKey),
+                            SliverList(
+                                delegate: SliverChildListDelegate([
+                              CompanyHeader(
+                                company: company,
+                              ),
+                              Container(
+                                height: 120,
+                                child: MiddleRow(
+                                  company: company,
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    border: Border.all(
+                                        width: 2, color: Colors.black38)),
+                                height: 150,
+                                width: MediaQuery.of(context).size.width,
+                                child: ListView(children: [
+                                  RichText(
+                                      textAlign: TextAlign.center,
+                                      text: TextSpan(
+                                        text: "About Company",
+                                        children: [
+                                          TextSpan(
+                                              text:
+                                                  "\n\n" + company.aboutCompany,
+                                              style: TextStyle(
+                                                  color: Colors.grey,
+                                                  fontWeight: FontWeight.w600))
+                                        ],
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color:
+                                                Color.fromARGB(255, 0, 0, 128)),
+                                      ))
+                                ]),
+                              ),
+                              PeopleRow(
+                                company: company,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  if (_auth.currentUser != null) {
+                                    Navigator.push(
+                                        context,
+                                        new MaterialPageRoute(
+                                            builder: (context) =>
+                                                AddCompany()));
+                                  } else {
+                                    Navigator.push(
+                                        context,
+                                        new MaterialPageRoute(
+                                            builder: (context) => LoginPage()));
+                                  }
+                                },
+                                child: Container(
+                                  child: Center(
+                                    child: Text(
+                                      "Suggest Changes",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black),
+                                    ),
+                                  ),
+                                  height: 50,
+                                  width: MediaQuery.of(context).size.width,
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      begin: Alignment.centerLeft,
+                                      end: Alignment.centerRight,
+                                      colors: [
+                                        Colors.orange[100],
+                                        Colors.green[100]
+                                      ],
+                                    ),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10.0)),
+                                  ),
+                                  margin: EdgeInsets.all(20),
+                                ),
+                              )
+                            ]))
+                          ]);
+                        } else
+                          return Center(child: Text("Loading ..."));
+                    }
+                  }))),
     );
   }
 }

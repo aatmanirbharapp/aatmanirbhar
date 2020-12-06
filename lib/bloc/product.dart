@@ -1,6 +1,7 @@
 class Product {
   String id;
 
+  String companyId;
   String productId;
 
   String productName;
@@ -50,6 +51,7 @@ class Product {
   int makeInIndia;
   Product(
       {this.id,
+      this.companyId,
       this.productId,
       this.productName,
       this.wikiPage,
@@ -84,7 +86,7 @@ class Product {
     keyPerson = json['keyPerson'] as String;
     sector = json['sector'] as String;
     country = json['country'] as String;
-
+    companyId = json['companyId'] as String;
     description = json['description'] as String;
     logoFileName = json['logoFileName'] as String;
     makeInIndia = json['makeInIndia'] as int;

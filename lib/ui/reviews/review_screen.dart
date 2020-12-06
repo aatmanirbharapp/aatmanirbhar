@@ -1,9 +1,14 @@
+import 'package:atamnirbharapp/bloc/company.dart';
+import 'package:atamnirbharapp/ui/reviews/add_review.dart';
+import 'package:atamnirbharapp/ui/userauthentication/loginpage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class AllReview extends StatelessWidget {
-  final object;
+  final Company object;
 
-  const AllReview({Key key, @required this.object});
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  AllReview({Key key, @required this.object});
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +53,22 @@ class AllReview extends StatelessWidget {
                           fontWeight: FontWeight.bold, color: Colors.white),
                     ),
                     color: Color.fromARGB(255, 0, 0, 136),
-                    onPressed: () {},
+                    onPressed: () {
+                      if (_auth.currentUser != null) {
+                        Navigator.push(
+                            context,
+                            new MaterialPageRoute(
+                                builder: (context) => AddReview(
+                                    object,
+                                    _auth.currentUser.uid,
+                                    _auth.currentUser.displayName)));
+                      } else {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginPage()));
+                      }
+                    },
                   )
                 ],
               ),

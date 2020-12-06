@@ -34,7 +34,6 @@ class CompanyProductList extends StatelessWidget {
                 itemCount: snapshot.data.length,
                 itemBuilder: (context, index) {
                   return AlternateCompanyHeader(
-                    company: company,
                     product:
                         Product.fromJson(snapshot.data.elementAt(index).data()),
                   );
@@ -45,7 +44,7 @@ class CompanyProductList extends StatelessWidget {
                 child: Text("Error Occured"),
               );
             } else
-              return CommanWidgets().getCircularProgressIndicator();
+              return CommanWidgets().getCircularProgressIndicator(context);
           },
         ),
       ),

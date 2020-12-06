@@ -1,5 +1,6 @@
 import 'package:atamnirbharapp/bloc/company.dart';
 import 'package:atamnirbharapp/bloc/product.dart';
+import 'package:atamnirbharapp/ui/screens/indiancompanyscreen.dart';
 import 'package:atamnirbharapp/ui/screens/show_web_view.dart';
 import 'package:atamnirbharapp/utils/comman_widgets.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -7,9 +8,8 @@ import 'package:flutter/material.dart';
 
 class ProductHeader extends StatelessWidget {
   final Product product;
-  final Company company;
 
-  const ProductHeader({Key key, this.product, this.company});
+  const ProductHeader({Key key, this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class ProductHeader extends StatelessWidget {
                         iconSize: MediaQuery.of(context).size.width,
                         icon: Image.network(snapshot.data),
                         onPressed: () {});
-                  return CommanWidgets().getCircularProgressIndicator();
+                  return CommanWidgets().getCircularProgressIndicator(context);
                 }),
           ),
           Container(
@@ -47,10 +47,20 @@ class ProductHeader extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(
-                      product.productName,
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    )
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.65 - 50,
+                      child: SingleChildScrollView(
+                        padding: EdgeInsets.only(top: 8),
+                        child: Text(
+                          product.productName,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                          overflow: TextOverflow.visible,
+                          softWrap: true,
+                          maxLines: null,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
                 Row(
@@ -69,7 +79,7 @@ class ProductHeader extends StatelessWidget {
                                 onTap: () {
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) => WebViewPage(
-                                            url: company.website,
+                                            url: product.website,
                                           )));
                                 },
                                 child: Image.asset(
@@ -93,21 +103,24 @@ class ProductHeader extends StatelessWidget {
                               child: InkWell(
                                 onTap: () {
                                   Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => WebViewPage(
-                                            url: company.website,
+                                      builder: (context) => IndianCompany(
+                                            companyId: product.companyId,
                                           )));
                                 },
                                 child: FutureBuilder<Object>(
                                     future: FirebaseStorage.instance
                                         .ref()
-                                        .child("Company_Logos/" + company.image)
+                                        .child("Company_Logos/" +
+                                            product.companyId +
+                                            ".png")
                                         .getDownloadURL(),
                                     builder: (context, snapshot) {
                                       if (snapshot.hasData)
                                         return Image.network(snapshot.data);
 
                                       return CommanWidgets()
-                                          .getCircularProgressIndicator();
+                                          .getCircularProgressIndicator(
+                                              context);
                                     }),
                               )),
                         ),

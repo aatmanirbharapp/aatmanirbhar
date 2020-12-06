@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "830859103786",
+    "firebase_url": "https://aatmanirbhar.firebaseio.com",
+    "project_id": "aatmanirbhar",
+    "storage_bucket": "aatmanirbhar.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:830859103786:android:05ee7ba84015fdf5e37d53",
+        "android_client_info": {
+          "package_name": "com.example.atamnirbharapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "830859103786-3kcdlkhvoug8cdq9fjn65beujoct99gc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.atamnirbharapp",
+            "certificate_hash": "b7c3e9a6bfd045e8ace29ce15fd5a614d643b567"
+          }
+        },
+        {
+          "client_id": "830859103786-0h6acf81mju7kdak5pkqtgnvkohmds20.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9KsqNyMTtF5Kh3m8SyepCX7twyeDcKIc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "830859103786-0h6acf81mju7kdak5pkqtgnvkohmds20.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

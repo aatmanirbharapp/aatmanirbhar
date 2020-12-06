@@ -72,48 +72,37 @@ class Aboutus extends StatelessWidget {
                         Divider(),
                         TeamHeader(
                             storageRef: storageRef,
-                            team: Team.fromJson(
-                                aboutUs.team.elementAt(0).data())),
+                            team: aboutUs.team.elementAt(0)),
                         TeamHeader(
                             storageRef: storageRef,
-                            team: Team.fromJson(
-                                aboutUs.team.elementAt(1).data())),
+                            team: aboutUs.team.elementAt(1)),
                         TeamHeader(
                             storageRef: storageRef,
-                            team: Team.fromJson(
-                                aboutUs.team.elementAt(2).data())),
+                            team: aboutUs.team.elementAt(2)),
                         TeamHeader(
                             storageRef: storageRef,
-                            team: Team.fromJson(
-                                aboutUs.team.elementAt(3).data())),
+                            team: aboutUs.team.elementAt(3)),
                         TeamHeader(
                             storageRef: storageRef,
-                            team: Team.fromJson(
-                                aboutUs.team.elementAt(4).data())),
+                            team: aboutUs.team.elementAt(4)),
                         TeamHeader(
                             storageRef: storageRef,
-                            team: Team.fromJson(
-                                aboutUs.team.elementAt(5).data())),
+                            team: aboutUs.team.elementAt(5)),
                         TeamHeader(
                             storageRef: storageRef,
-                            team: Team.fromJson(
-                                aboutUs.team.elementAt(6).data())),
+                            team: aboutUs.team.elementAt(6)),
                         TeamHeader(
                             storageRef: storageRef,
-                            team: Team.fromJson(
-                                aboutUs.team.elementAt(7).data())),
+                            team: aboutUs.team.elementAt(7)),
                         TeamHeader(
                             storageRef: storageRef,
-                            team: Team.fromJson(
-                                aboutUs.team.elementAt(8).data())),
+                            team: aboutUs.team.elementAt(8)),
                         TeamHeader(
                             storageRef: storageRef,
-                            team: Team.fromJson(
-                                aboutUs.team.elementAt(9).data())),
+                            team: aboutUs.team.elementAt(9)),
                         TeamHeader(
                             storageRef: storageRef,
-                            team: Team.fromJson(
-                                aboutUs.team.elementAt(10).data())),
+                            team: aboutUs.team.elementAt(10)),
                         Divider(),
                         Container(
                             height: 250,
@@ -144,61 +133,65 @@ class TeamHeader extends StatelessWidget {
       : super(key: key);
 
   final FirebaseStorage storageRef;
-  final Team team;
+  final Map team;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 100,
-      width: MediaQuery.of(context).size.width,
-      child: Row(
-        children: [
-          Container(
-            width: MediaQuery.of(context).size.width * 0.45,
-            child: Column(
-              children: [
-                Container(
-                  height: 50,
-                  child: FutureBuilder<Object>(
-                      future: storageRef
-                          .ref()
-                          .child("Team/" + team.image)
-                          .getDownloadURL(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData)
-                          return ClipOval(
-                            child: Image.network(
-                              snapshot.data,
-                              fit: BoxFit.cover,
-                            ),
-                          );
-                        return CommanWidgets().getCircularProgressIndicator();
-                      }),
-                ),
-                SingleChildScrollView(
-                    child: Text(
-                  team.role,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ))
-              ],
+    return Padding(
+      padding: const EdgeInsets.only(top: 8, bottom: 8),
+      child: Container(
+        height: 100,
+        width: MediaQuery.of(context).size.width,
+        child: Row(
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width * 0.45,
+              child: Column(
+                children: [
+                  Container(
+                    height: 50,
+                    child: FutureBuilder<Object>(
+                        future: storageRef
+                            .ref()
+                            .child("Team/" + team['image'])
+                            .getDownloadURL(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData)
+                            return ClipOval(
+                              child: Image.network(
+                                snapshot.data,
+                                fit: BoxFit.cover,
+                              ),
+                            );
+                          return CommanWidgets()
+                              .getCircularProgressIndicator(context);
+                        }),
+                  ),
+                  SingleChildScrollView(
+                      child: Text(
+                    team['role'],
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ))
+                ],
+              ),
             ),
-          ),
-          Container(
-            width: MediaQuery.of(context).size.width * 0.45,
-            child: Column(
-              children: [
-                Text(
-                  team.name,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                Text(team.ocupation, textAlign: TextAlign.center),
-                Text(team.location, textAlign: TextAlign.center)
-              ],
-            ),
-          )
-        ],
+            Container(
+              width: MediaQuery.of(context).size.width * 0.45,
+              child: Column(
+                children: [
+                  Text(
+                    team['name'],
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text(team['ocupation'], textAlign: TextAlign.center),
+                  Text(team['location'], textAlign: TextAlign.center)
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
