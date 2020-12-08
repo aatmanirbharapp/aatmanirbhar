@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -16,7 +16,22 @@ class WebViewPage extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.orange[100],
-          title: Text("Website demo"),
+          title: Text(
+            "Aatmanirbhar",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontStyle: FontStyle.italic,
+                fontSize: 22,
+                foreground: Paint()
+                  ..shader = ui.Gradient.linear(
+                    const Offset(60, 100),
+                    const Offset(50, 35),
+                    <Color>[
+                      Colors.orange,
+                      Colors.green,
+                    ],
+                  )),
+          ),
         ),
         body: WebView(
           initialUrl: url,

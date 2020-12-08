@@ -1,9 +1,6 @@
-import 'dart:io';
-
 import 'package:atamnirbharapp/bloc/company_repo.dart';
 import 'package:atamnirbharapp/utils/appconstant.dart';
 import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
 
 import 'dart:convert';
 

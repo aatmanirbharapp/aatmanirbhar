@@ -87,6 +87,7 @@ class CompanyHeader extends StatelessWidget {
                               FutureBuilder(
                                   future: _httpReq
                                       .getRatingCount(company.companyId),
+                                  // ignore: missing_return
                                   builder: (context, snapshot) {
                                     switch (snapshot.connectionState) {
                                       case ConnectionState.waiting:

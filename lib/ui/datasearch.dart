@@ -1,5 +1,3 @@
-import 'package:atamnirbharapp/bloc/company.dart';
-import 'package:atamnirbharapp/bloc/company_sql.dart';
 import 'package:atamnirbharapp/http/faqrequest.dart';
 import 'package:atamnirbharapp/ui/screens/forein_product_screen.dart';
 import 'package:atamnirbharapp/ui/screens/india_product_screen.dart';

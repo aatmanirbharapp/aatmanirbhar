@@ -1,5 +1,4 @@
 import 'package:atamnirbharapp/ui/components/footerwidget.dart';
-import 'package:atamnirbharapp/ui/home_page.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -24,10 +23,10 @@ class _CompanyCardViewState extends State<CompanyCardView> {
     super.initState();
     _controller = YoutubePlayerController(
       initialVideoId: YoutubePlayer.convertUrlToId(
-          "https://www.youtube.com/watch?v=BBAyRBTfsOU"),
+          "https://www.youtube.com/watch?v=0CG8Jd7FdtA"),
       flags: const YoutubePlayerFlags(
         mute: false,
-        autoPlay: true,
+        autoPlay: false,
         disableDragSeek: false,
         loop: false,
         isLive: false,
@@ -66,6 +65,7 @@ class _CompanyCardViewState extends State<CompanyCardView> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(

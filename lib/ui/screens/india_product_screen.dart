@@ -1,7 +1,5 @@
-import 'package:atamnirbharapp/bloc/company.dart';
 import 'package:atamnirbharapp/bloc/product.dart';
 import 'package:atamnirbharapp/bloc/product_repo.dart';
-import 'package:atamnirbharapp/ui/components/company_header.dart';
 import 'package:atamnirbharapp/ui/components/innerpageappbar.dart';
 import 'package:atamnirbharapp/ui/components/middlelogorow.dart';
 import 'package:atamnirbharapp/ui/components/peoplewidget.dart';
