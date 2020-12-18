@@ -21,6 +21,8 @@ class Company {
 
   String firstCountry;
 
+  String secondCountry;
+
   String image;
 
   int isActive;
@@ -57,6 +59,7 @@ class Company {
       this.keyPerson,
       this.sector,
       this.country,
+      this.secondCountry,
       this.story,
       this.description,
       this.logoFileName,
@@ -101,6 +104,7 @@ class Company {
     moderatorByPlace = json['moderatorByPlace'] as String;
     firstCountry = json['firstCountry'] as String;
     isService = json['isService'] as int;
+    secondCountry = json['secondCountry'] as String;
   }
 
   Map<String, dynamic> toJson() => {
@@ -128,6 +132,7 @@ class Company {
         'moderatorByName': moderatorByName,
         'moderatorByPlace': moderatorByPlace,
         'firstCountry': firstCountry,
-        'isService': isService
+        'isService': isService,
+        'secondCountry': secondCountry
       };
 }

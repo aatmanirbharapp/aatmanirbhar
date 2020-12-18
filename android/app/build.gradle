@@ -25,6 +25,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+apply plugin: 'com.google.firebase.crashlytics'
+apply plugin: 'com.google.firebase.firebase-perf'
 
 android {
     compileSdkVersion 28
@@ -67,5 +69,8 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
     // https://mvnrepository.com/artifact/com.google.android.gms/play-services-base
     compile group: 'com.google.android.gms', name: 'play-services-base', version: '17.0.0'
+    implementation platform('com.google.firebase:firebase-bom:26.1.1')
+    implementation 'com.google.firebase:firebase-perf'
+    implementation 'com.google.firebase:firebase-crashlytics'
 
 }

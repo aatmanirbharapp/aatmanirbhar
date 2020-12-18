@@ -108,6 +108,8 @@ class IndianProduct extends StatelessWidget {
                           ]);
                         } else if (snapshot.hasError)
                           return Center(child: Text("Loading ... "));
+                        else
+                          return Center(child: Text("Loading ... "));
                     }
                   }))),
     );

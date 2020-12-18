@@ -12,7 +12,7 @@ class CompanyCardView extends StatefulWidget {
 
 class _CompanyCardViewState extends State<CompanyCardView> {
   YoutubePlayerController _controller;
-  bool _muted = false;
+
   bool _isPlayerReady = false;
   PlayerState _playerState;
 
@@ -66,7 +66,6 @@ class _CompanyCardViewState extends State<CompanyCardView> {
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           height: MediaQuery.of(context).size.height * 0.3,
@@ -116,46 +115,52 @@ class _CompanyCardViewState extends State<CompanyCardView> {
         Container(
             height: MediaQuery.of(context).size.height * 0.3,
             width: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.all(10),
             child: CarouselSlider(
               items: [
                 Padding(
-                    padding: EdgeInsets.all(8),
+                    padding: EdgeInsets.only(left: 8, right: 8),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8.0),
-                      child: Image.asset("assets/images/IM1_English.png"),
+                      child: Image.asset(
+                        "assets/images/IM1_English.png",
+                        height: MediaQuery.of(context).size.height * 0.3,
+                      ),
                     )),
                 Padding(
-                    padding: EdgeInsets.all(8),
+                    padding: EdgeInsets.only(left: 8, right: 8),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8.0),
-                      child: Image.asset("assets/images/IM2_English.png"),
+                      child: Image.asset("assets/images/IM2_English.png",
+                          height: MediaQuery.of(context).size.height * 0.3),
                     )),
                 Padding(
-                    padding: EdgeInsets.all(8),
+                    padding: EdgeInsets.only(left: 8, right: 8),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8.0),
-                      child: Image.asset("assets/images/IM3_English.png"),
+                      child: Image.asset("assets/images/IM3_English.png",
+                          height: MediaQuery.of(context).size.height * 0.3),
                     )),
                 Padding(
-                    padding: EdgeInsets.all(8),
+                    padding: EdgeInsets.only(left: 8, right: 8),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8.0),
-                      child: Image.asset("assets/images/IM4_English.png"),
+                      child: Image.asset("assets/images/IM4_English.png",
+                          height: MediaQuery.of(context).size.height * 0.3),
                     )),
                 Padding(
-                    padding: EdgeInsets.all(8),
+                    padding: EdgeInsets.only(left: 8, right: 8),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8.0),
-                      child: Image.asset("assets/images/IM5_English.png"),
+                      child: Image.asset("assets/images/IM5_English.png",
+                          height: MediaQuery.of(context).size.height * 0.3),
                     ))
               ],
               options: CarouselOptions(
                 autoPlay: true,
+                enlargeCenterPage: true,
                 pauseAutoPlayOnTouch: true,
               ),
             )),
-        FooterWidget()
       ],
     );
   }

@@ -30,7 +30,7 @@ class Faq extends StatelessWidget {
         backgroundColor: Colors.orange[50],
         centerTitle: true,
         title: Text(
-          "FAQ's",
+          "FAQs",
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
       ),

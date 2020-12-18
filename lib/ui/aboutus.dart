@@ -59,6 +59,7 @@ class Aboutus extends StatelessWidget {
                       SliverList(
                           delegate: SliverChildListDelegate([
                         Container(
+                            margin: EdgeInsets.all(8),
                             height: 250,
                             child: HtmlView(
                                 data: '${aboutUs.description}',
@@ -67,7 +68,8 @@ class Aboutus extends StatelessWidget {
                         Text(
                           "Our Core Team",
                           textAlign: TextAlign.center,
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20),
                         ),
                         Divider(),
                         TeamHeader(
@@ -75,13 +77,13 @@ class Aboutus extends StatelessWidget {
                             team: aboutUs.team.elementAt(0)),
                         TeamHeader(
                             storageRef: storageRef,
-                            team: aboutUs.team.elementAt(1)),
+                            team: aboutUs.team.elementAt(10)),
+                        TeamHeader(
+                            storageRef: storageRef,
+                            team: aboutUs.team.elementAt(11)),
                         TeamHeader(
                             storageRef: storageRef,
                             team: aboutUs.team.elementAt(2)),
-                        TeamHeader(
-                            storageRef: storageRef,
-                            team: aboutUs.team.elementAt(3)),
                         TeamHeader(
                             storageRef: storageRef,
                             team: aboutUs.team.elementAt(4)),
@@ -90,22 +92,26 @@ class Aboutus extends StatelessWidget {
                             team: aboutUs.team.elementAt(5)),
                         TeamHeader(
                             storageRef: storageRef,
+                            team: aboutUs.team.elementAt(1)),
+                        TeamHeader(
+                            storageRef: storageRef,
                             team: aboutUs.team.elementAt(6)),
+                        TeamHeader(
+                            storageRef: storageRef,
+                            team: aboutUs.team.elementAt(3)),
+                        TeamHeader(
+                            storageRef: storageRef,
+                            team: aboutUs.team.elementAt(9)),
                         TeamHeader(
                             storageRef: storageRef,
                             team: aboutUs.team.elementAt(7)),
                         TeamHeader(
                             storageRef: storageRef,
                             team: aboutUs.team.elementAt(8)),
-                        TeamHeader(
-                            storageRef: storageRef,
-                            team: aboutUs.team.elementAt(9)),
-                        TeamHeader(
-                            storageRef: storageRef,
-                            team: aboutUs.team.elementAt(10)),
                         Divider(),
                         Container(
                             height: 250,
+                            margin: EdgeInsets.all(8),
                             child: HtmlView(
                                 data: '${aboutUs.last}', scrollable: true)),
                       ])),
@@ -149,7 +155,7 @@ class TeamHeader extends StatelessWidget {
               child: Column(
                 children: [
                   Container(
-                    height: 50,
+                    height: 80,
                     child: FutureBuilder<Object>(
                         future: storageRef
                             .ref()
@@ -167,12 +173,6 @@ class TeamHeader extends StatelessWidget {
                               .getCircularProgressIndicator(context);
                         }),
                   ),
-                  SingleChildScrollView(
-                      child: Text(
-                    team['role'],
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ))
                 ],
               ),
             ),
@@ -185,7 +185,11 @@ class TeamHeader extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  Text(team['ocupation'], textAlign: TextAlign.center),
+                  SingleChildScrollView(
+                      child: Text(
+                    team['role'],
+                    textAlign: TextAlign.center,
+                  )),
                   Text(team['location'], textAlign: TextAlign.center)
                 ],
               ),

@@ -131,6 +131,8 @@ class IndianCompany extends StatelessWidget {
                       ]);
                     } else if (snapshot.hasError) {
                       return Center(child: Text("Error occured"));
+                    } else {
+                      return Center(child: Text("Error occured"));
                     }
                 }
               })),

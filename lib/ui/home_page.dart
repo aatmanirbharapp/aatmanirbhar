@@ -1,3 +1,4 @@
+import 'package:atamnirbharapp/ui/components/footerwidget.dart';
 import 'package:atamnirbharapp/ui/components/sliverappbarwidget.dart';
 import 'package:atamnirbharapp/ui/drawer.dart';
 import 'package:atamnirbharapp/ui/screens/homescreen.dart';
@@ -25,6 +26,12 @@ class MyHomePage extends StatelessWidget {
               CustomSliverAppBar(scaffoldKey: _scaffoldKey),
               SliverList(
                   delegate: SliverChildListDelegate([CompanyCardView()])),
+              SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: Align(
+                    child: FooterWidget(),
+                    alignment: Alignment.bottomCenter,
+                  )),
             ]),
           )),
     );

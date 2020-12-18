@@ -6,7 +6,6 @@ import 'package:atamnirbharapp/ui/privacy.dart';
 import 'package:atamnirbharapp/ui/screens/addcompany.dart';
 import 'package:atamnirbharapp/ui/user_profile.dart';
 import 'package:atamnirbharapp/ui/userauthentication/loginpage.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -44,9 +43,7 @@ class DrawerClass extends StatelessWidget {
                           new MaterialPageRoute(
                               builder: (context) => LoginPage())),
                       title: new Text("Login"),
-                      leading: new Icon(
-                        EvaIcons.personAddOutline,
-                      ),
+                      leading: new Icon(Icons.login),
                       trailing: new Icon(Icons.arrow_right),
                     ),
               Divider(),
@@ -67,17 +64,9 @@ class DrawerClass extends StatelessWidget {
               ),
               Divider(),
               new ListTile(
-                onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => HelpAndSupport())),
-                title: new Text("Help And Suppor"),
-                leading: new Icon(Icons.help),
-                trailing: new Icon(Icons.arrow_right),
-              ),
-              Divider(),
-              new ListTile(
                 onTap: () => Navigator.of(context)
                     .push(MaterialPageRoute(builder: (context) => Privacy())),
-                title: new Text("Privacy Terms and Conditions"),
+                title: new Text("Privacy Policy"),
                 leading: new Icon(Icons.security),
                 trailing: new Icon(Icons.arrow_right),
               ),
@@ -93,7 +82,7 @@ class DrawerClass extends StatelessWidget {
               new ListTile(
                 onTap: () => Navigator.of(context)
                     .push(new MaterialPageRoute(builder: (context) => Faq())),
-                title: new Text("FAQ"),
+                title: new Text("FAQs"),
                 leading: new Icon(Icons.help),
                 trailing: new Icon(Icons.arrow_right),
               ),

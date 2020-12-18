@@ -23,33 +23,22 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  eva_icons_flutter: ^2.0.1
-  fab_circular_menu: ^1.0.0
-  flutter_launcher_icons: ^0.8.0
   font_awesome_flutter: ^8.8.1
-  flutter_signin_button: ^0.2.8
   carousel_slider: ^2.3.1
-  flutter_auth_buttons: ^0.10.0
-  flutter_otp: ^0.3.2
   http: ^0.12.2
   firebase_auth: ^0.18.1+2
   flutter_html_view: ^0.5.12
   firebase_messaging: ^7.0.3
   firebase_core : ^0.5.0
-  pin_code_fields: ^6.0.0
-  country_code_picker: ^1.6.0
-  country_pickers: ^1.3.0
   flutter_country_picker: ^0.1.6
   cloud_firestore: ^0.14.1+3
-  json_serializable: ^3.5.0
   image_picker: ^0.6.7+12
   firebase_storage: ^4.0.1
-  path: ^1.7.0
   webview_flutter: ^1.0.5
   google_sign_in: ^4.5.3
-  timer_button: ^1.0.1
   intl: ^0.16.1
   youtube_player_flutter: ^7.0.0+7
+  url_launcher: ^5.7.10
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -76,25 +65,11 @@ flutter:
     - assets/images/sidebar_dash_icon.png
     - assets/images/Final_AatmNirbhar_logo.png
     - assets/images/MakeInIndiaLogo.png
-    - assets/images/Hersheys_Company_Logo.png
     - assets/images/PreferThis.png
     - assets/images/MakesInIndia_Logo.png
-    - assets/images/USA_flag.png
-    - assets/images/backimage.jpg
-    - assets/images/britannia.png
-    - assets/images/Cars.png
-    - assets/images/Jewellery.png
-    - assets/images/Medicines.png
-    - assets/images/Smart Phones.png
-    - assets/images/Toys.png
-    - assets/images/Televisions.png
-    - assets/images/Bajaj_Company_logo.png
     - assets/images/Indian_Flag.png
     - assets/images/Fact_Icon.png
-    - assets/images/Wikipedia_Icon.png
     - assets/images/Website_Icon.png
-    - assets/images/Dani.jpeg
-    - assets/images/Prathm.jpg
     - assets/images/glogo.png
     - assets/images/indian_flag_icon.png
     - assets/images/Products_Icon.png
@@ -105,6 +80,7 @@ flutter:
     - assets/images/IM3_English.png
     - assets/images/IM4_English.png
     - assets/images/IM5_English.png
+    - assets/images/Wikipedia_Icon.png
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

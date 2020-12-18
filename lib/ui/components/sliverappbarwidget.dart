@@ -25,17 +25,21 @@ class CustomSliverAppBar extends StatelessWidget {
       ),
       pinned: true,
       floating: true,
-      title: TitleWidget(),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          TitleWidget(),
+          ClipOval(
+            child: Image.asset(
+              "assets/images/Final_AatmNirbhar_logo.png",
+              fit: BoxFit.cover,
+              height: 80,
+            ),
+          )
+        ],
+      ),
       bottom: PreferredSize(
           child: SearchBarWidget(), preferredSize: const Size.fromHeight(60)),
-      actions: [
-        ClipOval(
-          child: Image.asset(
-            "assets/images/Final_AatmNirbhar_logo.png",
-            fit: BoxFit.cover,
-          ),
-        )
-      ],
     );
   }
 }

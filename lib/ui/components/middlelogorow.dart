@@ -1,10 +1,21 @@
+import 'package:atamnirbharapp/bloc/company.dart';
 import 'package:atamnirbharapp/utils/comman_widgets.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
-class MiddleRow extends StatelessWidget {
-  final company;
+class MiddleRow extends StatefulWidget {
+  @override
+  _MiddleRowState createState() => _MiddleRowState();
+
+  final Company company;
   const MiddleRow({Key key, this.company}) : super(key: key);
+}
+
+class _MiddleRowState extends State<MiddleRow> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,11 +32,11 @@ class MiddleRow extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(100),
               ),
-              child: company.firstCountry.contains("India")
+              child: widget.company.firstCountry.contains("India")
                   ? Image.asset("assets/images/MakesInIndia_Logo.png")
                   : Image.asset("assets/images/Imported_Icon.png"),
             ),
-            company.firstCountry.contains("India")
+            widget.company.firstCountry.contains("India")
                 ? RichText(
                     textAlign: TextAlign.center,
                     text: TextSpan(
@@ -54,11 +65,11 @@ class MiddleRow extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(100),
               ),
-              child: company.firstCountry.contains("India")
+              child: widget.company.firstCountry.contains("India")
                   ? Image.asset("assets/images/PreferThis.png")
                   : Image.asset("assets/images/alternatives_icon.png"),
             ),
-            company.firstCountry.contains("India")
+            widget.company.firstCountry.contains("India")
                 ? RichText(
                     textAlign: TextAlign.center,
                     text: TextSpan(
@@ -82,35 +93,34 @@ class MiddleRow extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Container(
-              height: MediaQuery.of(context).size.width * 0.15,
-              width: MediaQuery.of(context).size.width * 0.15,
-              margin: EdgeInsets.only(left: 25, right: 25),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(100),
-              ),
-              child: company.firstCountry.contains("India")
-                  ? Image.asset("assets/images/Indian_Flag.png")
-                  : FutureBuilder<Object>(
-                      future: FirebaseStorage.instance
-                          .ref()
-                          .child("Country_Flags/flag-of-" +
-                              company.firstCountry +
-                              ".png")
-                          .getDownloadURL(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData)
-                          return ClipOval(
-                            child: Image.network(
-                              snapshot.data,
-                              fit: BoxFit.fill,
-                            ),
-                          );
-                        return CommanWidgets()
-                            .getCircularProgressIndicator(context);
-                      }),
-            ),
+                height: MediaQuery.of(context).size.width * 0.15,
+                width: MediaQuery.of(context).size.width * 0.15,
+                margin: EdgeInsets.only(left: 25, right: 25),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                ),
+                child: widget.company.firstCountry.contains("India")
+                    ? Image.asset("assets/images/Indian_Flag.png")
+                    : FutureBuilder<Object>(
+                        future: FirebaseStorage.instance
+                            .ref()
+                            .child("Country_Flags/Flag_" +
+                                widget.company.firstCountry +
+                                ".png")
+                            .getDownloadURL(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData)
+                            return ClipOval(
+                              child: Image.network(
+                                snapshot.data,
+                                fit: BoxFit.fill,
+                              ),
+                            );
+                          return CommanWidgets()
+                              .getCircularProgressIndicator(context);
+                        })),
             Text(
-              company.firstCountry,
+              widget.company.firstCountry,
               style: TextStyle(color: Color.fromARGB(255, 0, 0, 128)),
             )
           ],

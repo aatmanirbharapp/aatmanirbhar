@@ -1,5 +1,4 @@
 import 'package:atamnirbharapp/bloc/cloud_firestore.dart';
-import 'package:atamnirbharapp/http/faqrequest.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +29,7 @@ class Privacy extends StatelessWidget {
         backgroundColor: Colors.orange[50],
         centerTitle: true,
         title: Text(
-          "Privacy & Policy",
+          "Privacy Policy",
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
       ),

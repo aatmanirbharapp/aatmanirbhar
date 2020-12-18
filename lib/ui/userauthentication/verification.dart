@@ -3,7 +3,6 @@ import 'package:atamnirbharapp/ui/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
 
 class Verification extends StatefulWidget {
   final String number;
@@ -18,7 +17,7 @@ class _VerificationState extends State<Verification> {
   var onTapRecognizer;
   final textEditingController = TextEditingController();
 
-  StreamController<ErrorAnimationType> errorController;
+
 
   bool hasError = false;
   String currentText = "";
@@ -38,7 +37,7 @@ class _VerificationState extends State<Verification> {
       ..onTap = () {
         Navigator.pop(context);
       };
-    errorController = StreamController<ErrorAnimationType>();
+
     super.initState();
     print(widget.number);
     _submitPhoneNumber();
@@ -54,7 +53,7 @@ class _VerificationState extends State<Verification> {
   @override
   void dispose() {
     textEditingController.dispose();
-    errorController.close();
+    //errorController.close();
     super.dispose();
   }
 
@@ -113,7 +112,7 @@ class _VerificationState extends State<Verification> {
                     ),
                     SizedBox(
                       height: 20,
-                    ),
+                    ),/*
                     Padding(
                       padding: const EdgeInsets.only(left: 10.0, right: 10),
                       child: Form(
@@ -133,8 +132,8 @@ class _VerificationState extends State<Verification> {
                               ),
                               keyboardType: TextInputType.number,
                               cursorColor: Colors.black,
-                              onChanged: null)),
-                    ),
+                              onChanged: null)),*/
+
                     SizedBox(
                       height: 20,
                     ),
@@ -172,7 +171,7 @@ class _VerificationState extends State<Verification> {
                                       builder: (context) => MyHomePage(),
                                     ));
                             } else {
-                              errorController.add(ErrorAnimationType.shake);
+                              //errorController.add(ErrorAnimationType.shake);
                             }
                           },
                           child: Center(

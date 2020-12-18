@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -7,9 +6,6 @@ class WebViewPage extends StatelessWidget {
   final String url;
 
   WebViewPage({Key key, this.url}) : super(key: key);
-
-  final Completer<WebViewController> _controller =
-      Completer<WebViewController>();
 
   @override
   Widget build(BuildContext context) {
