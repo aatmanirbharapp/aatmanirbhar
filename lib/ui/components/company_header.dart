@@ -21,7 +21,7 @@ class CompanyHeader extends StatelessWidget {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: Colors.black26)),
-      height: 100,
+      height: 120,
       width: MediaQuery.of(context).size.width,
       child: Row(
         children: [
@@ -35,7 +35,7 @@ class CompanyHeader extends StatelessWidget {
                 builder: (context, snapshot) {
                   if (snapshot.hasData)
                     return IconButton(
-                        iconSize: MediaQuery.of(context).size.width,
+                        iconSize: MediaQuery.of(context).size.height,
                         icon: Image.network(snapshot.data),
                         onPressed: () {});
                   return CommanWidgets().getCircularProgressIndicator(context);
@@ -57,7 +57,8 @@ class CompanyHeader extends StatelessWidget {
                         child: Text(
                           company.companyName,
                           textAlign: TextAlign.center,
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
                           overflow: TextOverflow.visible,
                           softWrap: true,
                           maxLines: null,
@@ -187,7 +188,7 @@ class CompanyHeader extends StatelessWidget {
                                   onTap: () {
                                     showAboutDialog(
                                         context: context,
-                                        applicationName: "Facts And Stories",
+                                        applicationName: "Stories",
                                         children: [
                                           Text(
                                             company.story,
@@ -201,7 +202,7 @@ class CompanyHeader extends StatelessWidget {
                                       "assets/images/Fact_Icon.png")),
                             ),
                           ),
-                          Text("Story & Facts",
+                          Text("Facts",
                               style: TextStyle(
                                   fontSize: 10,
                                   color: Color.fromARGB(255, 0, 0, 136)))

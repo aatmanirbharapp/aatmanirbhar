@@ -49,6 +49,8 @@ class Product {
   String keywords;
 
   int makeInIndia;
+  String secondCountry;
+
   Product(
       {this.id,
       this.companyId,
@@ -75,7 +77,8 @@ class Product {
       this.moderatorByPlace,
       this.manufacture,
       this.keywords,
-      this.firstCountry});
+      this.firstCountry,
+      this.secondCountry});
 
   Product.fromJson(Map<String, dynamic> json) {
     id = json['id'] as String;
@@ -104,6 +107,7 @@ class Product {
     firstCountry = json['firstCountry'] as String;
     manufacture = json['manufacture'] as String;
     keywords = json['keywords'] as String;
+    secondCountry = json['secondCountry'] as String;
   }
 
   Map<String, dynamic> toJson() => {
@@ -132,5 +136,6 @@ class Product {
         'manufacture': manufacture,
         'keywords': keywords,
         'firstCountry': firstCountry,
+        'secondCountry': secondCountry
       };
 }

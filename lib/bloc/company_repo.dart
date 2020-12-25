@@ -1,4 +1,6 @@
 import 'package:atamnirbharapp/bloc/company.dart';
+import 'package:atamnirbharapp/bloc/product.dart';
+import 'package:atamnirbharapp/bloc/user_company.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CompanyRepository {
@@ -9,10 +11,23 @@ class CompanyRepository {
     });
   }
 
+  Future addOrUpdateUserData(UserData company) async {
+    return _firestore.runTransaction((transaction) async {
+      _firestore.collection('userAddedCompany').doc().set(company.toJson());
+    });
+  }
+
+  Future addOrUpdateProduct(UserData company) async {
+    return _firestore.runTransaction((transaction) async {
+      _firestore.collection('userAddedProduct').doc().set(company.toJson());
+    });
+  }
+
   Future<List<QueryDocumentSnapshot>> getCompany(String companyId) async {
     return await _firestore
         .collection('company')
-        .where('companyId', isEqualTo: companyId)
+        .where('companyId',
+            isEqualTo: companyId.contains('C') ? companyId : 'C' + companyId)
         .get(GetOptions(source: Source.serverAndCache))
         .then((value) => value.docs);
   }

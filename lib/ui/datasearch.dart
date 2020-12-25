@@ -201,15 +201,15 @@ class _DataSearchState extends State<DataSearch> {
                             context,
                             new MaterialPageRoute(
                                 builder: (context) => IndianCompany(
-                                      companyId: datalist
-                                          .elementAt(index)['company_logo'],
+                                      companyId:
+                                          datalist.elementAt(index)['id'],
                                     )))
                         : Navigator.push(
                             context,
                             new MaterialPageRoute(
                                 builder: (context) => OutsideIndiaCompany(
-                                      companyId: datalist
-                                          .elementAt(index)['company_logo'],
+                                      companyId:
+                                          datalist.elementAt(index)['id'],
                                     )));
               },
               leading:

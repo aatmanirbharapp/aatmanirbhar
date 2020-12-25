@@ -83,7 +83,7 @@ class DrawerClass extends StatelessWidget {
                 onTap: () => Navigator.of(context)
                     .push(new MaterialPageRoute(builder: (context) => Faq())),
                 title: new Text("FAQs"),
-                leading: new Icon(Icons.help),
+                leading: new Icon(Icons.question_answer),
                 trailing: new Icon(Icons.arrow_right),
               ),
               Divider(),
@@ -96,7 +96,7 @@ class DrawerClass extends StatelessWidget {
                         builder: (context) => LoginPage()));
                   },
                   title: new Text("Logout"),
-                  leading: new Icon(Icons.help),
+                  leading: new Icon(Icons.logout),
                   trailing: new Icon(Icons.arrow_right),
                 ),
             ],

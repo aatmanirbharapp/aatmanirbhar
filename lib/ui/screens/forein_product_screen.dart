@@ -9,6 +9,7 @@ import 'package:atamnirbharapp/ui/components/product_header.dart';
 
 import 'package:atamnirbharapp/ui/drawer.dart';
 import 'package:atamnirbharapp/ui/screens/addcompany.dart';
+import 'package:atamnirbharapp/ui/screens/suggest_change_product.dart';
 import 'package:atamnirbharapp/ui/userauthentication/loginpage.dart';
 import 'package:atamnirbharapp/utils/comman_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -73,7 +74,9 @@ class ForeinProductPage extends StatelessWidget {
                                         context,
                                         new MaterialPageRoute(
                                             builder: (context) =>
-                                                AddCompany()));
+                                                SuggestChangesProduct(
+                                                  product: product,
+                                                )));
                                   } else {
                                     Navigator.push(
                                         context,

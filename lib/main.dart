@@ -1,4 +1,4 @@
-import 'package:atamnirbharapp/ui/home_page.dart';
+import 'package:atamnirbharapp/ui/screens/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -28,6 +28,6 @@ class _MyAppState extends State<MyApp> {
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: MyHomePage());
+        home: SplashScreen());
   }
 }

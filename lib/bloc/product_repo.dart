@@ -7,12 +7,9 @@ class ProductRepository {
       String id) async {
     Query query =
         _firestore.collection("product").where('companyId', isEqualTo: id);
-    return query.get(GetOptions(source: Source.cache)).then((value) =>
-        value.docs.length == 0
-            ? query
-                .get(GetOptions(source: Source.serverAndCache))
-                .then((value) => value.docs)
-            : value.docs);
+    return query
+        .get(GetOptions(source: Source.serverAndCache))
+        .then((value) => value.docs);
   }
 
   Future<List<QueryDocumentSnapshot>> getProduct(String productId) async {
@@ -24,12 +21,12 @@ class ProductRepository {
   }
 
   Future<List<QueryDocumentSnapshot>> getProductByKeyword(
-      String keyword) async {
+      String keyword, int limit) async {
     return await _firestore
         .collection('product')
         .where("firstCountry", isEqualTo: "India")
         .where("manufacture", isEqualTo: keyword)
-        .limit(3)
+        .limit(limit)
         .get(GetOptions(source: Source.serverAndCache))
         .then((value) => value.docs);
   }

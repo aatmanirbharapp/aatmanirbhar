@@ -1,6 +1,7 @@
 import 'package:atamnirbharapp/bloc/product.dart';
 import 'package:atamnirbharapp/bloc/product_repo.dart';
 import 'package:atamnirbharapp/ui/components/alternate_company_header.dart';
+import 'package:atamnirbharapp/ui/screens/product_list_bykeyword.dart';
 import 'package:atamnirbharapp/utils/comman_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -28,12 +29,17 @@ Widget AlternateContainer(BuildContext context, Product product) {
                 "Alternative Indian Companies",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              InkWell(child: Text("View All")),
+              InkWell(
+                  onTap: () => Navigator.of(context).push(new MaterialPageRoute(
+                      builder: (context) => ProductListByKeyWord(
+                            product: product,
+                          ))),
+                  child: Text("View All")),
             ],
           ),
         ),
         FutureBuilder<List<QueryDocumentSnapshot>>(
-            future: productRepo.getProductByKeyword(product.manufacture),
+            future: productRepo.getProductByKeyword(product.manufacture, 3),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return ListView.builder(

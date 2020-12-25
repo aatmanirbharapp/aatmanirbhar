@@ -16,31 +16,16 @@ class CommanGetCalls {
 
   Future<QuerySnapshot> getAboutUs() async {
     Query query = _firestore.collection("aboutUs");
-    return query.get(GetOptions(source: Source.cache)).then((value) =>
-        value.docs.length == 0
-            ? query
-                .get(GetOptions(source: Source.serverAndCache))
-                .then((value) => value)
-            : value);
+    return query.get(GetOptions(source: Source.serverAndCache));
   }
 
   Future<QuerySnapshot> getPrivacy() async {
     Query query = _firestore.collection("privacy");
-    return query.get(GetOptions(source: Source.cache)).then((value) =>
-        value.docs.length == 0
-            ? query
-                .get(GetOptions(source: Source.serverAndCache))
-                .then((value) => value)
-            : value);
+    return query.get(GetOptions(source: Source.serverAndCache));
   }
 
   Future<QuerySnapshot> getFaq() async {
     Query query = _firestore.collection("faq");
-    return query.get(GetOptions(source: Source.cache)).then((value) =>
-        value.docs.length == 0
-            ? query
-                .get(GetOptions(source: Source.serverAndCache))
-                .then((value) => value)
-            : value);
+    return query.get(GetOptions(source: Source.serverAndCache));
   }
 }

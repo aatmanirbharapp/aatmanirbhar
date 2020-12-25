@@ -25,31 +25,21 @@ class InnerSliverAppBar extends StatelessWidget {
       pinned: true,
       floating: true,
       centerTitle: true,
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          IconButton(
-            iconSize: 15,
-            icon: Image.asset("assets/images/Final_AatmNirbhar_logo.png"),
-            onPressed: null,
-          ),
-          Text(
-            "Aatmanirbhar",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontStyle: FontStyle.italic,
-                fontSize: 22,
-                foreground: Paint()
-                  ..shader = ui.Gradient.linear(
-                    const Offset(60, 100),
-                    const Offset(50, 35),
-                    <Color>[
-                      Colors.orange,
-                      Colors.green,
-                    ],
-                  )),
-          ),
-        ],
+      title: Text(
+        "Aatmanirbhar",
+        textAlign: TextAlign.center,
+        style: TextStyle(
+            fontStyle: FontStyle.italic,
+            fontSize: 22,
+            foreground: Paint()
+              ..shader = ui.Gradient.linear(
+                const Offset(60, 100),
+                const Offset(50, 35),
+                <Color>[
+                  Colors.orange,
+                  Colors.green,
+                ],
+              )),
       ),
       actions: [
         IconButton(

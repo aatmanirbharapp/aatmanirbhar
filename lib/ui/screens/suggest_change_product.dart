@@ -1,90 +1,54 @@
-import 'dart:io';
-
-import 'package:atamnirbharapp/bloc/company.dart';
 import 'package:atamnirbharapp/bloc/company_repo.dart';
+import 'package:atamnirbharapp/bloc/product.dart';
+import 'package:atamnirbharapp/bloc/user_company.dart';
 import 'package:atamnirbharapp/bloc/user_details.dart';
 import 'package:atamnirbharapp/bloc/user_repo.dart';
 import 'package:atamnirbharapp/ui/home_page.dart';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_country_picker/flutter_country_picker.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart';
 
-class AddCompany extends StatefulWidget {
+class SuggestChangesProduct extends StatefulWidget {
+  final Product product;
   @override
-  _AddCompanyState createState() => _AddCompanyState();
+  _SuggestChangesProductState createState() => _SuggestChangesProductState();
+  const SuggestChangesProduct({this.product});
 }
 
-class _AddCompanyState extends State<AddCompany> {
-  FirebaseFirestore store = FirebaseFirestore.instance;
+class _SuggestChangesProductState extends State<SuggestChangesProduct> {
   var _scafolldKey = GlobalKey<ScaffoldState>();
 
   CompanyRepository _companyRepository = CompanyRepository();
-  String name,
+
+  TextEditingController name,
       website,
+      country,
       keyPerson,
       wikiUrl,
       facts,
       description,
       sector,
-      fileUrl,
       userName,
       userEmail;
 
   int makesInIndia;
   var formkey = GlobalKey<FormState>();
-  PickedFile image;
   Country _selected;
   var radioValue = 1;
   bool isLoading = false;
   UserDetails userDetails;
-  var userNameController;
   UserRepository userRepository = new UserRepository();
-  var emailController;
-
-  _imgFromCamera() {
-    setState(() async {
-      image = await ImagePicker().getImage(source: ImageSource.camera);
-    });
-  }
-
-  _imgFromGallery() {
-    setState(() async {
-      image = await ImagePicker().getImage(source: ImageSource.gallery);
-    });
-  }
 
   BuildContext context;
-  Future storeImage(File imageFile) async {
-    var fileName = basename(image.path);
-    print('Inside Store method' + fileName);
-    StorageReference firebaseStorageRef =
-        FirebaseStorage.instance.ref().child(fileName);
-
-    StorageUploadTask ref = firebaseStorageRef.putFile(File(image.path));
-    var storageTaskSnapshot = await ref.onComplete;
-    var downloadUrl = await storageTaskSnapshot.ref.getDownloadURL();
-    setState(() {
-      fileUrl = downloadUrl;
-    });
-  }
-
-  getUserData(userId) async {
-    await userRepository.getUserById(userId).then((value) => {
-          setState(() {
-            userDetails = UserDetails.fromJson(value.data());
-            userNameController = TextEditingController(text: userDetails.name);
-            emailController = TextEditingController(text: userDetails.email);
-          })
-        });
-  }
 
   @override
   void initState() {
     super.initState();
+    name = TextEditingController(text: widget.product.productName);
+    website = TextEditingController(text: widget.product.website);
+    country = TextEditingController(text: widget.product.firstCountry);
+    sector = TextEditingController(text: widget.product.manufacture);
+    description = TextEditingController();
   }
 
   @override
@@ -118,7 +82,7 @@ class _AddCompanyState extends State<AddCompany> {
                     )
                   : ListView(children: [
                       Align(
-                        alignment: Alignment.center,
+                        alignment: Alignment.topCenter,
                         child: IconButton(
                             iconSize: MediaQuery.of(context).size.height * 0.2,
                             onPressed: () {},
@@ -126,13 +90,15 @@ class _AddCompanyState extends State<AddCompany> {
                                 "assets/images/Final_AatmNirbhar_logo.png")),
                       ),
                       Padding(
-                        padding: EdgeInsets.all(8),
+                        padding: EdgeInsets.only(bottom: 8),
                         child: Align(
                           alignment: Alignment.center,
                           child: Text(
-                            "Add Company",
+                            "Suggest Changes",
                             style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20),
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black45,
+                                fontSize: 20),
                           ),
                         ),
                       ),
@@ -144,13 +110,9 @@ class _AddCompanyState extends State<AddCompany> {
                             children: [
                               _companyName(),
                               _selectCountry(),
-                              _radioButton(),
-                              _wikiPage(),
                               _websitePage(),
                               _enterSector(),
-                              _companyLogo(),
-                              _factsAndStories(),
-                              _description()
+                              _comments()
                             ],
                           ),
                         ),
@@ -162,27 +124,19 @@ class _AddCompanyState extends State<AddCompany> {
                           height: 50,
                           child: FlatButton(
                             onPressed: () async {
-                              if (formkey.currentState.validate() &&
-                                  image != null &&
-                                  image.path.length != 0) {
-                                formkey.currentState.save();
-                                var company = Company(
-                                    companyName: name,
-                                    website: website,
-                                    country: _selected.toString(),
-                                    keyPerson: keyPerson,
-                                    sector: sector,
-                                    story: facts,
-                                    wikiPage: wikiUrl,
-                                    description: description,
-                                    logoFileName: fileUrl,
-                                    makesInIndia: makesInIndia);
+                              if (formkey.currentState.validate()) {
+                                var product = UserData(
+                                    name: name.text,
+                                    country: country.text,
+                                    website: website.text,
+                                    manufacture: sector.text,
+                                    comments: description.text);
                                 setState(() {
                                   isLoading = true;
                                 });
-                                await storeImage(File(image.path));
+
                                 await _companyRepository
-                                    .addOrUpdateCompany(company)
+                                    .addOrUpdateProduct(product)
                                     .then((value) => {
                                           setState(() {
                                             isLoading = false;
@@ -203,12 +157,11 @@ class _AddCompanyState extends State<AddCompany> {
                                                 Theme.of(this.context)
                                                     .errorColor,
                                             content: Text(
-                                                "Failed to add company, Please try to sumbit again"),
+                                                "Failed to add product, Please try again later"),
                                           ))
                                         });
                               } else {
-                                Scaffold.of(_scafolldKey.currentContext)
-                                    .showSnackBar(SnackBar(
+                                Scaffold.of(this.context).showSnackBar(SnackBar(
                                   backgroundColor: Theme.of(context).errorColor,
                                   content: Text(
                                       "Failed to add company, Image is not selected"),
@@ -247,6 +200,8 @@ class _AddCompanyState extends State<AddCompany> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
+        enabled: false,
+        controller: name,
         style: new TextStyle(
           fontFamily: "Poppins",
         ),
@@ -257,17 +212,13 @@ class _AddCompanyState extends State<AddCompany> {
           if (value == null || value.isEmpty) return "Please enter valid Name";
           return null;
         },
-        onSaved: (value) {
-          name = value;
-        },
         decoration: InputDecoration(
           prefixIcon: Icon(
-            Icons.featured_play_list,
+            Icons.text_fields,
             color: Colors.grey,
           ),
-          hintText: "Enter Company's Name",
           fillColor: Colors.orange[50],
-          labelText: "Company's Name",
+          labelText: "Product Name",
           labelStyle:
               TextStyle(fontWeight: FontWeight.bold, color: Colors.black45),
           border: OutlineInputBorder(
@@ -280,64 +231,26 @@ class _AddCompanyState extends State<AddCompany> {
 
   Widget _selectCountry() {
     return Padding(
-      padding: const EdgeInsets.only(top: 8, bottom: 8, left: 20, right: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Spacer(),
-          Text(
-            "Origin Country :",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-            textAlign: TextAlign.center,
-          ),
-          Spacer(
-            flex: 3,
-          ),
-          Center(
-            child: CountryPicker(
-              nameTextStyle:
-                  TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-              onChanged: (Country country) {
-                setState(() {
-                  _selected = country;
-                });
-              },
-              selectedCountry: _selected,
-            ),
-          ),
-          Spacer()
-        ],
-      ),
-    );
-  }
-
-  Widget _wikiPage() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8),
       child: TextFormField(
+        controller: country,
         style: new TextStyle(
           fontFamily: "Poppins",
         ),
-        keyboardType: TextInputType.url,
+        keyboardType: TextInputType.text,
         autocorrect: true,
         cursorHeight: 10,
-        onSaved: (value) {
-          wikiUrl = value;
-        },
         validator: (String value) {
-          if (value == null || value.isEmpty)
-            return "Please enter valid wikipedia Page";
+          if (value == null || value.isEmpty) return "Please enter valid Name";
           return null;
         },
         decoration: InputDecoration(
           prefixIcon: Icon(
-            Icons.link,
+            Icons.flag_outlined,
             color: Colors.grey,
           ),
-          hintText: "Enter Company's Wikipedia link",
           fillColor: Colors.orange[50],
-          labelText: "Wikipedia Link",
+          labelText: "Country",
           labelStyle:
               TextStyle(fontWeight: FontWeight.bold, color: Colors.black45),
           border: OutlineInputBorder(
@@ -348,67 +261,25 @@ class _AddCompanyState extends State<AddCompany> {
     );
   }
 
-  Widget _radioButton() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            "Makes In India :",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-          ),
-          Text("Yes",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-          Radio(
-            value: 1,
-            groupValue: radioValue,
-            onChanged: (value) {
-              setState(() {
-                radioValue = value;
-                makesInIndia = value;
-              });
-            },
-          ),
-          Text("No",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-          Radio(
-            value: 0,
-            groupValue: radioValue,
-            onChanged: (value) {
-              setState(() {
-                radioValue = value;
-                makesInIndia = value;
-              });
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _enterSector() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
+        controller: sector,
         style: new TextStyle(
           fontFamily: "Poppins",
         ),
         keyboardType: TextInputType.text,
         autocorrect: true,
         cursorHeight: 10,
-        onSaved: (value) {
-          sector = value;
-        },
         decoration: InputDecoration(
           prefixIcon: Icon(
-            Icons.featured_play_list,
+            Icons.category,
             color: Colors.grey,
           ),
-          hintText: "Enter Sector ",
+          hintText: "Enter Manufacture ",
           fillColor: Colors.orange[50],
-          labelText: "Sector",
+          labelText: "Manufacture",
           labelStyle:
               TextStyle(fontWeight: FontWeight.bold, color: Colors.black45),
           border: OutlineInputBorder(
@@ -423,15 +294,13 @@ class _AddCompanyState extends State<AddCompany> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
+        controller: website,
         style: new TextStyle(
           fontFamily: "Poppins",
         ),
         keyboardType: TextInputType.url,
         autocorrect: true,
         cursorHeight: 10,
-        onSaved: (value) {
-          website = value;
-        },
         decoration: InputDecoration(
           prefixIcon: Icon(
             Icons.link,
@@ -450,91 +319,11 @@ class _AddCompanyState extends State<AddCompany> {
     );
   }
 
-  _companyLogo() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        Text(
-          "Upload Company Logo :",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-        ),
-        IconButton(
-          key: _scafolldKey,
-          onPressed: () {
-            Scaffold.of(_scafolldKey.currentContext).showSnackBar(SnackBar(
-              backgroundColor: Colors.white,
-              elevation: 5,
-              content: Container(
-                height: 200,
-                width: MediaQuery.of(_scafolldKey.currentContext).size.width,
-                child: Column(
-                  children: [
-                    ListTile(
-                      leading: Icon(
-                        Icons.photo_album,
-                        color: Colors.black,
-                      ),
-                      title: Text("Upload Using gallery",
-                          style: TextStyle(color: Colors.black)),
-                      onTap: () {
-                        _imgFromGallery();
-                      },
-                    ),
-                    ListTile(
-                      leading: Icon(Icons.photo_camera, color: Colors.black),
-                      title: Text("Take picture",
-                          style: TextStyle(color: Colors.black)),
-                      onTap: () {
-                        _imgFromCamera();
-                      },
-                    )
-                  ],
-                ),
-              ),
-            ));
-          },
-          icon: Icon(Icons.add_a_photo),
-        )
-      ]),
-    );
-  }
-
-  Widget _factsAndStories() {
+  Widget _comments() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
-        style: new TextStyle(
-          fontFamily: "Poppins",
-        ),
-        keyboardType: TextInputType.text,
-        autocorrect: true,
-        maxLines: null,
-        cursorHeight: 10,
-        onSaved: (value) {
-          facts = value;
-        },
-        decoration: InputDecoration(
-          prefixIcon: Icon(
-            Icons.amp_stories,
-            color: Colors.grey,
-          ),
-          hintText: "Enter Facts and stories about company. (Optional)",
-          fillColor: Colors.orange[50],
-          labelText: "Facts & Stories",
-          labelStyle:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.black45),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _description() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: TextFormField(
+        controller: description,
         maxLines: null,
         style: new TextStyle(
           fontFamily: "Poppins",
@@ -542,22 +331,14 @@ class _AddCompanyState extends State<AddCompany> {
         keyboardType: TextInputType.text,
         autocorrect: true,
         cursorHeight: 10,
-        onSaved: (value) {
-          description = value;
-        },
         validator: (String value) {
           if (value == null || value.isEmpty)
             return "Please enter valid Description";
           return null;
         },
         decoration: InputDecoration(
-          prefixIcon: Icon(
-            Icons.description,
-            color: Colors.grey,
-          ),
-          hintText: "Enter Description",
           fillColor: Colors.orange[50],
-          labelText: "Description",
+          labelText: "Comments",
           labelStyle:
               TextStyle(fontWeight: FontWeight.bold, color: Colors.black45),
           border: OutlineInputBorder(

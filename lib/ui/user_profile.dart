@@ -1,6 +1,7 @@
 import 'package:atamnirbharapp/bloc/user_details.dart';
 import 'package:atamnirbharapp/bloc/user_repo.dart';
 import 'package:atamnirbharapp/ui/drawer.dart';
+import 'package:atamnirbharapp/ui/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -89,6 +90,11 @@ class _UserProfileState extends State<UserProfile> {
               onPressed: () {},
             ),
           ],
+          leading: IconButton(
+              color: Colors.black,
+              icon: Icon(Icons.arrow_back),
+              onPressed: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => MyHomePage()))),
           elevation: 10,
           backgroundColor: Colors.orange[50],
           centerTitle: true,
@@ -98,7 +104,6 @@ class _UserProfileState extends State<UserProfile> {
           ),
         ),
         key: _scaffoldKey,
-        drawer: DrawerClass(),
         body: SafeArea(
             top: false,
             bottom: false,

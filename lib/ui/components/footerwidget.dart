@@ -62,7 +62,7 @@ class FooterWidget extends StatelessWidget {
                     color: Colors.red,
                     icon: FaIcon(FontAwesomeIcons.instagram),
                     onPressed: () async {
-                      const url = 'https://www.instagram.com/japanisawapi/';
+                      const url = 'https://www.instagram.com/aatmanirbhar.app/';
                       if (await canLaunch(url)) {
                         await launch(url);
                       } else {
@@ -116,7 +116,6 @@ class FooterWidget extends StatelessWidget {
                           color: Colors.black,
                           fontSize: 12,
                           fontWeight: FontWeight.bold))),
-              
             ],
           ),
           Divider(),

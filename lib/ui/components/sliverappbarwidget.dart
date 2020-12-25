@@ -33,7 +33,7 @@ class CustomSliverAppBar extends StatelessWidget {
             child: Image.asset(
               "assets/images/Final_AatmNirbhar_logo.png",
               fit: BoxFit.cover,
-              height: 80,
+              height: 60,
             ),
           )
         ],

@@ -6,6 +6,7 @@ import 'package:atamnirbharapp/ui/components/middlelogorow.dart';
 import 'package:atamnirbharapp/ui/components/peoplewidget.dart';
 import 'package:atamnirbharapp/ui/drawer.dart';
 import 'package:atamnirbharapp/ui/screens/addcompany.dart';
+import 'package:atamnirbharapp/ui/screens/suggest_changes.dart';
 import 'package:atamnirbharapp/ui/userauthentication/loginpage.dart';
 import 'package:atamnirbharapp/utils/comman_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -38,7 +39,7 @@ class OutsideIndiaCompany extends StatelessWidget {
                 fit: BoxFit.cover,
               )),
               child: FutureBuilder<List<QueryDocumentSnapshot>>(
-                  future: companyRepo.getCompany(companyId.split('.').first),
+                  future: companyRepo.getCompany(companyId),
                   builder: (context, snapshot) {
                     switch (snapshot.connectionState) {
                       case ConnectionState.waiting:
@@ -99,7 +100,9 @@ class OutsideIndiaCompany extends StatelessWidget {
                                         context,
                                         new MaterialPageRoute(
                                             builder: (context) =>
-                                                AddCompany()));
+                                                SuggestChanges(
+                                                  company: company,
+                                                )));
                                   } else {
                                     Navigator.push(
                                         context,
