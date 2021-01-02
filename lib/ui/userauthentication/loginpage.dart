@@ -93,8 +93,8 @@ class _LoginPageState extends State<LoginPage> {
                       child: InkWell(
                           onTap: () async {
                             await signWithGoogle();
-                            Navigator.pop(context);
-                            Navigator.push(
+
+                            Navigator.pushReplacement(
                                 context,
                                 new MaterialPageRoute(
                                     builder: (context) => MyHomePage()));

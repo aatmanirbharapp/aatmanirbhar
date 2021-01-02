@@ -72,16 +72,6 @@ class _AddCompanyState extends State<AddCompany> {
     });
   }
 
-  getUserData(userId) async {
-    await userRepository.getUserById(userId).then((value) => {
-          setState(() {
-            userDetails = UserDetails.fromJson(value.data());
-            userNameController = TextEditingController(text: userDetails.name);
-            emailController = TextEditingController(text: userDetails.email);
-          })
-        });
-  }
-
   @override
   void initState() {
     super.initState();
@@ -148,7 +138,6 @@ class _AddCompanyState extends State<AddCompany> {
                               _wikiPage(),
                               _websitePage(),
                               _enterSector(),
-                              _companyLogo(),
                               _factsAndStories(),
                               _description()
                             ],
@@ -162,9 +151,7 @@ class _AddCompanyState extends State<AddCompany> {
                           height: 50,
                           child: FlatButton(
                             onPressed: () async {
-                              if (formkey.currentState.validate() &&
-                                  image != null &&
-                                  image.path.length != 0) {
+                              if (formkey.currentState.validate()) {
                                 formkey.currentState.save();
                                 var company = Company(
                                     companyName: name,
@@ -180,7 +167,8 @@ class _AddCompanyState extends State<AddCompany> {
                                 setState(() {
                                   isLoading = true;
                                 });
-                                await storeImage(File(image.path));
+                                //await storeImage(File(image.path));
+
                                 await _companyRepository
                                     .addOrUpdateCompany(company)
                                     .then((value) => {
@@ -285,9 +273,8 @@ class _AddCompanyState extends State<AddCompany> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Spacer(),
           Text(
-            "Origin Country :",
+            "Benefiting Country :",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             textAlign: TextAlign.center,
           ),
@@ -544,11 +531,6 @@ class _AddCompanyState extends State<AddCompany> {
         cursorHeight: 10,
         onSaved: (value) {
           description = value;
-        },
-        validator: (String value) {
-          if (value == null || value.isEmpty)
-            return "Please enter valid Description";
-          return null;
         },
         decoration: InputDecoration(
           prefixIcon: Icon(

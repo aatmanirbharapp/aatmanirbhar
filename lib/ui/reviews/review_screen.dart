@@ -5,10 +5,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class AllReview extends StatelessWidget {
-  final Company object;
+  final String id;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  AllReview({Key key, @required this.object});
+  AllReview({Key key, @required this.id});
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +59,7 @@ class AllReview extends StatelessWidget {
                             context,
                             new MaterialPageRoute(
                                 builder: (context) => AddReview(
-                                    object,
+                                    id,
                                     _auth.currentUser.uid,
                                     _auth.currentUser.displayName)));
                       } else {

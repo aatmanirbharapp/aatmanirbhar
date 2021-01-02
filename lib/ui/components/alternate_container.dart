@@ -1,6 +1,7 @@
 import 'package:atamnirbharapp/bloc/product.dart';
 import 'package:atamnirbharapp/bloc/product_repo.dart';
 import 'package:atamnirbharapp/ui/components/alternate_company_header.dart';
+import 'package:atamnirbharapp/ui/components/alternate_product_header.dart';
 import 'package:atamnirbharapp/ui/screens/product_list_bykeyword.dart';
 import 'package:atamnirbharapp/utils/comman_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -26,7 +27,7 @@ Widget AlternateContainer(BuildContext context, Product product) {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Text(
-                "Alternative Indian Companies",
+                "Alternative Indian Products",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               InkWell(
@@ -51,7 +52,7 @@ Widget AlternateContainer(BuildContext context, Product product) {
                     itemBuilder: (BuildContext context, int index) {
                       Product com = Product.fromJson(
                           snapshot.data.elementAt(index).data());
-                      return AlternateCompanyHeader(
+                      return AlternateProductHeader(
                         product: com,
                       );
                     });

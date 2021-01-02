@@ -28,7 +28,6 @@ class _MiddleRowState extends State<MiddleRow> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Container(
-              height: MediaQuery.of(context).size.width * 0.15,
               width: MediaQuery.of(context).size.width * 0.15,
               margin: EdgeInsets.only(left: 25, right: 25),
               decoration: BoxDecoration(
@@ -61,7 +60,6 @@ class _MiddleRowState extends State<MiddleRow> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Container(
-              height: MediaQuery.of(context).size.width * 0.15,
               width: MediaQuery.of(context).size.width * 0.15,
               margin: EdgeInsets.only(left: 25, right: 25),
               decoration: BoxDecoration(
@@ -122,10 +120,19 @@ class _MiddleRowState extends State<MiddleRow> {
                                 return CommanWidgets()
                                     .getCircularProgressIndicator(context);
                               })),
-                  Text(
-                    widget.company.firstCountry,
-                    style: TextStyle(color: Color.fromARGB(255, 0, 0, 128)),
-                  )
+                  Container(
+                      width: MediaQuery.of(context).size.width * 0.25,
+                      child: SingleChildScrollView(
+                          child: Text(
+                        widget.company.firstCountry,
+                        maxLines: null,
+                        textAlign: TextAlign.center,
+                        softWrap: true,
+                        overflow: TextOverflow.visible,
+                        style: TextStyle(
+                            color: Color.fromARGB(255, 0, 0, 136),
+                            fontSize: 15),
+                      )))
                 ],
               )
             : CarouselSlider(
@@ -169,10 +176,18 @@ Widget getSecondCompany(String companyName, BuildContext context) {
                     return CommanWidgets()
                         .getCircularProgressIndicator(context);
                   })),
-      Text(
-        companyName,
-        style: TextStyle(color: Color.fromARGB(255, 0, 0, 128)),
-      )
+      Container(
+          width: MediaQuery.of(context).size.width * 0.25,
+          child: SingleChildScrollView(
+              child: Text(
+            companyName,
+            maxLines: null,
+            textAlign: TextAlign.center,
+            softWrap: true,
+            overflow: TextOverflow.visible,
+            style:
+                TextStyle(color: Color.fromARGB(255, 0, 0, 136), fontSize: 15),
+          )))
     ],
   );
 }

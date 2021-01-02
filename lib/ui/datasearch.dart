@@ -113,7 +113,7 @@ class _DataSearchState extends State<DataSearch> {
             enabledBorder: InputBorder.none,
             errorBorder: InputBorder.none,
             disabledBorder: InputBorder.none,
-            hintText: "Search by " + type + "...",
+            hintText: "Search by " + type + " name ...",
           ),
         ),
       ),

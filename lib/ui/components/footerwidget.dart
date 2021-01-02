@@ -2,6 +2,7 @@ import 'package:atamnirbharapp/ui/aboutus.dart';
 import 'package:atamnirbharapp/ui/faq.dart';
 import 'package:atamnirbharapp/ui/helpandsupport.dart';
 import 'package:atamnirbharapp/ui/privacy.dart';
+import 'package:atamnirbharapp/ui/terms_of_user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -19,7 +20,8 @@ class FooterWidget extends StatelessWidget {
         height: MediaQuery.of(context).size.height * 0.22,
         width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.all(5),
-        child: Column(children: [
+        child:
+            Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
           Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -91,37 +93,63 @@ class FooterWidget extends StatelessWidget {
                     Navigator.of(context).push(
                         MaterialPageRoute(builder: (context) => Aboutus()));
                   },
-                  child: Text("About Us",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold))),
+                  child: Text(
+                    "About Us",
+                    style: TextStyle(
+                        color: Color.fromARGB(255, 0, 0, 136),
+                        fontFamily: 'Ambit',
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold),
+                  )),
               InkWell(
                   onTap: () {
                     Navigator.of(context)
                         .push(MaterialPageRoute(builder: (context) => Faq()));
                   },
-                  child: Text("FAQs",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold))),
+                  child: Text(
+                    "FAQs",
+                    style: TextStyle(
+                        color: Color.fromARGB(255, 0, 0, 136),
+                        fontFamily: 'Ambit',
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold),
+                  )),
               InkWell(
                   onTap: () {
                     Navigator.of(context).push(
                         MaterialPageRoute(builder: (context) => Privacy()));
                   },
-                  child: Text("Privacy Policy",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold))),
+                  child: Text(
+                    "Privacy Policy",
+                    style: TextStyle(
+                        color: Color.fromARGB(255, 0, 0, 136),
+                        fontFamily: 'Ambit',
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold),
+                  )),
+              InkWell(
+                  onTap: () {
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) => Terms()));
+                  },
+                  child: Text(
+                    "Terms Of Use",
+                    style: TextStyle(
+                        color: Color.fromARGB(255, 0, 0, 136),
+                        fontFamily: 'Ambit',
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold),
+                  )),
             ],
           ),
           Divider(),
           Text(
             "Copyright © 2020 The Aatmanirbhar Trust. Created by Yash Agrawal",
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                color: Color.fromARGB(255, 0, 0, 136),
+                fontFamily: 'Ambit',
+                fontSize: 12,
+                fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
         ]));

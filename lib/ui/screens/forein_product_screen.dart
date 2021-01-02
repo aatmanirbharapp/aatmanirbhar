@@ -6,6 +6,8 @@ import 'package:atamnirbharapp/ui/components/innerpageappbar.dart';
 import 'package:atamnirbharapp/ui/components/middlelogorow.dart';
 import 'package:atamnirbharapp/ui/components/peoplewidget.dart';
 import 'package:atamnirbharapp/ui/components/product_header.dart';
+import 'package:atamnirbharapp/ui/components/review_list.dart';
+import 'package:atamnirbharapp/ui/components/suggest_button.dart';
 
 import 'package:atamnirbharapp/ui/drawer.dart';
 import 'package:atamnirbharapp/ui/screens/addcompany.dart';
@@ -63,54 +65,16 @@ class ForeinProductPage extends StatelessWidget {
                                 ),
                               ),
                               AlternateContainer(context, product),
-                              PeopleRow(
-                                company: product,
+                              SuggestButton(
+                                product: product,
+                                buttonName: "Suggest Changes",
                               ),
-                              GestureDetector(
-                                onTap: () {
-                                  if (FirebaseAuth.instance.currentUser !=
-                                      null) {
-                                    Navigator.push(
-                                        context,
-                                        new MaterialPageRoute(
-                                            builder: (context) =>
-                                                SuggestChangesProduct(
-                                                  product: product,
-                                                )));
-                                  } else {
-                                    Navigator.push(
-                                        context,
-                                        new MaterialPageRoute(
-                                            builder: (context) => LoginPage()));
-                                  }
-                                },
-                                child: Container(
-                                  child: Center(
-                                    child: Text(
-                                      "Suggest Changes",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black),
-                                    ),
-                                  ),
-                                  height: 50,
-                                  width: MediaQuery.of(context).size.width,
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      begin: Alignment.centerLeft,
-                                      end: Alignment.centerRight,
-                                      colors: [
-                                        Colors.orange[100],
-                                        Colors.green[100]
-                                      ],
-                                    ),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10.0)),
-                                  ),
-                                  margin: EdgeInsets.all(20),
-                                ),
+                              ReviewList(
+                                id: product.id,
+                              ),
+                              SuggestButton(
+                                product: product,
+                                buttonName: "Add Review/Comments",
                               )
                             ]))
                           ]);

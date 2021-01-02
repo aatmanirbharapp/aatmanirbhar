@@ -1,6 +1,5 @@
 import 'package:atamnirbharapp/bloc/user_details.dart';
 import 'package:atamnirbharapp/bloc/user_repo.dart';
-import 'package:atamnirbharapp/ui/drawer.dart';
 import 'package:atamnirbharapp/ui/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -93,8 +92,7 @@ class _UserProfileState extends State<UserProfile> {
           leading: IconButton(
               color: Colors.black,
               icon: Icon(Icons.arrow_back),
-              onPressed: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => MyHomePage()))),
+              onPressed: () => Navigator.pop(context, null)),
           elevation: 10,
           backgroundColor: Colors.orange[50],
           centerTitle: true,
@@ -310,32 +308,24 @@ class _UserProfileState extends State<UserProfile> {
                                   }
                                 },
                                 child: Container(
-                                  child: Center(
-                                    child: Text(
-                                      "Update",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black),
+                                    height: 50,
+                                    width: MediaQuery.of(context).size.width,
+                                    decoration: BoxDecoration(
+                                      color: Color.fromARGB(255, 0, 0, 136),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(10.0)),
                                     ),
-                                  ),
-                                  height: 50,
-                                  width: MediaQuery.of(context).size.width,
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      begin: Alignment.centerLeft,
-                                      end: Alignment.centerRight,
-                                      colors: [
-                                        Colors.orange[100],
-                                        Colors.green[100]
-                                      ],
-                                    ),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10.0)),
-                                  ),
-                                  margin: EdgeInsets.all(20),
-                                ))
+                                    margin: EdgeInsets.all(8),
+                                    child: Center(
+                                      child: Text(
+                                        "Update",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white),
+                                      ),
+                                    )))
                           ],
                         ),
                       ),

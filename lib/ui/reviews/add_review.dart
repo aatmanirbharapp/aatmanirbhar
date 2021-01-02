@@ -1,26 +1,31 @@
-import 'package:atamnirbharapp/bloc/company.dart';
-import 'package:atamnirbharapp/http/faqrequest.dart';
+import 'package:atamnirbharapp/bloc/review.dart';
+import 'package:atamnirbharapp/bloc/review_repo.dart';
+
+import 'package:atamnirbharapp/ui/home_page.dart';
 import 'package:atamnirbharapp/ui/reviews/star_field.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class AddReview extends StatefulWidget {
-  final Company object;
+  final String id;
   final String username;
   final String uid;
 
-  AddReview(this.object, this.uid, this.username);
+  AddReview(this.id, this.uid, this.username);
 
   @override
   _AddReviewState createState() => _AddReviewState();
 }
 
 class _AddReviewState extends State<AddReview> {
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  var _scafolldKey = GlobalKey<ScaffoldState>();
   final formKey = GlobalKey<FormState>();
 
   final textEditingController = TextEditingController();
   final descriptionEditingController = TextEditingController();
 
-  final _httpReq = SqlResponse();
+  final _httpReq = ReviewRepo();
 
   double rating = 0.0;
   @override
@@ -29,7 +34,7 @@ class _AddReviewState extends State<AddReview> {
       appBar: AppBar(
         backgroundColor: Colors.orange[100],
         title: Text(
-          "Add Review" + widget.object.companyId,
+          "Add Review",
           style: TextStyle(color: Color.fromARGB(255, 0, 0, 136)),
         ),
         centerTitle: true,
@@ -126,16 +131,29 @@ class _AddReviewState extends State<AddReview> {
             ),
             GestureDetector(
                 onTap: () async {
-                  if (formKey.currentState.validate() && rating <= 0.0) {
-                    await _httpReq.addRating(
-                        widget.uid,
-                        "0",
-                        widget.object.id,
-                        rating,
-                        DateTime.now().toString(),
-                        textEditingController.text,
-                        descriptionEditingController.text,
-                        widget.username);
+                  if (formKey.currentState.validate()) {
+                    var review = Review(
+                      companyId: widget.id,
+                      userId: widget.uid,
+                      rating: rating,
+                      userName: widget.username,
+                      title: textEditingController.text,
+                      description: descriptionEditingController.text,
+                      dateTime: DateTime.now().toString(),
+                      enable: 0,
+                    );
+
+                    await _firestore
+                        .collection("reviews")
+                        .add(review.toJson())
+                        .then((value) => {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => MyHomePage()))
+                            })
+                        .catchError((error) =>
+                            {print("error define here"), print(error)});
                   } else {}
                 },
                 child: Container(
@@ -146,17 +164,13 @@ class _AddReviewState extends State<AddReview> {
                       style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black),
+                          color: Colors.white),
                     ),
                   ),
                   height: 50,
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                      colors: [Colors.orange[100], Colors.green[100]],
-                    ),
+                    color: Color.fromARGB(255, 0, 0, 136),
                     borderRadius: BorderRadius.all(Radius.circular(10.0)),
                   ),
                   margin: EdgeInsets.all(20),

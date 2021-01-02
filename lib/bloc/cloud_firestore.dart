@@ -24,6 +24,11 @@ class CommanGetCalls {
     return query.get(GetOptions(source: Source.serverAndCache));
   }
 
+  Future<QuerySnapshot> getTerms() async {
+    Query query = _firestore.collection("terms");
+    return query.get(GetOptions(source: Source.serverAndCache));
+  }
+
   Future<QuerySnapshot> getFaq() async {
     Query query = _firestore.collection("faq");
     return query.get(GetOptions(source: Source.serverAndCache));

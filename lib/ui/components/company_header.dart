@@ -58,67 +58,70 @@ class CompanyHeader extends StatelessWidget {
                           company.companyName,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18),
+                              color: Color.fromARGB(255, 0, 0, 136),
+                              fontFamily: 'Ambit',
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold),
                           overflow: TextOverflow.visible,
                           softWrap: true,
                           maxLines: null,
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 5, right: 5, top: 5),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      AllReview(object: company)));
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: Color.fromARGB(255, 0, 0, 136),
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(width: 1)),
-                          height: 25,
-                          width: 40,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              FutureBuilder(
-                                  future: _httpReq
-                                      .getRatingCount(company.companyId),
-                                  // ignore: missing_return
-                                  builder: (context, snapshot) {
-                                    switch (snapshot.connectionState) {
-                                      case ConnectionState.waiting:
-                                        return Text("0.0",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white));
-                                      default:
-                                        if (snapshot.hasData) {
-                                          return Text("4.2",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.white));
-                                        } else if (snapshot.hasError)
-                                          return Text("0.0",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.white));
-                                    }
-                                  }),
-                              Icon(
-                                Icons.star,
-                                color: Colors.white,
-                                size: 10,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.only(left: 5, right: 5, top: 5),
+                    //   child: GestureDetector(
+                    //     onTap: () {
+                    //       Navigator.push(
+                    //           context,
+                    //           MaterialPageRoute(
+                    //               builder: (context) =>
+                    //                   AllReview(company.companyId)));
+                    //     },
+                    //     child: Container(
+                    //       decoration: BoxDecoration(
+                    //           color: Color.fromARGB(255, 0, 0, 136),
+                    //           borderRadius: BorderRadius.circular(5),
+                    //           border: Border.all(width: 1)),
+                    //       height: 25,
+                    //       width: 40,
+                    //       child: Row(
+                    //         mainAxisAlignment: MainAxisAlignment.center,
+                    //         children: [
+                    //           FutureBuilder(
+                    //               future: _httpReq
+                    //                   .getRatingCount(company.companyId),
+                    //               // ignore: missing_return
+                    //               builder: (context, snapshot) {
+                    //                 switch (snapshot.connectionState) {
+                    //                   case ConnectionState.waiting:
+                    //                     return Text("0.0",
+                    //                         style: TextStyle(
+                    //                             fontWeight: FontWeight.bold,
+                    //                             color: Colors.white));
+                    //                   default:
+                    //                     if (snapshot.hasData) {
+                    //                       return Text("4.2",
+                    //                           style: TextStyle(
+                    //                               fontWeight: FontWeight.bold,
+                    //                               color: Colors.white));
+                    //                     } else if (snapshot.hasError)
+                    //                       return Text("0.0",
+                    //                           style: TextStyle(
+                    //                               fontWeight: FontWeight.bold,
+                    //                               color: Colors.white));
+                    //                 }
+                    //               }),
+                    //           Icon(
+                    //             Icons.star,
+                    //             color: Colors.white,
+                    //             size: 10,
+                    //           ),
+                    //         ],
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
                 Row(
@@ -146,6 +149,7 @@ class CompanyHeader extends StatelessWidget {
                         ),
                         Text("Website",
                             style: TextStyle(
+                                fontFamily: 'Roboto',
                                 fontSize: 10,
                                 color: Color.fromARGB(255, 0, 0, 136)))
                       ],
@@ -171,6 +175,7 @@ class CompanyHeader extends StatelessWidget {
                         ),
                         Text("Wikipedia",
                             style: TextStyle(
+                                fontFamily: 'Roboto',
                                 fontSize: 10,
                                 color: Color.fromARGB(255, 0, 0, 136)))
                       ],
@@ -204,6 +209,7 @@ class CompanyHeader extends StatelessWidget {
                           ),
                           Text("Facts",
                               style: TextStyle(
+                                  fontFamily: 'Roboto',
                                   fontSize: 10,
                                   color: Color.fromARGB(255, 0, 0, 136)))
                         ],
@@ -235,6 +241,7 @@ class CompanyHeader extends StatelessWidget {
                           ),
                           Text("Products",
                               style: TextStyle(
+                                  fontFamily: 'Roboto',
                                   fontSize: 10,
                                   color: Color.fromARGB(255, 0, 0, 136)))
                         ],

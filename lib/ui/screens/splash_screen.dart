@@ -20,7 +20,8 @@ class _SplashScreenState extends State<SplashScreen> {
         setState(() {});
       });
     Future.delayed(Duration(seconds: 8), () {
-      Navigator.popAndPushNamed(context, '/myhomepage');
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => MyHomePage()));
     });
   }
 

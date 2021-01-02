@@ -1,6 +1,7 @@
 import 'package:atamnirbharapp/bloc/product.dart';
 import 'package:atamnirbharapp/bloc/product_repo.dart';
 import 'package:atamnirbharapp/ui/components/alternate_company_header.dart';
+import 'package:atamnirbharapp/ui/components/alternate_product_header.dart';
 import 'package:atamnirbharapp/ui/drawer.dart';
 import 'package:atamnirbharapp/utils/comman_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -31,7 +32,7 @@ class ProductListByKeyWord extends StatelessWidget {
               return ListView.builder(
                 itemCount: snapshot.data.length,
                 itemBuilder: (context, index) {
-                  return AlternateCompanyHeader(
+                  return AlternateProductHeader(
                     product:
                         Product.fromJson(snapshot.data.elementAt(index).data()),
                   );

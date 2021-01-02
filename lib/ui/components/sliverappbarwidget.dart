@@ -19,12 +19,12 @@ class CustomSliverAppBar extends StatelessWidget {
       leading: IconButton(
         icon: Image.asset("assets/images/indian_flag_icon.png"),
         onPressed: () {
-          print("your menu action here");
           _scaffoldKey.currentState.openDrawer();
         },
       ),
+      centerTitle: true,
       pinned: true,
-      floating: true,
+      floating: false,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [

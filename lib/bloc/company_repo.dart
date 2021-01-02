@@ -32,6 +32,15 @@ class CompanyRepository {
         .then((value) => value.docs);
   }
 
+  Future<List<QueryDocumentSnapshot>> getCompanyListBySector(
+      String sector) async {
+    return await _firestore
+        .collection('company')
+        .where('sector', isEqualTo: sector)
+        .get(GetOptions(source: Source.serverAndCache))
+        .then((value) => value.docs);
+  }
+
   Future<List<QueryDocumentSnapshot>> getCompanyBySector(
       String sector, int limit) async {
     return await _firestore

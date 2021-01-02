@@ -1,46 +1,49 @@
+import 'package:atamnirbharapp/bloc/company.dart';
 import 'package:atamnirbharapp/bloc/product.dart';
 import 'package:atamnirbharapp/ui/screens/forein_product_screen.dart';
 import 'package:atamnirbharapp/ui/screens/india_product_screen.dart';
+import 'package:atamnirbharapp/ui/screens/indiancompanyscreen.dart';
+import 'package:atamnirbharapp/ui/screens/outside_india_company.dart';
 
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class AlternateCompanyHeader extends StatelessWidget {
-  final Product product;
+  final Company company;
 
-  AlternateCompanyHeader({Key key, this.product}) : super(key: key);
+  AlternateCompanyHeader({Key key, this.company}) : super(key: key);
 
   final FirebaseStorage storageRef = FirebaseStorage.instance;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        product.firstCountry.toLowerCase().contains("india")
+        print(company.toJson());
+        company.firstCountry.toLowerCase().contains("india")
             ? Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => IndianProduct(
-                          productId: product.image,
+                    builder: (context) => IndianCompany(
+                          companyId: company.companyId,
                         )))
             : Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) =>
-                        ForeinProductPage(productId: product.image)));
+                        OutsideIndiaCompany(companyId: company.companyId)));
       },
       child: Container(
-        margin: const EdgeInsets.all(15.0),
+        margin: const EdgeInsets.all(8),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             border: Border.all(color: Colors.black26)),
         height: 100,
-        width: MediaQuery.of(context).size.width * 0.80,
         child: Row(
           children: [
             FutureBuilder<Object>(
                 future: storageRef
                     .ref()
-                    .child("Product_Images/" + product.image)
+                    .child("Company_Logos/" + company.image)
                     .getDownloadURL(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData)
@@ -74,9 +77,13 @@ class AlternateCompanyHeader extends StatelessWidget {
                         child: SingleChildScrollView(
                           padding: EdgeInsets.only(top: 8),
                           child: Text(
-                            product.productName,
+                            company.companyName,
                             textAlign: TextAlign.center,
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                color: Color.fromARGB(255, 0, 0, 136),
+                                fontFamily: 'Ambit',
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold),
                             overflow: TextOverflow.visible,
                             softWrap: true,
                             maxLines: null,

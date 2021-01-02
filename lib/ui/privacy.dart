@@ -30,16 +30,18 @@ class Privacy extends StatelessWidget {
         centerTitle: true,
         title: Text(
           "Privacy Policy",
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontFamily: 'Roboto',
+              color: Colors.black,
+              fontWeight: FontWeight.bold),
         ),
       ),
       body: FutureBuilder<QuerySnapshot>(
           future: _faqGetRequest.getPrivacy(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Container(
+              return ListView(scrollDirection: Axis.vertical, children: [
+                Container(
                   padding: EdgeInsets.all(10),
                   height: MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
@@ -52,7 +54,7 @@ class Privacy extends StatelessWidget {
                       data: '${snapshot.data.docs.first.data()['description']}',
                       scrollable: true),
                 ),
-              );
+              ]);
             } else if (snapshot.hasError) {
               return Text("${snapshot.error}");
             }

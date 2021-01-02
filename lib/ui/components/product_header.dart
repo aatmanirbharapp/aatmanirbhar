@@ -17,7 +17,7 @@ class ProductHeader extends StatelessWidget {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: Colors.black26)),
-      height: 100,
+      height: 120,
       width: MediaQuery.of(context).size.width,
       child: Row(
         children: [
@@ -31,7 +31,7 @@ class ProductHeader extends StatelessWidget {
                 builder: (context, snapshot) {
                   if (snapshot.hasData)
                     return IconButton(
-                        iconSize: MediaQuery.of(context).size.width,
+                        iconSize: MediaQuery.of(context).size.height,
                         icon: Image.network(snapshot.data),
                         onPressed: () {});
                   return CommanWidgets().getCircularProgressIndicator(context);
@@ -53,7 +53,11 @@ class ProductHeader extends StatelessWidget {
                         child: Text(
                           product.productName,
                           textAlign: TextAlign.center,
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              color: Color.fromARGB(255, 0, 0, 136),
+                              fontFamily: 'Ambit',
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold),
                           overflow: TextOverflow.visible,
                           softWrap: true,
                           maxLines: null,
