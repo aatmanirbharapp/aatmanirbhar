@@ -103,7 +103,7 @@ class SqlResponse {
 
     http.Response response = await http.post('${AppContants.url}',
         body: body, headers: {"Accept": "application/json"});
-    List list = await getRatingCount(companyid);
+     await getRatingCount(companyid);
     repo.updateRatingCompany(companyid, '4.0');
 
     if (response.statusCode == 200) {

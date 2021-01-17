@@ -17,7 +17,7 @@ class ProductHeader extends StatelessWidget {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: Colors.black26)),
-      height: 120,
+      height: 150,
       width: MediaQuery.of(context).size.width,
       child: Row(
         children: [

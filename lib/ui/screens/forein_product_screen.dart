@@ -4,18 +4,15 @@ import 'package:atamnirbharapp/ui/components/alternate_container.dart';
 
 import 'package:atamnirbharapp/ui/components/innerpageappbar.dart';
 import 'package:atamnirbharapp/ui/components/middlelogorow.dart';
-import 'package:atamnirbharapp/ui/components/peoplewidget.dart';
+
 import 'package:atamnirbharapp/ui/components/product_header.dart';
 import 'package:atamnirbharapp/ui/components/review_list.dart';
 import 'package:atamnirbharapp/ui/components/suggest_button.dart';
 
 import 'package:atamnirbharapp/ui/drawer.dart';
-import 'package:atamnirbharapp/ui/screens/addcompany.dart';
-import 'package:atamnirbharapp/ui/screens/suggest_change_product.dart';
-import 'package:atamnirbharapp/ui/userauthentication/loginpage.dart';
 import 'package:atamnirbharapp/utils/comman_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 
 class ForeinProductPage extends StatelessWidget {
@@ -51,6 +48,7 @@ class ForeinProductPage extends StatelessWidget {
                         if (snapshot.hasData) {
                           Product product =
                               Product.fromJson(snapshot.data.first.data());
+                          product.id = snapshot.data.first.id;
                           return CustomScrollView(slivers: [
                             InnerSliverAppBar(scaffoldKey: _scaffoldKey),
                             SliverList(
@@ -61,21 +59,38 @@ class ForeinProductPage extends StatelessWidget {
                               Container(
                                 height: 120,
                                 child: MiddleRow(
-                                  company: product,
+                                  firstCountry: product.firstCountry,
+                                  secondCountry: product.secondCountry,
+                                  makesInIndia: product.makeInIndia,
                                 ),
                               ),
                               AlternateContainer(context, product),
-                              SuggestButton(
-                                product: product,
-                                buttonName: "Suggest Changes",
+                              Padding(
+                                padding: EdgeInsets.all(8),
+                                child: Text("Top Reviews",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontFamily: 'Ambit',
+                                        fontWeight: FontWeight.bold,
+                                        color: Color.fromARGB(255, 0, 0, 136))),
                               ),
                               ReviewList(
                                 id: product.id,
                               ),
-                              SuggestButton(
-                                product: product,
-                                buttonName: "Add Review/Comments",
-                              )
+                              Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    SuggestButton(
+                                      product: product,
+                                      buttonName: "Suggest Changes",
+                                    ),
+                                    SuggestButton(
+                                      product: product,
+                                      buttonName: "Add Review / Comment",
+                                    )
+                                  ]),
                             ]))
                           ]);
                         } else if (snapshot.hasError)

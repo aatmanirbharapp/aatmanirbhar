@@ -1,5 +1,9 @@
+import 'package:atamnirbharapp/bloc/company_repo.dart';
 import 'package:atamnirbharapp/ui/components/footerwidget.dart';
+import 'package:atamnirbharapp/utils/comman_widgets.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,6 +19,8 @@ class _CompanyCardViewState extends State<CompanyCardView> {
 
   bool _isPlayerReady = false;
   PlayerState _playerState;
+  final FirebaseStorage storageRef = FirebaseStorage.instance;
+  CompanyRepository companyRepo = CompanyRepository();
 
   YoutubeMetaData _videoMetaData;
 
@@ -73,11 +79,6 @@ class _CompanyCardViewState extends State<CompanyCardView> {
           child: Padding(
               padding: EdgeInsets.all(5),
               child: YoutubePlayerBuilder(
-                onExitFullScreen: () {
-                  // The player forces portraitUp after exiting fullscreen. This overrides the behaviour.
-                  SystemChrome.setPreferredOrientations(
-                      DeviceOrientation.values);
-                },
                 builder: (context, player) => Container(),
                 player: YoutubePlayer(
                   controller: _controller,
@@ -96,14 +97,6 @@ class _CompanyCardViewState extends State<CompanyCardView> {
                         maxLines: 1,
                       ),
                     ),
-                    IconButton(
-                      icon: const Icon(
-                        Icons.settings,
-                        color: Colors.white,
-                        size: 25.0,
-                      ),
-                      onPressed: () {},
-                    ),
                   ],
                   onReady: () {
                     _isPlayerReady = true;
@@ -112,54 +105,140 @@ class _CompanyCardViewState extends State<CompanyCardView> {
                 ),
               )),
         ),
+        Padding(
+          padding: EdgeInsets.only(top: 15, right: 8, left: 8, bottom: 8),
+          child: Text("Trending Aatmanirbhar Companies",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'Ambit',
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(255, 0, 0, 136))),
+        ),
         Container(
-            height: MediaQuery.of(context).size.height * 0.3,
+            margin: EdgeInsets.only(top: 10),
+            height: 120,
             width: MediaQuery.of(context).size.width,
-            child: CarouselSlider(
-              items: [
-                Padding(
-                    padding: EdgeInsets.only(left: 8, right: 8),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8.0),
-                      child: Image.asset(
-                        "assets/images/IM1_English.png",
-                        height: MediaQuery.of(context).size.height * 0.3,
-                      ),
-                    )),
-                Padding(
-                    padding: EdgeInsets.only(left: 8, right: 8),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8.0),
-                      child: Image.asset("assets/images/IM2_English.png",
-                          height: MediaQuery.of(context).size.height * 0.3),
-                    )),
-                Padding(
-                    padding: EdgeInsets.only(left: 8, right: 8),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8.0),
-                      child: Image.asset("assets/images/IM3_English.png",
-                          height: MediaQuery.of(context).size.height * 0.3),
-                    )),
-                Padding(
-                    padding: EdgeInsets.only(left: 8, right: 8),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8.0),
-                      child: Image.asset("assets/images/IM4_English.png",
-                          height: MediaQuery.of(context).size.height * 0.3),
-                    )),
-                Padding(
-                    padding: EdgeInsets.only(left: 8, right: 8),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8.0),
-                      child: Image.asset("assets/images/IM5_English.png",
-                          height: MediaQuery.of(context).size.height * 0.3),
-                    ))
-              ],
-              options: CarouselOptions(
-                autoPlay: true,
-                enlargeCenterPage: true,
-                pauseAutoPlayOnTouch: true,
-              ),
+            child: FutureBuilder<List<QueryDocumentSnapshot>>(
+              future: companyRepo.getAllTrendingCompany(),
+              builder: (context, snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.waiting:
+                    return CommanWidgets()
+                        .getCircularProgressIndicator(context);
+                  default:
+                    if (snapshot.hasData) {
+                      return CarouselSlider.builder(
+                        options: CarouselOptions(
+                          autoPlay: true,
+                          enlargeCenterPage: true,
+                          pauseAutoPlayOnTouch: true,
+                        ),
+                        itemCount: snapshot.data.length,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () async {
+                              await showDialog(
+                                  context: context,
+                                  builder: (_) => Dialog(
+                                      child: FutureBuilder<Object>(
+                                          future: storageRef
+                                              .ref()
+                                              .child("trending_company_logos/" +
+                                                  snapshot.data
+                                                      .elementAt(index)
+                                                      .data()['trendingImage'])
+                                              .getDownloadURL(),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.hasData)
+                                              return Container(
+                                                height: 220,
+                                                decoration: BoxDecoration(
+                                                    image: DecorationImage(
+                                                        image: NetworkImage(
+                                                            snapshot.data),
+                                                        fit: BoxFit.fill)),
+                                              );
+                                            return SizedBox(
+                                              width: 10,
+                                              height: 10,
+                                              child: CircularProgressIndicator(
+                                                value: 5,
+                                                backgroundColor: Colors.red,
+                                              ),
+                                            );
+                                          })));
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.all(3),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(color: Colors.black26)),
+                              child: Row(
+                                children: [
+                                  FutureBuilder<Object>(
+                                      future: storageRef
+                                          .ref()
+                                          .child("Company_Logos/" +
+                                              snapshot.data
+                                                  .elementAt(index)
+                                                  .data()['image'])
+                                          .getDownloadURL(),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasData)
+                                          return Container(
+                                            width: 100,
+                                            child: IconButton(
+                                                iconSize: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                icon: Image.network(
+                                                    snapshot.data),
+                                                onPressed: () {}),
+                                          );
+                                        return Container(
+                                          width: 50,
+                                          child: LinearProgressIndicator(
+                                            value: 5,
+                                            backgroundColor: Colors.red,
+                                          ),
+                                        );
+                                      }),
+                                  Container(
+                                    alignment: Alignment.center,
+                                    width: 200,
+                                    child: SingleChildScrollView(
+                                      padding: EdgeInsets.only(top: 8),
+                                      child: Text(
+                                        snapshot.data
+                                            .elementAt(index)
+                                            .data()['companyName'],
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color:
+                                                Color.fromARGB(255, 0, 0, 136),
+                                            fontFamily: 'Ambit',
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold),
+                                        overflow: TextOverflow.visible,
+                                        softWrap: true,
+                                        maxLines: null,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text("Error occured"));
+                    } else {
+                      return Center(child: Text("Error occured"));
+                    }
+                }
+              },
             )),
       ],
     );

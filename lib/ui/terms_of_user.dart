@@ -28,33 +28,39 @@ class Terms extends StatelessWidget {
         elevation: 10,
         backgroundColor: Colors.orange[50],
         centerTitle: true,
-        title: Text(
-          "Terms Of Use",
-          style: TextStyle(
-              fontFamily: 'Roboto',
-              color: Colors.black,
-              fontWeight: FontWeight.bold),
-        ),
+        title: Text("Terms Of Use",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontFamily: 'Ambit',
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(255, 0, 0, 136))),
       ),
       body: FutureBuilder<QuerySnapshot>(
           future: _faqGetRequest.getTerms(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return ListView(scrollDirection: Axis.vertical, children: [
-                Container(
-                  padding: EdgeInsets.all(10),
-                  height: MediaQuery.of(context).size.height,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                    image: AssetImage("assets/images/BG_Color.jpeg"),
-                    fit: BoxFit.cover,
-                  )),
-                  child: HtmlView(
-                      data: '${snapshot.data.docs.first.data()['description']}',
-                      scrollable: true),
-                ),
-              ]);
+              return CustomScrollView(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  slivers: [
+                    SliverList(
+                        delegate: SliverChildListDelegate([
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        height: MediaQuery.of(context).size.height,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                          image: AssetImage("assets/images/BG_Color.jpeg"),
+                          fit: BoxFit.cover,
+                        )),
+                        child: HtmlView(
+                            data:
+                                '${snapshot.data.docs.first.data()['description']}',
+                            scrollable: true),
+                      ),
+                    ]))
+                  ]);
             } else if (snapshot.hasError) {
               return Text("${snapshot.error}");
             }

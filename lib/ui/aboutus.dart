@@ -33,10 +33,12 @@ class Aboutus extends StatelessWidget {
         elevation: 10,
         backgroundColor: Colors.orange[50],
         centerTitle: true,
-        title: Text(
-          "About Us",
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        ),
+        title: Text("About Us",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontFamily: 'Ambit',
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(255, 0, 0, 136))),
       ),
       body: Container(
         height: MediaQuery.of(context).size.height,

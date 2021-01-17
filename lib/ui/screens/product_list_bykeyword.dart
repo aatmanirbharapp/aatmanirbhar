@@ -1,6 +1,5 @@
 import 'package:atamnirbharapp/bloc/product.dart';
 import 'package:atamnirbharapp/bloc/product_repo.dart';
-import 'package:atamnirbharapp/ui/components/alternate_company_header.dart';
 import 'package:atamnirbharapp/ui/components/alternate_product_header.dart';
 import 'package:atamnirbharapp/ui/drawer.dart';
 import 'package:atamnirbharapp/utils/comman_widgets.dart';
@@ -16,6 +15,29 @@ class ProductListByKeyWord extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: Image.asset("assets/images/Final_AatmNirbhar_logo.png"),
+            iconSize: 70,
+            onPressed: () {},
+          ),
+        ],
+        leading: IconButton(
+          color: Colors.black,
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        elevation: 10,
+        backgroundColor: Colors.orange[50],
+        centerTitle: true,
+        title: Text("Alternate Products List",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontFamily: 'Ambit',
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(255, 0, 0, 136))),
+      ),
       drawer: DrawerClass(),
       body: Container(
         height: MediaQuery.of(context).size.height,

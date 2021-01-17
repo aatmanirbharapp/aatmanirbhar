@@ -46,6 +46,7 @@ class IndianCompany extends StatelessWidget {
                     if (snapshot.hasData) {
                       Company company =
                           Company.fromJson(snapshot.data.first.data());
+                      company.id = snapshot.data.first.id;
                       return CustomScrollView(slivers: [
                         InnerSliverAppBar(scaffoldKey: this._scaffoldKey),
                         SliverList(
@@ -56,7 +57,9 @@ class IndianCompany extends StatelessWidget {
                           Container(
                             height: 150,
                             child: MiddleRow(
-                              company: company,
+                              firstCountry: company.firstCountry,
+                              secondCountry: company.secondCountry,
+                              makesInIndia: company.makesInIndia,
                             ),
                           ),
                           Container(
@@ -69,7 +72,8 @@ class IndianCompany extends StatelessWidget {
                             width: MediaQuery.of(context).size.width,
                             child: ListView(
                                 shrinkWrap: true,
-                                padding: EdgeInsets.all(8),
+                                padding:
+                                    EdgeInsets.only(left: 8, right: 8, top: 8),
                                 children: [
                                   Text("About Company",
                                       textAlign: TextAlign.center,
@@ -82,24 +86,38 @@ class IndianCompany extends StatelessWidget {
                                       textAlign: TextAlign.justify,
                                       style: TextStyle(
                                         fontFamily: 'OpenSans',
-                                        color: Colors.grey[700],
+                                        color: Colors.black,
                                       ))
                                 ]),
                           ),
                           SimilarIndianCompanies(
                             company: company,
                           ),
-                          SuggestButton(
-                            company: company,
-                            buttonName: "Suggest Changes",
+                          Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Text("Top Reviews",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontFamily: 'Ambit',
+                                    fontWeight: FontWeight.bold,
+                                    color: Color.fromARGB(255, 0, 0, 136))),
                           ),
                           ReviewList(
                             id: company.id,
                           ),
-                          SuggestButton(
-                            company: company,
-                            buttonName: "Add Review/Comment",
-                          )
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                SuggestButton(
+                                  company: company,
+                                  buttonName: "Suggest Changes",
+                                ),
+                                SuggestButton(
+                                  company: company,
+                                  buttonName: "Add Review / Comment",
+                                )
+                              ]),
                         ]))
                       ]);
                     } else if (snapshot.hasError) {

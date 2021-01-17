@@ -13,20 +13,24 @@ class SimilarIndianCompanies extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 150,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Text("Similar Indian Companies",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontFamily: 'Ambit',
-                  fontWeight: FontWeight.bold,
-                  color: Color.fromARGB(255, 0, 0, 136))),
+          Padding(
+            padding: EdgeInsets.all(8),
+            child: Text("Similar Indian Companies",
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                    fontSize: 20,
+                    fontFamily: 'Ambit',
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(255, 0, 0, 136))),
+          ),
           Container(
               height: 120,
               child: FutureBuilder<List<QueryDocumentSnapshot>>(
-                future: companyRepo.getCompanyListBySector(company.sector),
+                future: companyRepo.getCompanyListBySector(
+                    company.sector, company.companyName),
                 builder: (context, snapshot) {
                   switch (snapshot.connectionState) {
                     case ConnectionState.waiting:

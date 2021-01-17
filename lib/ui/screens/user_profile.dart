@@ -1,4 +1,5 @@
 import 'package:atamnirbharapp/bloc/user_details.dart';
+import 'package:atamnirbharapp/ui/home_page.dart';
 import 'package:atamnirbharapp/ui/user_profile.dart';
 import 'package:atamnirbharapp/utils/comman_widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -34,7 +35,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
           leading: IconButton(
             color: Colors.black,
             icon: Icon(Icons.arrow_back),
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => MyHomePage())),
           ),
           elevation: 10,
           backgroundColor: Colors.orange[50],

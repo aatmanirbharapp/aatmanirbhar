@@ -49,6 +49,7 @@ class OutsideIndiaCompany extends StatelessWidget {
                         if (snapshot.hasData) {
                           Company company =
                               Company.fromJson(snapshot.data.first.data());
+                          company.id = snapshot.data.first.id;
                           return CustomScrollView(slivers: [
                             InnerSliverAppBar(scaffoldKey: _scaffoldKey),
                             SliverList(
@@ -59,8 +60,9 @@ class OutsideIndiaCompany extends StatelessWidget {
                               Container(
                                 height: 120,
                                 child: MiddleRow(
-                                  company: company,
-                                ),
+                                    firstCountry: company.firstCountry,
+                                    secondCountry: company.secondCountry,
+                                    makesInIndia: company.makesInIndia),
                               ),
                               Container(
                                 margin: EdgeInsets.all(8),
@@ -72,7 +74,8 @@ class OutsideIndiaCompany extends StatelessWidget {
                                 width: MediaQuery.of(context).size.width,
                                 child: ListView(
                                     shrinkWrap: true,
-                                    padding: EdgeInsets.all(2),
+                                    padding: EdgeInsets.only(
+                                        left: 8, right: 8, top: 8),
                                     children: [
                                       Text("About Company",
                                           textAlign: TextAlign.center,
@@ -84,25 +87,39 @@ class OutsideIndiaCompany extends StatelessWidget {
                                       Text("\n\n" + company.aboutCompany,
                                           textAlign: TextAlign.justify,
                                           style: TextStyle(
-                                            fontFamily: 'OpenSans',
-                                            color: Colors.grey,
-                                          ))
+                                              fontFamily: 'OpenSans',
+                                              color: Colors.black))
                                     ]),
                               ),
                               SimilarIndianCompanies(
                                 company: company,
                               ),
-                              SuggestButton(
-                                company: company,
-                                buttonName: "Suggest Changes",
+                              Padding(
+                                padding: EdgeInsets.all(8),
+                                child: Text("Top Reviews",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontFamily: 'Ambit',
+                                        fontWeight: FontWeight.bold,
+                                        color: Color.fromARGB(255, 0, 0, 136))),
                               ),
                               ReviewList(
                                 id: company.id,
                               ),
-                              SuggestButton(
-                                company: company,
-                                buttonName: "Add Review/Comments",
-                              )
+                              Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    SuggestButton(
+                                      company: company,
+                                      buttonName: "Suggest Changes",
+                                    ),
+                                    SuggestButton(
+                                      company: company,
+                                      buttonName: "Add Review / Comment",
+                                    )
+                                  ]),
                             ]))
                           ]);
                         } else

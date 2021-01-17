@@ -30,6 +30,8 @@ class ReviewList extends StatelessWidget {
                       padding: EdgeInsets.all(5),
                       scrollDirection: Axis.vertical,
                       itemCount: snapshot.data.length,
+                      physics:
+                          ScrollPhysics(parent: NeverScrollableScrollPhysics()),
                       itemBuilder: (context, int index) {
                         Review review = Review.fromJson(
                             snapshot.data.elementAt(index).data());

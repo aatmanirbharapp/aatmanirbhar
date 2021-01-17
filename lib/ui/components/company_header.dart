@@ -1,6 +1,5 @@
 import 'package:atamnirbharapp/bloc/company.dart';
 import 'package:atamnirbharapp/http/faqrequest.dart';
-import 'package:atamnirbharapp/ui/reviews/review_screen.dart';
 import 'package:atamnirbharapp/ui/screens/comapny_product_list.dart';
 import 'package:atamnirbharapp/ui/screens/show_web_view.dart';
 import 'package:atamnirbharapp/utils/comman_widgets.dart';
@@ -128,94 +127,13 @@ class CompanyHeader extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: InkWell(
-                                onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => WebViewPage(
-                                            url: company.website,
-                                          )));
-                                },
-                                child: Image.asset(
-                                    "assets/images/Website_Icon.png")),
-                          ),
-                        ),
-                        Text("Website",
-                            style: TextStyle(
-                                fontFamily: 'Roboto',
-                                fontSize: 10,
-                                color: Color.fromARGB(255, 0, 0, 136)))
-                      ],
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SizedBox(
-                            height: 30,
-                            width: 30,
-                            child: InkWell(
-                                onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => WebViewPage(
-                                            url: company.wikiPage,
-                                          )));
-                                },
-                                child: Image.asset(
-                                    "assets/images/Wikipedia_Icon.png")),
-                          ),
-                        ),
-                        Text("Wikipedia",
-                            style: TextStyle(
-                                fontFamily: 'Roboto',
-                                fontSize: 10,
-                                color: Color.fromARGB(255, 0, 0, 136)))
-                      ],
-                    ),
-                    if (company.firstCountry.contains("India"))
-                      Column(
+                    GestureDetector(
+                      onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => WebViewPage(
+                                url: company.website,
+                              ))),
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: SizedBox(
-                              height: 25,
-                              width: 25,
-                              child: InkWell(
-                                  onTap: () {
-                                    showAboutDialog(
-                                        context: context,
-                                        applicationName: "Stories",
-                                        children: [
-                                          Text(
-                                            company.story,
-                                            softWrap: true,
-                                            overflow: TextOverflow.visible,
-                                            maxLines: null,
-                                          )
-                                        ]);
-                                  },
-                                  child: Image.asset(
-                                      "assets/images/Fact_Icon.png")),
-                            ),
-                          ),
-                          Text("Facts",
-                              style: TextStyle(
-                                  fontFamily: 'Roboto',
-                                  fontSize: 10,
-                                  color: Color.fromARGB(255, 0, 0, 136)))
-                        ],
-                      ),
-                    if (company.isService == 0)
-                      Column(
                         children: [
                           Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -224,28 +142,232 @@ class CompanyHeader extends StatelessWidget {
                               width: 20,
                               child: InkWell(
                                   onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              CompanyProductList(
-                                            company: company,
-                                          ),
-                                        ));
+                                    company.website.isEmpty
+                                        ? AlertDialog(
+                                            actions: [
+                                              FlatButton(
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8)),
+                                                color: Color.fromARGB(
+                                                    255, 0, 0, 136),
+                                                child: Text("Close"),
+                                                onPressed: () =>
+                                                    Navigator.pop(context),
+                                              )
+                                            ],
+                                            content: Text(
+                                                "No website page present for given company, If you found any link please suggest that changes",
+                                                style: TextStyle(
+                                                  fontFamily: 'OpenSans',
+                                                  color: Colors.grey[700],
+                                                )),
+                                          )
+                                        : Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    WebViewPage(
+                                                      url: company.website,
+                                                    )));
                                   },
                                   child: Image.asset(
-                                    "assets/images/Products_Icon.png",
-                                    color: Color.fromARGB(255, 0, 0, 136),
-                                  )),
+                                      "assets/images/Website_Icon.png")),
                             ),
                           ),
-                          Text("Products",
+                          Text("Website",
                               style: TextStyle(
                                   fontFamily: 'Roboto',
                                   fontSize: 10,
                                   color: Color.fromARGB(255, 0, 0, 136)))
                         ],
                       ),
+                    ),
+                    GestureDetector(
+                      onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => WebViewPage(
+                                url: company.wikiPage,
+                              ))),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SizedBox(
+                              height: 30,
+                              width: 30,
+                              child: InkWell(
+                                  onTap: () {
+                                    company.wikiPage.isEmpty
+                                        ? AlertDialog(
+                                            actions: [
+                                              FlatButton(
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8)),
+                                                color: Color.fromARGB(
+                                                    255, 0, 0, 136),
+                                                child: Text("Close"),
+                                                onPressed: () =>
+                                                    Navigator.pop(context),
+                                              )
+                                            ],
+                                            content: Text(
+                                                "No wikipedia page present for given company, If you found any link please suggest that changes",
+                                                style: TextStyle(
+                                                  fontFamily: 'OpenSans',
+                                                  color: Colors.grey[700],
+                                                )),
+                                          )
+                                        : Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    WebViewPage(
+                                                      url: company.wikiPage,
+                                                    )));
+                                  },
+                                  child: Image.asset(
+                                      "assets/images/Wikipedia_Icon.png")),
+                            ),
+                          ),
+                          Text("Wikipedia",
+                              style: TextStyle(
+                                  fontFamily: 'Roboto',
+                                  fontSize: 10,
+                                  color: Color.fromARGB(255, 0, 0, 136)))
+                        ],
+                      ),
+                    ),
+                    if (company.firstCountry.contains("India"))
+                      GestureDetector(
+                        onTap: () => showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                actions: [
+                                  FlatButton(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8)),
+                                    color: Color.fromARGB(255, 0, 0, 136),
+                                    child: Text("Close"),
+                                    onPressed: () => Navigator.pop(context),
+                                  )
+                                ],
+                                title: Text("Aatmanirbhar Story and Facts",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontFamily: 'Ambit',
+                                        fontWeight: FontWeight.bold,
+                                        color: Color.fromARGB(255, 0, 0, 136))),
+                                content: Text(company.story,
+                                    textAlign: TextAlign.justify,
+                                    style: TextStyle(
+                                      fontFamily: 'OpenSans',
+                                      color: Colors.grey[700],
+                                    )),
+                              );
+                            }),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SizedBox(
+                                height: 25,
+                                width: 25,
+                                child: InkWell(
+                                    onTap: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              actions: [
+                                                FlatButton(
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8)),
+                                                  color: Color.fromARGB(
+                                                      255, 0, 0, 136),
+                                                  child: Text("Close"),
+                                                  onPressed: () =>
+                                                      Navigator.pop(context),
+                                                )
+                                              ],
+                                              title: Text(
+                                                  "Aatmanirbhar Story and Facts",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontSize: 20,
+                                                      fontFamily: 'Ambit',
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Color.fromARGB(
+                                                          255, 0, 0, 136))),
+                                              content: Text(company.story,
+                                                  textAlign: TextAlign.justify,
+                                                  style: TextStyle(
+                                                    fontFamily: 'OpenSans',
+                                                    color: Colors.grey[700],
+                                                  )),
+                                            );
+                                          });
+                                    },
+                                    child: Image.asset(
+                                        "assets/images/Fact_Icon.png")),
+                              ),
+                            ),
+                            Text("Facts",
+                                style: TextStyle(
+                                    fontFamily: 'Roboto',
+                                    fontSize: 10,
+                                    color: Color.fromARGB(255, 0, 0, 136)))
+                          ],
+                        ),
+                      ),
+                    if (company.isService == 0)
+                      GestureDetector(
+                        onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CompanyProductList(
+                                company: company,
+                              ),
+                            )),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                CompanyProductList(
+                                              company: company,
+                                            ),
+                                          ));
+                                    },
+                                    child: Image.asset(
+                                      "assets/images/Products_Icon.png",
+                                      color: Color.fromARGB(255, 0, 0, 136),
+                                    )),
+                              ),
+                            ),
+                            Text("Products",
+                                style: TextStyle(
+                                    fontFamily: 'Roboto',
+                                    fontSize: 10,
+                                    color: Color.fromARGB(255, 0, 0, 136)))
+                          ],
+                        ),
+                      )
                   ],
                 ),
               ],

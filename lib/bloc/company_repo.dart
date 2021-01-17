@@ -1,5 +1,4 @@
 import 'package:atamnirbharapp/bloc/company.dart';
-import 'package:atamnirbharapp/bloc/product.dart';
 import 'package:atamnirbharapp/bloc/user_company.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -33,10 +32,11 @@ class CompanyRepository {
   }
 
   Future<List<QueryDocumentSnapshot>> getCompanyListBySector(
-      String sector) async {
+      String sector, String companyName) async {
     return await _firestore
         .collection('company')
         .where('sector', isEqualTo: sector)
+        .where('firstCountry', isEqualTo: 'India')
         .get(GetOptions(source: Source.serverAndCache))
         .then((value) => value.docs);
   }
@@ -60,6 +60,13 @@ class CompanyRepository {
                 .get(GetOptions(source: Source.serverAndCache))
                 .then((value) => value)
             : value);
+  }
+
+  Future<List<QueryDocumentSnapshot>> getAllTrendingCompany() async {
+    return _firestore
+        .collection("trendingCompanies")
+        .get(GetOptions(source: Source.serverAndCache))
+        .then((value) => value.docs);
   }
 
   void updateRatingCompany(String id, String rating) async {

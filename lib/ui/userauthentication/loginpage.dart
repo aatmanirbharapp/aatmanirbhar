@@ -94,10 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                           onTap: () async {
                             await signWithGoogle();
 
-                            Navigator.pushReplacement(
-                                context,
-                                new MaterialPageRoute(
-                                    builder: (context) => MyHomePage()));
+                            Navigator.pop(context);
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,

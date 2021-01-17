@@ -99,8 +99,9 @@ class _SuggestChangesState extends State<SuggestChanges> {
                           child: Text(
                             "Suggest Changes",
                             style: TextStyle(
+                                fontFamily: 'Ambit',
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black45,
+                                color: Color.fromARGB(255, 0, 0, 136),
                                 fontSize: 20),
                           ),
                         ),

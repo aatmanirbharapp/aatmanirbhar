@@ -2,6 +2,7 @@ import 'package:atamnirbharapp/ui/aboutus.dart';
 import 'package:atamnirbharapp/ui/faq.dart';
 import 'package:atamnirbharapp/ui/helpandsupport.dart';
 import 'package:atamnirbharapp/ui/privacy.dart';
+import 'package:atamnirbharapp/ui/screens/report_bug.dart';
 import 'package:atamnirbharapp/ui/terms_of_user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -134,6 +135,19 @@ class FooterWidget extends StatelessWidget {
                   },
                   child: Text(
                     "Terms Of Use",
+                    style: TextStyle(
+                        color: Color.fromARGB(255, 0, 0, 136),
+                        fontFamily: 'Ambit',
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold),
+                  )),
+              InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => ReportBug()));
+                  },
+                  child: Text(
+                    "Report Bug",
                     style: TextStyle(
                         color: Color.fromARGB(255, 0, 0, 136),
                         fontFamily: 'Ambit',

@@ -18,6 +18,29 @@ class CompanyProductList extends StatelessWidget {
   Widget build(BuildContext context) {
     print(company.companyId);
     return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: Image.asset("assets/images/Final_AatmNirbhar_logo.png"),
+            iconSize: 70,
+            onPressed: () {},
+          ),
+        ],
+        leading: IconButton(
+          color: Colors.black,
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        elevation: 10,
+        backgroundColor: Colors.orange[50],
+        centerTitle: true,
+        title: Text("Products List",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontFamily: 'Ambit',
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(255, 0, 0, 136))),
+      ),
       drawer: DrawerClass(),
       body: Container(
         height: MediaQuery.of(context).size.height,

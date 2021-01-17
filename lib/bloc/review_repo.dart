@@ -14,6 +14,7 @@ class ReviewRepo {
     return await _firestore
         .collection('reviews')
         .where('companyId', isEqualTo: companyId)
+        .limit(10)
         .get(GetOptions(source: Source.serverAndCache))
         .then((value) => value.docs);
   }

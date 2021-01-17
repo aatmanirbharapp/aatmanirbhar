@@ -1,10 +1,12 @@
 import 'package:atamnirbharapp/ui/components/searchbarwidget.dart';
 import 'package:atamnirbharapp/ui/components/titlewidget.dart';
+import 'package:atamnirbharapp/ui/userauthentication/loginpage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CustomSliverAppBar extends StatelessWidget {
-  const CustomSliverAppBar({
+  CustomSliverAppBar({
     Key key,
     @required GlobalKey<ScaffoldState> scaffoldKey,
   })  : _scaffoldKey = scaffoldKey,
@@ -12,6 +14,7 @@ class CustomSliverAppBar extends StatelessWidget {
 
   final GlobalKey<ScaffoldState> _scaffoldKey;
 
+  FirebaseAuth _auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
@@ -25,21 +28,31 @@ class CustomSliverAppBar extends StatelessWidget {
       centerTitle: true,
       pinned: true,
       floating: false,
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          TitleWidget(),
-          ClipOval(
-            child: Image.asset(
-              "assets/images/Final_AatmNirbhar_logo.png",
-              fit: BoxFit.cover,
-              height: 60,
-            ),
-          )
-        ],
-      ),
+      title: TitleWidget(),
       bottom: PreferredSize(
           child: SearchBarWidget(), preferredSize: const Size.fromHeight(60)),
+      actions: [
+        _auth.currentUser != null
+            ? Padding(
+                padding: EdgeInsets.only(right: 10),
+                child: CircleAvatar(
+                  backgroundImage: _auth.currentUser.photoURL != null
+                      ? NetworkImage(
+                          _auth.currentUser.photoURL,
+                        )
+                      : Icon(Icons.face),
+                ))
+            : Padding(
+                padding: EdgeInsets.only(right: 10),
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => LoginPage()));
+                  },
+                  icon: Icon(Icons.face),
+                  color: Color.fromARGB(255, 0, 0, 136),
+                ))
+      ],
     );
   }
 }

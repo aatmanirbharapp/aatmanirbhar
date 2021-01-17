@@ -19,18 +19,31 @@ class SuggestButton extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         if (_auth.currentUser != null) {
-          Navigator.push(
-              context,
-              new MaterialPageRoute(
-                  builder: (context) => company == null
-                      ? buttonName.contains("Suggest Changes")
+          switch (buttonName) {
+            case "Suggest Changes":
+              Navigator.push(
+                  context,
+                  new MaterialPageRoute(
+                      builder: (context) => company == null
                           ? SuggestChangesProduct(product: product)
-                          : AddReview(product.id, _auth.currentUser.uid,
+                          : SuggestChanges(company: company)));
+              break;
+            case "Add Review / Comment":
+              Navigator.push(
+                  context,
+                  new MaterialPageRoute(
+                      builder: (context) => company == null
+                          ? AddReview(product.id, _auth.currentUser.uid,
                               _auth.currentUser.displayName)
-                      : buttonName.contains("Suggest Changes")
-                          ? SuggestChanges(company: company)
                           : AddReview(company.id, _auth.currentUser.uid,
                               _auth.currentUser.displayName)));
+              break;
+            case "Close":
+              Navigator.pop(context);
+              break;
+            default:
+              break;
+          }
         } else {
           Navigator.push(context,
               new MaterialPageRoute(builder: (context) => LoginPage()));
@@ -38,15 +51,16 @@ class SuggestButton extends StatelessWidget {
       },
       child: Container(
         child: Center(
+            child: SingleChildScrollView(
           child: Text(buttonName,
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Colors.white)),
-        ),
+        )),
         height: 50,
-        width: MediaQuery.of(context).size.width,
+        width: MediaQuery.of(context).size.width * 0.42,
         decoration: BoxDecoration(
           color: Color.fromARGB(255, 0, 0, 136),
           borderRadius: BorderRadius.all(Radius.circular(10.0)),

@@ -120,9 +120,12 @@ class _AddCompanyState extends State<AddCompany> {
                         child: Align(
                           alignment: Alignment.center,
                           child: Text(
-                            "Add Company",
+                            "Add Company/Products",
                             style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20),
+                                fontFamily: 'Ambit',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: Color.fromARGB(255, 0, 0, 136)),
                           ),
                         ),
                       ),
@@ -138,8 +141,8 @@ class _AddCompanyState extends State<AddCompany> {
                               _wikiPage(),
                               _websitePage(),
                               _enterSector(),
-                              _factsAndStories(),
-                              _description()
+                              //_factsAndStories(),
+                              //_description()
                             ],
                           ),
                         ),
@@ -159,10 +162,7 @@ class _AddCompanyState extends State<AddCompany> {
                                     country: _selected.toString(),
                                     keyPerson: keyPerson,
                                     sector: sector,
-                                    story: facts,
                                     wikiPage: wikiUrl,
-                                    description: description,
-                                    logoFileName: fileUrl,
                                     makesInIndia: makesInIndia);
                                 setState(() {
                                   isLoading = true;
@@ -175,8 +175,8 @@ class _AddCompanyState extends State<AddCompany> {
                                           setState(() {
                                             isLoading = false;
                                           }),
-                                          Navigator.pop(context),
-                                          Navigator.of(this.context).push(
+                                          Navigator.pushReplacement(
+                                              context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
                                                       MyHomePage()))
@@ -198,8 +198,7 @@ class _AddCompanyState extends State<AddCompany> {
                                 Scaffold.of(_scafolldKey.currentContext)
                                     .showSnackBar(SnackBar(
                                   backgroundColor: Theme.of(context).errorColor,
-                                  content: Text(
-                                      "Failed to add company, Image is not selected"),
+                                  content: Text("Failed to add company."),
                                 ));
                               }
                             },
@@ -253,9 +252,9 @@ class _AddCompanyState extends State<AddCompany> {
             Icons.featured_play_list,
             color: Colors.grey,
           ),
-          hintText: "Enter Company's Name",
+          hintText: "Enter Company's/Product's Name",
           fillColor: Colors.orange[50],
-          labelText: "Company's Name",
+          labelText: "Name",
           labelStyle:
               TextStyle(fontWeight: FontWeight.bold, color: Colors.black45),
           border: OutlineInputBorder(

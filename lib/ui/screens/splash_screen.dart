@@ -44,7 +44,9 @@ class _SplashScreenState extends State<SplashScreen> {
           )),
           width: _controller.value.size?.width ?? 0,
           height: _controller.value.size?.height ?? 0,
-          child: VideoPlayer(_controller)),
+          child: Stack(children: [
+            VideoPlayer(_controller),
+          ])),
     ));
   }
 }

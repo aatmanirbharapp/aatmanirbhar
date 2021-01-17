@@ -56,10 +56,6 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 
-flutter_icons:
-  image_path: "assets/images/Final_AatmNirbhar_logo.png"
-  android: true
-  ios: true
   
 flutter:
   assets:
@@ -77,11 +73,6 @@ flutter:
     - assets/images/Products_Icon.png
     - assets/images/Imported_Icon.png
     - assets/images/alternatives_icon.png
-    - assets/images/IM1_English.png
-    - assets/images/IM2_English.png
-    - assets/images/IM3_English.png
-    - assets/images/IM4_English.png
-    - assets/images/IM5_English.png
     - assets/images/Wikipedia_Icon.png
     - assets/video/Opening_Animation_The_Aatmanirbhar_App.mp4
   # The following line ensures that the Material Icons font is
