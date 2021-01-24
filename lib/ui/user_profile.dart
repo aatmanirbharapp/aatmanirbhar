@@ -1,7 +1,6 @@
 import 'package:atamnirbharapp/bloc/user_details.dart';
 import 'package:atamnirbharapp/bloc/user_repo.dart';
 import 'package:atamnirbharapp/ui/home_page.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +12,7 @@ class UserProfile extends StatefulWidget {
 }
 
 class _UserProfileState extends State<UserProfile> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scafolldKey = new GlobalKey<ScaffoldState>();
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -34,7 +33,7 @@ class _UserProfileState extends State<UserProfile> {
   var userDetails = UserDetails();
   Future _selectDate() async {
     DateTime picked = await showDatePicker(
-        context: _scaffoldKey.currentContext,
+        context: _scafolldKey.currentContext,
         initialDate: new DateTime.now(),
         firstDate: new DateTime(1950),
         lastDate: new DateTime.now());
@@ -93,8 +92,7 @@ class _UserProfileState extends State<UserProfile> {
           leading: IconButton(
               color: Colors.black,
               icon: Icon(Icons.arrow_back),
-              onPressed: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => MyHomePage()))),
+              onPressed: () => Navigator.pop(context)),
           elevation: 10,
           backgroundColor: Colors.orange[50],
           centerTitle: true,
@@ -103,7 +101,7 @@ class _UserProfileState extends State<UserProfile> {
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
         ),
-        key: _scaffoldKey,
+        key: _scafolldKey,
         body: SafeArea(
             top: false,
             bottom: false,
@@ -297,15 +295,48 @@ class _UserProfileState extends State<UserProfile> {
                                     userDetails.bio = bioController.text;
                                     userDetails.birthdate =
                                         birthdayController.text;
-                                    await userRepository
-                                        .addOrUpdateUser(userDetails);
-                                    _scaffoldKey.currentState
+                                    userRepository
+                                        .addOrUpdateUser(userDetails)
+                                        .then((value) => {
+                                              _scafolldKey.currentState
+                                                  .showSnackBar(SnackBar(
+                                                content: Text(
+                                                    "Your profile has been successfully updated.",
+                                                    style: TextStyle(
+                                                        fontFamily: 'Ambit',
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Color.fromARGB(
+                                                            255, 0, 0, 136))),
+                                                backgroundColor: Colors.white,
+                                              )),
+                                              Future.delayed(
+                                                      Duration(seconds: 3))
+                                                  .then((_) {
+                                                Navigator.pushReplacement(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            MyHomePage()));
+                                              }),
+                                            })
+                                        .catchError((error) => {
+                                              _scafolldKey.currentState
+                                                  .showSnackBar(SnackBar(
+                                                backgroundColor:
+                                                    Theme.of(this.context)
+                                                        .errorColor,
+                                                content: Text(
+                                                    "Sorry! There was some issue and your profile could not be updated. Please try again later."),
+                                              ))
+                                            });
+                                  } else {
+                                    _scafolldKey.currentState
                                         .showSnackBar(SnackBar(
-                                      backgroundColor: Colors.white,
+                                      backgroundColor:
+                                          Theme.of(context).errorColor,
                                       content: Text(
-                                        "Record succesfully updated.",
-                                        style: TextStyle(color: Colors.black),
-                                      ),
+                                          "Please check and enter missing required field"),
                                     ));
                                   }
                                 },

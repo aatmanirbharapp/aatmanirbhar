@@ -7,11 +7,14 @@ import 'dart:convert';
 class SqlResponse {
   var repo = CompanyRepository();
 
-  Future<List> searchByCompany(String tablename, String search) async {
+  Future<List> searchByCompany(
+      String tablename, String search, String country, int make) async {
     Map<String, String> body = {
       'action': 'SEARCH_COMPANY_LIKE',
       'table': tablename,
-      'search': search
+      'search': search,
+      'country': country,
+      'make': make.toString()
     };
 
     http.Response response = await http.post('${AppContants.url}',
@@ -25,11 +28,14 @@ class SqlResponse {
     }
   }
 
-  Future<List> searchByProduct(String tablename, String search) async {
+  Future<List> searchByProduct(
+      String tablename, String search, String country, int make) async {
     Map<String, String> body = {
       'action': 'SEARCH_PRODUCT_LIKE',
       'table': 'products',
-      'search': search
+      'search': search,
+      'country': country,
+      'make': make.toString()
     };
 
     http.Response response = await http.post('${AppContants.url}',
@@ -103,7 +109,7 @@ class SqlResponse {
 
     http.Response response = await http.post('${AppContants.url}',
         body: body, headers: {"Accept": "application/json"});
-     await getRatingCount(companyid);
+    await getRatingCount(companyid);
     repo.updateRatingCompany(companyid, '4.0');
 
     if (response.statusCode == 200) {

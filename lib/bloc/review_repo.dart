@@ -18,4 +18,13 @@ class ReviewRepo {
         .get(GetOptions(source: Source.serverAndCache))
         .then((value) => value.docs);
   }
+
+  Future<List<QueryDocumentSnapshot>> getReviewByUserId(String userId) async {
+    return await _firestore
+        .collection('reviews')
+        .where('userId', isEqualTo: userId)
+        .limit(10)
+        .get(GetOptions(source: Source.serverAndCache))
+        .then((value) => value.docs);
+  }
 }

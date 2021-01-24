@@ -7,10 +7,12 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html_view/flutter_html_view.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Aboutus extends StatelessWidget {
   final _faqGetRequest = CommanGetCalls();
-  final storageRef = FirebaseStorage();
+  final storageRef = FirebaseStorage.instance;
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> _scaffoldKey =
@@ -51,85 +53,86 @@ class Aboutus extends StatelessWidget {
         child: FutureBuilder<QuerySnapshot>(
             future: _faqGetRequest.getAboutUs(),
             builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                AboutUs aboutUs =
-                    AboutUs.fromJson(snapshot.data.docs.first.data());
-                return CustomScrollView(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
-                    slivers: [
-                      SliverList(
-                          delegate: SliverChildListDelegate([
-                        Container(
-                            margin: EdgeInsets.all(8),
-                            height: 250,
-                            child: HtmlView(
-                                data: '${aboutUs.description}',
-                                scrollable: true)),
-                        Divider(),
-                        Text(
-                          "Our Core Team",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20),
-                        ),
-                        Divider(),
-                        TeamHeader(
-                            storageRef: storageRef,
-                            team: aboutUs.team.elementAt(0)),
-                        TeamHeader(
-                            storageRef: storageRef,
-                            team: aboutUs.team.elementAt(10)),
-                        TeamHeader(
-                            storageRef: storageRef,
-                            team: aboutUs.team.elementAt(11)),
-                        TeamHeader(
-                            storageRef: storageRef,
-                            team: aboutUs.team.elementAt(2)),
-                        TeamHeader(
-                            storageRef: storageRef,
-                            team: aboutUs.team.elementAt(4)),
-                        TeamHeader(
-                            storageRef: storageRef,
-                            team: aboutUs.team.elementAt(5)),
-                        TeamHeader(
-                            storageRef: storageRef,
-                            team: aboutUs.team.elementAt(1)),
-                        TeamHeader(
-                            storageRef: storageRef,
-                            team: aboutUs.team.elementAt(6)),
-                        TeamHeader(
-                            storageRef: storageRef,
-                            team: aboutUs.team.elementAt(3)),
-                        TeamHeader(
-                            storageRef: storageRef,
-                            team: aboutUs.team.elementAt(9)),
-                        TeamHeader(
-                            storageRef: storageRef,
-                            team: aboutUs.team.elementAt(7)),
-                        TeamHeader(
-                            storageRef: storageRef,
-                            team: aboutUs.team.elementAt(8)),
-                        Divider(),
-                        Container(
-                            height: 250,
-                            margin: EdgeInsets.all(8),
-                            child: HtmlView(
-                                data: '${aboutUs.last}', scrollable: true)),
-                      ])),
-                    ]);
-              } else if (snapshot.hasError) {
-                return Text("${snapshot.error}");
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
+                  return CommanWidgets().getCircularProgressIndicator(context);
+                default:
+                  if (snapshot.hasData) {
+                    AboutUs aboutUs =
+                        AboutUs.fromJson(snapshot.data.docs.first.data());
+                    return CustomScrollView(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        slivers: [
+                          SliverList(
+                              delegate: SliverChildListDelegate([
+                            Container(
+                                margin: EdgeInsets.all(8),
+                                height: 250,
+                                child: HtmlView(
+                                    data: '${aboutUs.description}',
+                                    scrollable: true)),
+                            Divider(),
+                            Text(
+                              "Our Core Team",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontFamily: 'Ambit',
+                                  color: Color.fromARGB(255, 0, 0, 136),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20),
+                            ),
+                            Divider(),
+                            TeamHeader(
+                                storageRef: storageRef,
+                                team: aboutUs.team.elementAt(0)),
+                            TeamHeader(
+                                storageRef: storageRef,
+                                team: aboutUs.team.elementAt(10)),
+                            TeamHeader(
+                                storageRef: storageRef,
+                                team: aboutUs.team.elementAt(11)),
+                            TeamHeader(
+                                storageRef: storageRef,
+                                team: aboutUs.team.elementAt(2)),
+                            TeamHeader(
+                                storageRef: storageRef,
+                                team: aboutUs.team.elementAt(4)),
+                            TeamHeader(
+                                storageRef: storageRef,
+                                team: aboutUs.team.elementAt(5)),
+                            TeamHeader(
+                                storageRef: storageRef,
+                                team: aboutUs.team.elementAt(1)),
+                            TeamHeader(
+                                storageRef: storageRef,
+                                team: aboutUs.team.elementAt(6)),
+                            TeamHeader(
+                                storageRef: storageRef,
+                                team: aboutUs.team.elementAt(3)),
+                            TeamHeader(
+                                storageRef: storageRef,
+                                team: aboutUs.team.elementAt(9)),
+                            TeamHeader(
+                                storageRef: storageRef,
+                                team: aboutUs.team.elementAt(7)),
+                            TeamHeader(
+                                storageRef: storageRef,
+                                team: aboutUs.team.elementAt(8)),
+                            Divider(),
+                            Container(
+                                height: 250,
+                                margin: EdgeInsets.all(8),
+                                child: HtmlView(
+                                    data: '${aboutUs.last}', scrollable: true)),
+                          ])),
+                        ]);
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text("Error occured"));
+                  } else {
+                    return Center(child: Text("Error occured"));
+                  }
               }
-
-              // By default, show a loading spinner.
-              return Align(
-                alignment: Alignment.center,
-                child: CircularProgressIndicator(
-                  backgroundColor: Colors.blue,
-                  strokeWidth: 15,
-                ),
-              );
             }),
       ),
     );
@@ -157,7 +160,7 @@ class TeamHeader extends StatelessWidget {
               child: Column(
                 children: [
                   Container(
-                    height: 80,
+                    height: 100,
                     child: FutureBuilder<Object>(
                         future: storageRef
                             .ref()
@@ -178,24 +181,49 @@ class TeamHeader extends StatelessWidget {
                 ],
               ),
             ),
-            Container(
-              width: MediaQuery.of(context).size.width * 0.45,
-              child: Column(
-                children: [
-                  Text(
-                    team['name'],
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontWeight: FontWeight.bold),
+            InkWell(
+                onTap: () async {},
+                child: Container(
+                  alignment: Alignment.center,
+                  width: MediaQuery.of(context).size.width * 0.45,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              team['name'],
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontFamily: 'Ambit',
+                                  color: Color.fromARGB(255, 0, 0, 136),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            if (team['url'] != null &&
+                                team['url'].toString().isNotEmpty)
+                              IconButton(
+                                onPressed: () async {
+                                  if (await canLaunch(team['url'])) {
+                                    await launch(team['url']);
+                                  } else {
+                                    throw 'Could not launch ';
+                                  }
+                                },
+                                icon: FaIcon(FontAwesomeIcons.linkedinIn),
+                                iconSize: 15,
+                                color: Color.fromARGB(255, 0, 0, 136),
+                              )
+                          ]),
+                      SingleChildScrollView(
+                          child: Text(
+                        team['role'],
+                        textAlign: TextAlign.center,
+                      )),
+                      Text(team['location'], textAlign: TextAlign.center)
+                    ],
                   ),
-                  SingleChildScrollView(
-                      child: Text(
-                    team['role'],
-                    textAlign: TextAlign.center,
-                  )),
-                  Text(team['location'], textAlign: TextAlign.center)
-                ],
-              ),
-            )
+                ))
           ],
         ),
       ),

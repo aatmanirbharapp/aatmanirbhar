@@ -19,8 +19,11 @@ class SearchBarWidget extends StatelessWidget {
               color: Colors.white),
           child: InkWell(
             onTap: () {
-              Navigator.push(context,
-                  new MaterialPageRoute(builder: (context) => DataSearch()));
+              Navigator.push(
+                  context,
+                  new MaterialPageRoute(
+                      builder: (context) => DataSearch(),
+                      settings: RouteSettings(name: 'search')));
             },
             child: Row(
               children: [
@@ -33,7 +36,8 @@ class SearchBarWidget extends StatelessWidget {
                     Navigator.push(
                         context,
                         new MaterialPageRoute(
-                            builder: (context) => DataSearch()));
+                            builder: (context) => DataSearch(),
+                            settings: RouteSettings(name: 'search')));
                   },
                 ),
                 Expanded(

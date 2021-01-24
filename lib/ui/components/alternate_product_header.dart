@@ -21,12 +21,14 @@ class AlternateProductHeader extends StatelessWidget {
                 MaterialPageRoute(
                     builder: (context) => IndianProduct(
                           productId: product.image,
-                        )))
+                        ),
+                    settings: RouteSettings(name: 'product')))
             : Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) =>
-                        ForeinProductPage(productId: product.image)));
+                        ForeinProductPage(productId: product.image),
+                    settings: RouteSettings(name: 'productOutside')));
       },
       child: Container(
         margin: const EdgeInsets.all(15.0),

@@ -3,8 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  addOrUpdateUser(UserDetails user) {
-    _firestore.runTransaction((transaction) async {
+  Future addOrUpdateUser(UserDetails user) {
+    return _firestore.runTransaction((transaction) async {
       _firestore.collection('userDetails').doc(user.uid).set(user.toJson());
     });
   }

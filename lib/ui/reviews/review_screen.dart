@@ -1,4 +1,3 @@
-import 'package:atamnirbharapp/bloc/company.dart';
 import 'package:atamnirbharapp/ui/reviews/add_review.dart';
 import 'package:atamnirbharapp/ui/userauthentication/loginpage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -61,12 +60,14 @@ class AllReview extends StatelessWidget {
                                 builder: (context) => AddReview(
                                     id,
                                     _auth.currentUser.uid,
-                                    _auth.currentUser.displayName)));
+                                    _auth.currentUser.displayName),
+                                settings: RouteSettings(name: 'addReview')));
                       } else {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => LoginPage()));
+                                builder: (context) => LoginPage(),
+                                settings: RouteSettings(name: 'login')));
                       }
                     },
                   )

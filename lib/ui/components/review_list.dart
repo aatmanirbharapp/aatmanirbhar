@@ -9,15 +9,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ReviewList extends StatelessWidget {
-  String id;
+  String userId, companyId;
   FirebaseAuth auth = FirebaseAuth.instance;
-  ReviewList({this.id});
+  ReviewList({this.userId, this.companyId});
 
   final reviewRepo = ReviewRepo();
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<QueryDocumentSnapshot>>(
-      future: reviewRepo.getReviewByCompanyId(id),
+      future: companyId != null && companyId.isNotEmpty
+          ? reviewRepo.getReviewByCompanyId(companyId)
+          : reviewRepo.getReviewByUserId(userId),
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
@@ -36,7 +38,7 @@ class ReviewList extends StatelessWidget {
                         Review review = Review.fromJson(
                             snapshot.data.elementAt(index).data());
 
-                        return review.enable == 1
+                        return review.enable == 1 || userId != null
                             ? ReviewContainer(review)
                             : Padding(
                                 padding: EdgeInsets.all(8),

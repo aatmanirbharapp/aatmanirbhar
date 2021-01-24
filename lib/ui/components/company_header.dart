@@ -20,29 +20,26 @@ class CompanyHeader extends StatelessWidget {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: Colors.black26)),
-      height: 120,
+      height: 140,
       width: MediaQuery.of(context).size.width,
       child: Row(
         children: [
           Container(
-            width: MediaQuery.of(context).size.width * 0.25,
+            width: MediaQuery.of(context).size.width * 0.30,
             child: FutureBuilder<Object>(
                 future: FirebaseStorage.instance
                     .ref()
                     .child("Company_Logos/" + company.image)
                     .getDownloadURL(),
                 builder: (context, snapshot) {
-                  if (snapshot.hasData)
-                    return IconButton(
-                        iconSize: MediaQuery.of(context).size.height,
-                        icon: Image.network(snapshot.data),
-                        onPressed: () {});
+                  if (snapshot.hasData) return Image.network(snapshot.data);
+
                   return CommanWidgets().getCircularProgressIndicator(context);
                 }),
           ),
           Container(
-            height: 120,
-            width: MediaQuery.of(context).size.width * 0.65,
+            height: 140,
+            width: MediaQuery.of(context).size.width * 0.60,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -131,7 +128,8 @@ class CompanyHeader extends StatelessWidget {
                       onTap: () => Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => WebViewPage(
                                 url: company.website,
-                              ))),
+                              ),
+                          settings: RouteSettings(name: 'webView'))),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -169,7 +167,9 @@ class CompanyHeader extends StatelessWidget {
                                                 builder: (context) =>
                                                     WebViewPage(
                                                       url: company.website,
-                                                    )));
+                                                    ),
+                                                settings: RouteSettings(
+                                                    name: 'webView')));
                                   },
                                   child: Image.asset(
                                       "assets/images/Website_Icon.png")),
@@ -187,7 +187,8 @@ class CompanyHeader extends StatelessWidget {
                       onTap: () => Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => WebViewPage(
                                 url: company.wikiPage,
-                              ))),
+                              ),
+                          settings: RouteSettings(name: 'webView'))),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -225,7 +226,9 @@ class CompanyHeader extends StatelessWidget {
                                                 builder: (context) =>
                                                     WebViewPage(
                                                       url: company.wikiPage,
-                                                    )));
+                                                    ),
+                                                settings: RouteSettings(
+                                                    name: 'webView')));
                                   },
                                   child: Image.asset(
                                       "assets/images/Wikipedia_Icon.png")),
@@ -332,10 +335,11 @@ class CompanyHeader extends StatelessWidget {
                         onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => CompanyProductList(
-                                company: company,
-                              ),
-                            )),
+                                builder: (context) => CompanyProductList(
+                                      company: company,
+                                    ),
+                                settings:
+                                    RouteSettings(name: 'companyProductList'))),
                         child: Column(
                           children: [
                             Padding(
@@ -348,11 +352,12 @@ class CompanyHeader extends StatelessWidget {
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) =>
-                                                CompanyProductList(
-                                              company: company,
-                                            ),
-                                          ));
+                                              builder: (context) =>
+                                                  CompanyProductList(
+                                                    company: company,
+                                                  ),
+                                              settings: RouteSettings(
+                                                  name: 'companyProductList')));
                                     },
                                     child: Image.asset(
                                       "assets/images/Products_Icon.png",

@@ -7,7 +7,7 @@ class PeopleRow extends StatelessWidget {
 
   PeopleRow({Key key, this.company}) : super(key: key);
 
-  final storageRef = FirebaseStorage();
+  final storageRef = FirebaseStorage.instance;
 
   @override
   Widget build(BuildContext context) {

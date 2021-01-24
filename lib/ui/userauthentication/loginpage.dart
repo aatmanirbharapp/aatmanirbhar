@@ -1,7 +1,6 @@
+import 'package:atamnirbharapp/bloc/check_internet.dart';
 import 'package:atamnirbharapp/bloc/user_details.dart';
 import 'package:atamnirbharapp/bloc/user_repo.dart';
-import 'package:atamnirbharapp/ui/home_page.dart';
-
 import 'package:atamnirbharapp/ui/userauthentication/verification.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,6 +15,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   var onTapRecognizer;
   GoogleSignIn _googleSignIn = GoogleSignIn();
   FirebaseAuth _auth = FirebaseAuth.instance;
@@ -31,6 +31,14 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.pop(context);
       };
     super.initState();
+    CheckInternet().checkConnection(context);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    CheckInternet().listener.cancel();
   }
 
   Future signWithGoogle() async {
@@ -58,6 +66,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       body: SafeArea(
           top: false,
           bottom: false,
@@ -93,8 +102,18 @@ class _LoginPageState extends State<LoginPage> {
                       child: InkWell(
                           onTap: () async {
                             await signWithGoogle();
+                            _scaffoldKey.currentState.showSnackBar(SnackBar(
+                              content: Text("Logged in successful",
+                                  style: TextStyle(
+                                      fontFamily: 'Ambit',
+                                      fontWeight: FontWeight.bold,
+                                      color: Color.fromARGB(255, 0, 0, 136))),
+                              backgroundColor: Colors.white,
+                            ));
 
-                            Navigator.pop(context);
+                            Future.delayed(Duration(seconds: 3)).then((_) {
+                              Navigator.pop(context);
+                            });
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,

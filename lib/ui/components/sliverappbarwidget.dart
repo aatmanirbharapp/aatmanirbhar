@@ -20,7 +20,7 @@ class CustomSliverAppBar extends StatelessWidget {
     return SliverAppBar(
       backgroundColor: Colors.orange[100],
       leading: IconButton(
-        icon: Image.asset("assets/images/indian_flag_icon.png"),
+        icon: Image.asset("assets/images/sidebar.png"),
         onPressed: () {
           _scaffoldKey.currentState.openDrawer();
         },
@@ -31,27 +31,11 @@ class CustomSliverAppBar extends StatelessWidget {
       title: TitleWidget(),
       bottom: PreferredSize(
           child: SearchBarWidget(), preferredSize: const Size.fromHeight(60)),
-      actions: [
-        _auth.currentUser != null
-            ? Padding(
-                padding: EdgeInsets.only(right: 10),
-                child: CircleAvatar(
-                  backgroundImage: _auth.currentUser.photoURL != null
-                      ? NetworkImage(
-                          _auth.currentUser.photoURL,
-                        )
-                      : Icon(Icons.face),
-                ))
-            : Padding(
-                padding: EdgeInsets.only(right: 10),
-                child: IconButton(
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => LoginPage()));
-                  },
-                  icon: Icon(Icons.face),
-                  color: Color.fromARGB(255, 0, 0, 136),
-                ))
+      actions: [ IconButton(
+              icon: Image.asset("assets/images/Final_AatmNirbhar_logo.png"),
+              iconSize: 70,
+              onPressed: () {},
+            ),
       ],
     );
   }

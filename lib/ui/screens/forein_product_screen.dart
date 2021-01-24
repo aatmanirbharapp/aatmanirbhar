@@ -68,7 +68,7 @@ class ForeinProductPage extends StatelessWidget {
                               Padding(
                                 padding: EdgeInsets.all(8),
                                 child: Text("Top Reviews",
-                                    textAlign: TextAlign.left,
+                                    textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontSize: 20,
                                         fontFamily: 'Ambit',
@@ -76,7 +76,7 @@ class ForeinProductPage extends StatelessWidget {
                                         color: Color.fromARGB(255, 0, 0, 136))),
                               ),
                               ReviewList(
-                                id: product.id,
+                                companyId: product.id,
                               ),
                               Row(
                                   mainAxisAlignment:

@@ -57,19 +57,10 @@ class _AddCompanyState extends State<AddCompany> {
     });
   }
 
-  BuildContext context;
   Future storeImage(File imageFile) async {
     var fileName = basename(image.path);
     print('Inside Store method' + fileName);
-    StorageReference firebaseStorageRef =
-        FirebaseStorage.instance.ref().child(fileName);
-
-    StorageUploadTask ref = firebaseStorageRef.putFile(File(image.path));
-    var storageTaskSnapshot = await ref.onComplete;
-    var downloadUrl = await storageTaskSnapshot.ref.getDownloadURL();
-    setState(() {
-      fileUrl = downloadUrl;
-    });
+    FirebaseStorage.instance.ref().child(fileName).putFile(File(image.path));
   }
 
   @override
@@ -84,8 +75,8 @@ class _AddCompanyState extends State<AddCompany> {
 
   @override
   Widget build(BuildContext context) {
-    setState(() => this.context = context);
     return Scaffold(
+      key: _scafolldKey,
       body: SafeArea(
           top: false,
           bottom: false,
@@ -175,30 +166,44 @@ class _AddCompanyState extends State<AddCompany> {
                                           setState(() {
                                             isLoading = false;
                                           }),
-                                          Navigator.pushReplacement(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      MyHomePage()))
+                                          _scafolldKey.currentState
+                                              .showSnackBar(SnackBar(
+                                            content: Text(
+                                                "Thank you! The company information you shared has been received by our team. Once it is approved by our team, this company will be available in the Aatmanirbhar app.",
+                                                style: TextStyle(
+                                                    fontFamily: 'Ambit',
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Color.fromARGB(
+                                                        255, 0, 0, 136))),
+                                            backgroundColor: Colors.white,
+                                          )),
+                                          Future.delayed(Duration(seconds: 3))
+                                              .then((_) {
+                                            Navigator.pop(context);
+                                            Navigator.of(this.context).push(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        MyHomePage()));
+                                          }),
                                         })
                                     .catchError((error) => {
                                           setState(() {
                                             isLoading = false;
                                           }),
-                                          Scaffold.of(this.context)
+                                          _scafolldKey.currentState
                                               .showSnackBar(SnackBar(
                                             backgroundColor:
                                                 Theme.of(this.context)
                                                     .errorColor,
                                             content: Text(
-                                                "Failed to add company, Please try to sumbit again"),
+                                                "Sorry! We were unable to add your company information due to some technical issue. Please try again or visit this page later to add the company"),
                                           ))
                                         });
                               } else {
-                                Scaffold.of(_scafolldKey.currentContext)
-                                    .showSnackBar(SnackBar(
+                                _scafolldKey.currentState.showSnackBar(SnackBar(
                                   backgroundColor: Theme.of(context).errorColor,
-                                  content: Text("Failed to add company."),
+                                  content: Text(
+                                      "Please check and enter missing required field"),
                                 ));
                               }
                             },

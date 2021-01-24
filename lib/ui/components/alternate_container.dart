@@ -1,6 +1,6 @@
 import 'package:atamnirbharapp/bloc/product.dart';
 import 'package:atamnirbharapp/bloc/product_repo.dart';
-import 'package:atamnirbharapp/ui/components/alternate_company_header.dart';
+
 import 'package:atamnirbharapp/ui/components/alternate_product_header.dart';
 import 'package:atamnirbharapp/ui/screens/product_list_bykeyword.dart';
 import 'package:atamnirbharapp/utils/comman_widgets.dart';
@@ -13,7 +13,6 @@ Widget AlternateContainer(BuildContext context, Product product) {
 
   return Container(
     margin: EdgeInsets.all(8),
-    height: 380,
     width: MediaQuery.of(context).size.width,
     decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
@@ -22,20 +21,28 @@ Widget AlternateContainer(BuildContext context, Product product) {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.only(top: 15.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Text(
                 "Alternative Indian Products",
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontFamily: 'ambit',
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(255, 0, 0, 136)),
               ),
               InkWell(
                   onTap: () => Navigator.of(context).push(new MaterialPageRoute(
                       builder: (context) => ProductListByKeyWord(
                             product: product,
-                          ))),
-                  child: Text("View All")),
+                          ),
+                      settings: RouteSettings(name: 'productList'))),
+                  child: Text("View All",
+                      style: TextStyle(
+                          fontFamily: 'ambit',
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 0, 0, 136)))),
             ],
           ),
         ),

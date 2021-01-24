@@ -26,7 +26,8 @@ class SuggestButton extends StatelessWidget {
                   new MaterialPageRoute(
                       builder: (context) => company == null
                           ? SuggestChangesProduct(product: product)
-                          : SuggestChanges(company: company)));
+                          : SuggestChanges(company: company),
+                      settings: RouteSettings(name: 'suggestChange')));
               break;
             case "Add Review / Comment":
               Navigator.push(
@@ -36,7 +37,8 @@ class SuggestButton extends StatelessWidget {
                           ? AddReview(product.id, _auth.currentUser.uid,
                               _auth.currentUser.displayName)
                           : AddReview(company.id, _auth.currentUser.uid,
-                              _auth.currentUser.displayName)));
+                              _auth.currentUser.displayName),
+                      settings: RouteSettings(name: 'addReview')));
               break;
             case "Close":
               Navigator.pop(context);

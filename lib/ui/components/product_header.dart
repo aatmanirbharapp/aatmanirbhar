@@ -83,7 +83,9 @@ class ProductHeader extends StatelessWidget {
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) => WebViewPage(
                                             url: product.website,
-                                          )));
+                                          ),
+                                      settings:
+                                          RouteSettings(name: 'webView')));
                                 },
                                 child: Image.asset(
                                     "assets/images/Website_Icon.png")),
@@ -108,7 +110,9 @@ class ProductHeader extends StatelessWidget {
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) => IndianCompany(
                                             companyId: product.companyId,
-                                          )));
+                                          ),
+                                      settings:
+                                          RouteSettings(name: 'company')));
                                 },
                                 child: FutureBuilder<Object>(
                                     future: FirebaseStorage.instance

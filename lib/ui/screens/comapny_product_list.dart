@@ -59,7 +59,7 @@ class CompanyProductList extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return AlternateProductHeader(
                     product:
-                        Product.fromJson(snapshot.data.elementAt(index).data()),
+                        Product.fromJson(snapshot.data.elementAt(index).data())
                   );
                 },
               );

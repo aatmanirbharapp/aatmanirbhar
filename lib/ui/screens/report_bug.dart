@@ -18,7 +18,7 @@ class ReportBug extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.orange[100],
         title: Text(
-          "Report Bug/Error",
+          "Feedback",
           style: TextStyle(color: Color.fromARGB(255, 0, 0, 136)),
         ),
         centerTitle: true,
@@ -195,7 +195,21 @@ class ReportBug extends StatelessWidget {
                     borderRadius: BorderRadius.all(Radius.circular(10.0)),
                   ),
                   margin: EdgeInsets.all(20),
-                ))
+                )),
+            Padding(
+              padding: EdgeInsets.only(left: 8, right: 8, top: 40),
+              child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Text(
+                      "If you find any bugs in our app, please share with us. We will be highly obligated to you. If any person or company has issues or complains with any information shown on this app, please let us know your concern. We will try to address it in the best possible manner. You can email us at teamaatmanirbhar@gmail.com or use the following form to get in touch with us.",
+                      softWrap: true,
+                      maxLines: null,
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(
+                        fontFamily: 'OpenSans',
+                        color: Colors.black,
+                      ))),
+            )
           ],
         ),
       ),

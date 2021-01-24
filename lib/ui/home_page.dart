@@ -25,13 +25,8 @@ class MyHomePage extends StatelessWidget {
             child: CustomScrollView(slivers: [
               CustomSliverAppBar(scaffoldKey: _scaffoldKey),
               SliverList(
-                  delegate: SliverChildListDelegate([CompanyCardView()])),
-              SliverFillRemaining(
-                  hasScrollBody: false,
-                  child: Align(
-                    child: FooterWidget(),
-                    alignment: Alignment.bottomCenter,
-                  )),
+                  delegate: SliverChildListDelegate(
+                      [CompanyCardView(), FooterWidget()])),
             ]),
           )),
     );

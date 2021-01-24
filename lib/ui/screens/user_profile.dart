@@ -1,4 +1,5 @@
 import 'package:atamnirbharapp/bloc/user_details.dart';
+import 'package:atamnirbharapp/ui/components/review_list.dart';
 import 'package:atamnirbharapp/ui/home_page.dart';
 import 'package:atamnirbharapp/ui/user_profile.dart';
 import 'package:atamnirbharapp/utils/comman_widgets.dart';
@@ -143,7 +144,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        UserProfile()));
+                                                        UserProfile(),
+                                                    settings: RouteSettings(
+                                                        name: 'editProfile')));
                                           },
                                         )
                                       ],
@@ -196,7 +199,22 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                   fontFamily: "OpenSans",
                                 ),
                               ),
-                            ))
+                            )),
+                        Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ListTile(
+                              leading: Icon(Icons.rate_review),
+                              title: Text(
+                                'Reviews Added by You',
+                                maxLines: null,
+                                style: new TextStyle(
+                                  fontFamily: "OpenSans",
+                                ),
+                              ),
+                            )),
+                        ReviewList(
+                          userId: _auth.currentUser.uid,
+                        )
                       ]));
                 } else if (snapshot.hasError) {
                   return Center(child: Text("Error occured"));

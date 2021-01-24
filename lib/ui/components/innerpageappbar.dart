@@ -17,7 +17,7 @@ class InnerSliverAppBar extends StatelessWidget {
       backgroundColor: Colors.orange[100],
       leading: IconButton(
         iconSize: 10,
-        icon: Image.asset("assets/images/indian_flag_icon.png"),
+        icon: Image.asset("assets/images/sidebar.png"),
         onPressed: () {
           _scaffoldKey.currentState.openDrawer();
         },

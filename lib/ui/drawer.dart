@@ -26,12 +26,16 @@ class DrawerClass extends StatelessWidget {
           )),
           child: new ListView(
             children: <Widget>[
-              _auth.currentUser != null
+              !_auth.currentUser.isAnonymous
                   ? new ListTile(
-                      onTap: () => Navigator.push(
-                          context,
-                          new MaterialPageRoute(
-                              builder: (context) => UserProfilePage())),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            new MaterialPageRoute(
+                                builder: (context) => UserProfilePage(),
+                                settings: RouteSettings(name: 'userProfile')));
+                      },
                       title: new Text(
                         _auth.currentUser.displayName != null
                             ? _auth.currentUser.displayName
@@ -42,14 +46,20 @@ class DrawerClass extends StatelessWidget {
                             fontSize: 15,
                             fontWeight: FontWeight.bold),
                       ),
-                      leading: new Icon(Icons.face),
-                      trailing: new Icon(Icons.arrow_right),
+                      leading: new Icon(Icons.face,
+                          color: Color.fromARGB(255, 0, 0, 136)),
+                      trailing: new Icon(Icons.arrow_right,
+                          color: Color.fromARGB(255, 0, 0, 136)),
                     )
                   : new ListTile(
-                      onTap: () => Navigator.push(
-                          context,
-                          new MaterialPageRoute(
-                              builder: (context) => LoginPage())),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            new MaterialPageRoute(
+                                builder: (context) => LoginPage(),
+                                settings: RouteSettings(name: 'login')));
+                      },
                       title: new Text(
                         "Login",
                         style: TextStyle(
@@ -58,13 +68,19 @@ class DrawerClass extends StatelessWidget {
                             fontSize: 15,
                             fontWeight: FontWeight.bold),
                       ),
-                      leading: new Icon(Icons.login),
-                      trailing: new Icon(Icons.arrow_right),
+                      leading: new Icon(Icons.login,
+                          color: Color.fromARGB(255, 0, 0, 136)),
+                      trailing: new Icon(Icons.arrow_right,
+                          color: Color.fromARGB(255, 0, 0, 136)),
                     ),
               Divider(),
               new ListTile(
-                onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => MyHomePage())),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => MyHomePage(),
+                      settings: RouteSettings(name: 'home')));
+                },
                 title: new Text(
                   "Dashboard",
                   style: TextStyle(
@@ -73,19 +89,26 @@ class DrawerClass extends StatelessWidget {
                       fontSize: 15,
                       fontWeight: FontWeight.bold),
                 ),
-                leading: new Icon(Icons.list),
-                trailing: new Icon(Icons.arrow_right),
+                leading: new Icon(
+                  Icons.list,
+                  color: Color.fromARGB(255, 0, 0, 136),
+                ),
+                trailing: new Icon(Icons.arrow_right,
+                    color: Color.fromARGB(255, 0, 0, 136)),
               ),
               Divider(),
               new ListTile(
                 onTap: () => {
-                  if (_auth.currentUser != null)
+                  if (!_auth.currentUser.isAnonymous)
                     {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => AddCompany()))
+                      Navigator.pop(context),
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => AddCompany(),
+                          settings: RouteSettings(name: 'addCompany')))
                     }
                   else
                     {
+                      Navigator.pop(context),
                       Scaffold.of(context).showSnackBar(
                         SnackBar(
                           content: Text("Please login first to add company",
@@ -105,13 +128,19 @@ class DrawerClass extends StatelessWidget {
                       fontSize: 15,
                       fontWeight: FontWeight.bold),
                 ),
-                leading: new Icon(Icons.add_box),
-                trailing: new Icon(Icons.arrow_right),
+                leading: new Icon(Icons.add_box,
+                    color: Color.fromARGB(255, 0, 0, 136)),
+                trailing: new Icon(Icons.arrow_right,
+                    color: Color.fromARGB(255, 0, 0, 136)),
               ),
               Divider(),
               new ListTile(
-                onTap: () => Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => Privacy())),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => Privacy(),
+                      settings: RouteSettings(name: 'privacy')));
+                },
                 title: new Text(
                   "Privacy Policy",
                   style: TextStyle(
@@ -120,13 +149,19 @@ class DrawerClass extends StatelessWidget {
                       fontSize: 15,
                       fontWeight: FontWeight.bold),
                 ),
-                leading: new Icon(Icons.security),
-                trailing: new Icon(Icons.arrow_right),
+                leading: new Icon(Icons.security,
+                    color: Color.fromARGB(255, 0, 0, 136)),
+                trailing: new Icon(Icons.arrow_right,
+                    color: Color.fromARGB(255, 0, 0, 136)),
               ),
               Divider(),
               new ListTile(
-                onTap: () => Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => Terms())),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => Terms(),
+                      settings: RouteSettings(name: 'terms')));
+                },
                 title: new Text(
                   "Terms Of Use",
                   style: TextStyle(
@@ -135,13 +170,19 @@ class DrawerClass extends StatelessWidget {
                       fontSize: 15,
                       fontWeight: FontWeight.bold),
                 ),
-                leading: new Icon(Icons.description),
-                trailing: new Icon(Icons.arrow_right),
+                leading: new Icon(Icons.description,
+                    color: Color.fromARGB(255, 0, 0, 136)),
+                trailing: new Icon(Icons.arrow_right,
+                    color: Color.fromARGB(255, 0, 0, 136)),
               ),
               Divider(),
               new ListTile(
-                onTap: () => Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => Aboutus())),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => Aboutus(),
+                      settings: RouteSettings(name: 'aboutUs')));
+                },
                 title: new Text(
                   "About Us",
                   style: TextStyle(
@@ -150,13 +191,19 @@ class DrawerClass extends StatelessWidget {
                       fontSize: 15,
                       fontWeight: FontWeight.bold),
                 ),
-                leading: new Icon(Icons.exit_to_app),
-                trailing: new Icon(Icons.arrow_right),
+                leading: new Icon(Icons.exit_to_app,
+                    color: Color.fromARGB(255, 0, 0, 136)),
+                trailing: new Icon(Icons.arrow_right,
+                    color: Color.fromARGB(255, 0, 0, 136)),
               ),
               Divider(),
               new ListTile(
-                onTap: () => Navigator.of(context)
-                    .push(new MaterialPageRoute(builder: (context) => Faq())),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.of(context).push(new MaterialPageRoute(
+                      builder: (context) => Faq(),
+                      settings: RouteSettings(name: 'faq')));
+                },
                 title: new Text(
                   "FAQs",
                   style: TextStyle(
@@ -165,20 +212,24 @@ class DrawerClass extends StatelessWidget {
                       fontSize: 15,
                       fontWeight: FontWeight.bold),
                 ),
-                leading: new Icon(Icons.question_answer),
-                trailing: new Icon(Icons.arrow_right),
+                leading: new Icon(Icons.question_answer,
+                    color: Color.fromARGB(255, 0, 0, 136)),
+                trailing: new Icon(Icons.arrow_right,
+                    color: Color.fromARGB(255, 0, 0, 136)),
               ),
               Divider(),
-              if (_auth.currentUser != null)
+              if (!_auth.currentUser.isAnonymous)
                 new ListTile(
                   onTap: () async {
                     await _auth.signOut();
                     await _googleSignIn.signOut();
-
+                    await _auth.signInAnonymously();
+                    Navigator.pop(context);
                     Navigator.push(
                         context,
                         new MaterialPageRoute(
-                            builder: (context) => LoginPage()));
+                            builder: (context) => LoginPage(),
+                            settings: RouteSettings(name: 'login')));
                   },
                   title: new Text(
                     "Logout",
@@ -188,8 +239,10 @@ class DrawerClass extends StatelessWidget {
                         fontSize: 15,
                         fontWeight: FontWeight.bold),
                   ),
-                  leading: new Icon(Icons.logout),
-                  trailing: new Icon(Icons.arrow_right),
+                  leading: new Icon(Icons.logout,
+                      color: Color.fromARGB(255, 0, 0, 136)),
+                  trailing: new Icon(Icons.arrow_right,
+                      color: Color.fromARGB(255, 0, 0, 136)),
                 ),
             ],
           ),

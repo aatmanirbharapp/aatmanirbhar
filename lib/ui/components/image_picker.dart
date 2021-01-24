@@ -34,15 +34,8 @@ class _ImagePickerClassState extends State<ImagePickerClass> {
   }
 
   Future storeImage() async {
-    StorageReference firebaseStorageRef =
-        FirebaseStorage.instance.ref().child(image.path);
-    if (firebaseStorageRef.putFile(File(image.path)).isComplete) {
-    } else {
-      Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text("Error Uploading image"),
-        backgroundColor: Theme.of(context).errorColor,
-      ));
-    }
+    final firebaseStorageRef = FirebaseStorage.instance.ref().child(image.path);
+    firebaseStorageRef.putFile(File(image.path)).whenComplete(() {});
   }
 
   @override

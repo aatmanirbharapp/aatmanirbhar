@@ -60,6 +60,7 @@ class _SuggestChangesProductState extends State<SuggestChangesProduct> {
   Widget build(BuildContext context) {
     setState(() => this.context = context);
     return Scaffold(
+      key: _scafolldKey,
       body: SafeArea(
           top: false,
           bottom: false,
@@ -142,30 +143,44 @@ class _SuggestChangesProductState extends State<SuggestChangesProduct> {
                                           setState(() {
                                             isLoading = false;
                                           }),
-                                          Navigator.pop(context),
-                                          Navigator.of(this.context).push(
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      MyHomePage()))
+                                          _scafolldKey.currentState
+                                              .showSnackBar(SnackBar(
+                                            content: Text(
+                                                "Thank you! Your suggestion has been received by our team. Once it is approved by our team, you can see your suggestion included here",
+                                                style: TextStyle(
+                                                    fontFamily: 'Ambit',
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Color.fromARGB(
+                                                        255, 0, 0, 136))),
+                                            backgroundColor: Colors.white,
+                                          )),
+                                          Future.delayed(Duration(seconds: 3))
+                                              .then((_) {
+                                            Navigator.pop(context);
+                                            Navigator.of(this.context).push(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        MyHomePage()));
+                                          }),
                                         })
                                     .catchError((error) => {
                                           setState(() {
                                             isLoading = false;
                                           }),
-                                          Scaffold.of(this.context)
+                                          _scafolldKey.currentState
                                               .showSnackBar(SnackBar(
                                             backgroundColor:
                                                 Theme.of(this.context)
                                                     .errorColor,
                                             content: Text(
-                                                "Failed to add product, Please try again later"),
+                                                "We were unable to add your suggestion due to some technical issue. Please try again or visit this page later to make the suggestion"),
                                           ))
                                         });
                               } else {
-                                Scaffold.of(this.context).showSnackBar(SnackBar(
+                                _scafolldKey.currentState.showSnackBar(SnackBar(
                                   backgroundColor: Theme.of(context).errorColor,
                                   content: Text(
-                                      "Failed to add company, Image is not selected"),
+                                      "Please check and enter missing required field"),
                                 ));
                               }
                             },

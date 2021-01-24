@@ -39,7 +39,12 @@ class SimilarIndianCompanies extends StatelessWidget {
                     default:
                       if (snapshot.hasData) {
                         return snapshot.data.length == 0
-                            ? Text("Empty list")
+                            ? Text("No Similar Companies found",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontFamily: 'Ambit',
+                                    fontWeight: FontWeight.bold,
+                                    color: Color.fromARGB(255, 0, 0, 136)))
                             : ListView.builder(
                                 shrinkWrap: true,
                                 scrollDirection: Axis.horizontal,

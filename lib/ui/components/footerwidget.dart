@@ -1,6 +1,5 @@
 import 'package:atamnirbharapp/ui/aboutus.dart';
 import 'package:atamnirbharapp/ui/faq.dart';
-import 'package:atamnirbharapp/ui/helpandsupport.dart';
 import 'package:atamnirbharapp/ui/privacy.dart';
 import 'package:atamnirbharapp/ui/screens/report_bug.dart';
 import 'package:atamnirbharapp/ui/terms_of_user.dart';
@@ -91,8 +90,9 @@ class FooterWidget extends StatelessWidget {
             children: [
               InkWell(
                   onTap: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => Aboutus()));
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => Aboutus(),
+                        settings: RouteSettings(name: 'aboutUs')));
                   },
                   child: Text(
                     "About Us",
@@ -104,8 +104,9 @@ class FooterWidget extends StatelessWidget {
                   )),
               InkWell(
                   onTap: () {
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (context) => Faq()));
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => Faq(),
+                        settings: RouteSettings(name: 'faq')));
                   },
                   child: Text(
                     "FAQs",
@@ -117,8 +118,9 @@ class FooterWidget extends StatelessWidget {
                   )),
               InkWell(
                   onTap: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => Privacy()));
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => Privacy(),
+                        settings: RouteSettings(name: 'privacy')));
                   },
                   child: Text(
                     "Privacy Policy",
@@ -130,8 +132,9 @@ class FooterWidget extends StatelessWidget {
                   )),
               InkWell(
                   onTap: () {
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (context) => Terms()));
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => Terms(),
+                        settings: RouteSettings(name: 'terms')));
                   },
                   child: Text(
                     "Terms Of Use",
@@ -143,11 +146,12 @@ class FooterWidget extends StatelessWidget {
                   )),
               InkWell(
                   onTap: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => ReportBug()));
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ReportBug(),
+                        settings: RouteSettings(name: 'feedback')));
                   },
                   child: Text(
-                    "Report Bug",
+                    "Feedback",
                     style: TextStyle(
                         color: Color.fromARGB(255, 0, 0, 136),
                         fontFamily: 'Ambit',
@@ -157,15 +161,37 @@ class FooterWidget extends StatelessWidget {
             ],
           ),
           Divider(),
-          Text(
-            "Copyright © 2020 The Aatmanirbhar Trust. Created by Yash Agrawal",
-            style: TextStyle(
-                color: Color.fromARGB(255, 0, 0, 136),
-                fontFamily: 'Ambit',
-                fontSize: 12,
-                fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
+          Row(children: [
+            Text(
+              "Copyright © 2020 The Aatmanirbhar Trust.",
+              style: TextStyle(
+                  color: Color.fromARGB(255, 0, 0, 136),
+                  fontFamily: 'Ambit',
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+            InkWell(
+              onTap: () async {
+                const url =
+                    'https://www.linkedin.com/in/yash-agrawal-9b936aa9/';
+                if (await canLaunch(url)) {
+                  await launch(url);
+                } else {
+                  throw 'Could not launch $url';
+                }
+              },
+              child: Text(
+                "Created by Yash Agrawal",
+                style: TextStyle(
+                    color: Color.fromARGB(255, 0, 0, 136),
+                    fontFamily: 'Ambit',
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+            )
+          ])
         ]));
   }
 }

@@ -104,7 +104,7 @@ class IndianCompany extends StatelessWidget {
                                     color: Color.fromARGB(255, 0, 0, 136))),
                           ),
                           ReviewList(
-                            id: company.id,
+                            companyId: company.id,
                           ),
                           Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,

@@ -31,6 +31,7 @@ class _AddReviewState extends State<AddReview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scafolldKey,
       appBar: AppBar(
         backgroundColor: Colors.orange[100],
         title: Text(
@@ -147,14 +148,37 @@ class _AddReviewState extends State<AddReview> {
                         .collection("reviews")
                         .add(review.toJson())
                         .then((value) => {
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => MyHomePage()))
+                              _scafolldKey.currentState.showSnackBar(SnackBar(
+                                content: Text(
+                                    "Your review has been successfully added. Please check your all reviews in profile section.",
+                                    style: TextStyle(
+                                        fontFamily: 'Ambit',
+                                        fontWeight: FontWeight.bold,
+                                        color: Color.fromARGB(255, 0, 0, 136))),
+                                backgroundColor: Colors.white,
+                              )),
+                              Future.delayed(Duration(seconds: 3)).then((_) {
+                                Navigator.pop(context);
+                                Navigator.of(this.context).push(
+                                    MaterialPageRoute(
+                                        builder: (context) => MyHomePage()));
+                              }),
                             })
-                        .catchError((error) =>
-                            {print("error define here"), print(error)});
-                  } else {}
+                        .catchError((error) => {
+                              _scafolldKey.currentState.showSnackBar(SnackBar(
+                                backgroundColor:
+                                    Theme.of(this.context).errorColor,
+                                content: Text(
+                                    "We were unable to add your review due to some technical issue. Please try again or visit this page later to add review."),
+                              ))
+                            });
+                  } else {
+                    _scafolldKey.currentState.showSnackBar(SnackBar(
+                      backgroundColor: Theme.of(context).errorColor,
+                      content:
+                          Text("Please check and enter missing required field"),
+                    ));
+                  }
                 },
                 child: Container(
                   child: Center(
