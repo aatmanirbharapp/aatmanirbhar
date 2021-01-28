@@ -27,7 +27,6 @@ class _CompanyCardViewState extends State<CompanyCardView> {
   @override
   void initState() {
     super.initState();
-    CheckInternet().checkConnection(context);
     _controller = YoutubePlayerController(
         initialVideoId: YoutubePlayerController.convertUrlToId(
             "https://www.youtube.com/watch?v=0CG8Jd7FdtA"),
@@ -65,7 +64,7 @@ class _CompanyCardViewState extends State<CompanyCardView> {
   @override
   void dispose() {
     super.dispose();
-    CheckInternet().listener.cancel();
+    
   }
 
   @override

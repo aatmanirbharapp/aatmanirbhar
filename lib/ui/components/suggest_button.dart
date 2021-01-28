@@ -18,7 +18,7 @@ class SuggestButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (_auth.currentUser != null) {
+        if (!_auth.currentUser.isAnonymous) {
           switch (buttonName) {
             case "Suggest Changes":
               Navigator.push(

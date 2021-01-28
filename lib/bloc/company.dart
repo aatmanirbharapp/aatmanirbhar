@@ -96,7 +96,7 @@ class Company {
     addedByName = json['addedByName'] as String;
     addedByPlace = json['addedByPlace'] as String;
     dateAdded = json['dateAdded'] as String;
-    dateUpdated = json['dateUpdated'] as String;
+    
     image = json['image'] as String;
     isActive = json['isActive'] as int;
     moderatorByImage = json['moderatorByImage'] as String;

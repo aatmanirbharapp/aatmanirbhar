@@ -1,9 +1,9 @@
 import 'package:atamnirbharapp/ui/components/searchbarwidget.dart';
 import 'package:atamnirbharapp/ui/components/titlewidget.dart';
-import 'package:atamnirbharapp/ui/userauthentication/loginpage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:share/share.dart';
 
 class CustomSliverAppBar extends StatelessWidget {
   CustomSliverAppBar({
@@ -31,12 +31,28 @@ class CustomSliverAppBar extends StatelessWidget {
       title: TitleWidget(),
       bottom: PreferredSize(
           child: SearchBarWidget(), preferredSize: const Size.fromHeight(60)),
-      actions: [ IconButton(
-              icon: Image.asset("assets/images/Final_AatmNirbhar_logo.png"),
-              iconSize: 70,
-              onPressed: () {},
-            ),
+      actions: [
+        IconButton(
+          icon: Icon(Icons.share),
+          iconSize: 70,
+          onPressed: () {},
+        ),
+        IconButton(
+          icon: Image.asset("assets/images/Final_AatmNirbhar_logo.png"),
+          iconSize: 70,
+          onPressed: () {
+            _onShare(context);
+          },
+        ),
       ],
     );
+  }
+
+  _onShare(BuildContext context) async {
+    final RenderBox box = context.findRenderObject();
+
+    await Share.share("Please visit www.aatmanirbharbano.com",
+        subject: "subject",
+        sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size);
   }
 }

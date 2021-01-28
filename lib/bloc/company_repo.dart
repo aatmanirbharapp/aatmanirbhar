@@ -37,6 +37,7 @@ class CompanyRepository {
         .collection('company')
         .where('sector', isEqualTo: sector)
         .where('firstCountry', isEqualTo: 'India')
+        .limit(10)
         .get(GetOptions(source: Source.serverAndCache))
         .then((value) => value.docs);
   }
