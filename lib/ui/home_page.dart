@@ -4,6 +4,7 @@ import 'package:atamnirbharapp/ui/drawer.dart';
 import 'package:atamnirbharapp/ui/screens/homescreen.dart';
 
 import 'package:flutter/material.dart';
+import 'package:share/share.dart';
 
 class MyHomePage extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -29,6 +30,19 @@ class MyHomePage extends StatelessWidget {
                       [CompanyCardView(), FooterWidget()])),
             ]),
           )),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          final RenderBox box = context.findRenderObject();
+          Share.share(
+              'Hello, Sharing the Aatmanirbhar app. Please download our app  https://play.google.com/store/apps/details?id=com.aatmanirbhar.flutter',
+              sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size);
+        },
+        child: Icon(
+          Icons.share_rounded,
+          color: Colors.white,
+        ),
+        backgroundColor: Color.fromARGB(255, 0, 0, 136),
+      ),
     );
   }
 }

@@ -33,26 +33,11 @@ class CustomSliverAppBar extends StatelessWidget {
           child: SearchBarWidget(), preferredSize: const Size.fromHeight(60)),
       actions: [
         IconButton(
-          icon: Icon(Icons.share),
+          icon: Image.asset("assets/images/Final_AatmNirbhar_logo.png"),
           iconSize: 70,
           onPressed: () {},
         ),
-        IconButton(
-          icon: Image.asset("assets/images/Final_AatmNirbhar_logo.png"),
-          iconSize: 70,
-          onPressed: () {
-            _onShare(context);
-          },
-        ),
       ],
     );
-  }
-
-  _onShare(BuildContext context) async {
-    final RenderBox box = context.findRenderObject();
-
-    await Share.share("Please visit www.aatmanirbharbano.com",
-        subject: "subject",
-        sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size);
   }
 }
