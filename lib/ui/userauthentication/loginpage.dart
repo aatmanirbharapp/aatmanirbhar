@@ -1,3 +1,4 @@
+import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:atamnirbharapp/bloc/check_internet.dart';
 import 'package:atamnirbharapp/bloc/user_details.dart';
 import 'package:atamnirbharapp/bloc/user_repo.dart';
@@ -6,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -31,14 +33,12 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.pop(context);
       };
     super.initState();
-    CheckInternet().checkConnection(context);
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    CheckInternet().listener.cancel();
   }
 
   Future signWithGoogle() async {
@@ -61,6 +61,63 @@ class _LoginPageState extends State<LoginPage> {
               }
           });
     });
+  }
+
+  Future signWithApple() async {
+    if (!await AppleSignIn.isAvailable()) {
+      ScaffoldMessenger.of(_scaffoldKey.currentContext).showSnackBar(SnackBar(
+        content: Text(
+            "Apple sign in not supported on your device, please try using google sign in."),
+        backgroundColor: Theme.of(_scaffoldKey.currentContext).errorColor,
+      ));
+      return null; //Break from the program
+    }
+
+    final AuthorizationResult result = await AppleSignIn.performRequests([
+      AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
+    ]);
+    switch (result.status) {
+      case AuthorizationStatus.authorized:
+        {
+          final AppleIdCredential appleIdCredential = result.credential;
+
+          OAuthProvider oAuthProvider = new OAuthProvider('apple.com');
+          final AuthCredential credential = oAuthProvider.credential(
+            idToken: String.fromCharCodes(appleIdCredential.identityToken),
+            accessToken:
+                String.fromCharCodes(appleIdCredential.authorizationCode),
+          );
+
+          await _auth
+              .signInWithCredential(credential)
+              .then((value) => (value) async {
+                    await userRepository
+                        .getUserById(value.user.uid)
+                        .then((value2) => {
+                              if (!value2.exists)
+                                {
+                                  userRepository.addOrUpdateUser(UserDetails(
+                                      uid: value.user.uid,
+                                      name: "${appleIdCredential.fullName}",
+                                      email: "${appleIdCredential.email}"))
+                                }
+                            });
+                  });
+          break;
+        }
+      case AuthorizationStatus.error:
+        ScaffoldMessenger.of(_scaffoldKey.currentContext).showSnackBar(SnackBar(
+          content: Text("Error occured please try again later"),
+          backgroundColor: Theme.of(_scaffoldKey.currentContext).errorColor,
+        ));
+        break;
+
+      case AuthorizationStatus.cancelled:
+        ScaffoldMessenger.of(_scaffoldKey.currentContext)
+            .showSnackBar(SnackBar(content: Text("Sign in cancelled")));
+
+        break;
+    }
   }
 
   @override
@@ -130,7 +187,59 @@ class _LoginPageState extends State<LoginPage> {
                             ],
                           )),
                     ),
-                  ), /* 
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 15, right: 15, top: 15),
+                    child: Container(
+                      height: 58,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.grey)),
+                      child: InkWell(
+                          onTap: () async {
+                            await signWithApple();
+                            if (!_auth.currentUser.isAnonymous) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text("Logged in successful",
+                                    style: TextStyle(
+                                        fontFamily: 'Ambit',
+                                        fontWeight: FontWeight.bold,
+                                        color: Color.fromARGB(255, 0, 0, 136))),
+                                backgroundColor: Colors.white,
+                              ));
+
+                              Future.delayed(Duration(seconds: 3)).then((_) {
+                                Navigator.pop(context);
+                              });
+                            }
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                alignment: Alignment.topCenter,
+                                icon: FaIcon(
+                                  FontAwesomeIcons.apple,
+                                  color: Colors.white,
+                                ),
+                                iconSize: 40,
+                                onPressed: null,
+                              ),
+                              Text(
+                                "Sign in with Apple",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20),
+                              )
+                            ],
+                          )),
+                    ),
+                  ) /* 
                     Padding(
                       padding: const EdgeInsets.all(20),
                       child: Center(
