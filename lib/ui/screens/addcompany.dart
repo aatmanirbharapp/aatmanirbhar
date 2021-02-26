@@ -104,7 +104,7 @@ class _AddCompanyState extends State<AddCompany> {
                             iconSize: MediaQuery.of(context).size.height * 0.2,
                             onPressed: () {},
                             icon: Image.asset(
-                                "assets/images/Final_AatmNirbhar_logo.png")),
+                                "assets/images/Final_Aatmanirbhar_Logo.png")),
                       ),
                       Padding(
                         padding: EdgeInsets.all(8),
@@ -166,7 +166,7 @@ class _AddCompanyState extends State<AddCompany> {
                                           setState(() {
                                             isLoading = false;
                                           }),
-                                          _scafolldKey.currentState
+                                          ScaffoldMessenger.of(context)
                                               .showSnackBar(SnackBar(
                                             content: Text(
                                                 "Thank you! The company information you shared has been received by our team. Once it is approved by our team, this company will be available in the Aatmanirbhar app.",
@@ -190,7 +190,7 @@ class _AddCompanyState extends State<AddCompany> {
                                           setState(() {
                                             isLoading = false;
                                           }),
-                                          _scafolldKey.currentState
+                                          ScaffoldMessenger.of(context)
                                               .showSnackBar(SnackBar(
                                             backgroundColor:
                                                 Theme.of(this.context)
@@ -200,7 +200,8 @@ class _AddCompanyState extends State<AddCompany> {
                                           ))
                                         });
                               } else {
-                                _scafolldKey.currentState.showSnackBar(SnackBar(
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
                                   backgroundColor: Theme.of(context).errorColor,
                                   content: Text(
                                       "Please check and enter missing required field"),
@@ -326,7 +327,7 @@ class _AddCompanyState extends State<AddCompany> {
             Icons.link,
             color: Colors.grey,
           ),
-          hintText: "Enter Company's Wikipedia link",
+          hintText: "Company's Wikipedia link/ If not then NA",
           fillColor: Colors.orange[50],
           labelText: "Wikipedia Link",
           labelStyle:
@@ -428,7 +429,7 @@ class _AddCompanyState extends State<AddCompany> {
             Icons.link,
             color: Colors.grey,
           ),
-          hintText: "Website Link",
+          hintText: "Website link/ If not then NA",
           fillColor: Colors.orange[50],
           labelText: "Website",
           labelStyle:
@@ -452,7 +453,8 @@ class _AddCompanyState extends State<AddCompany> {
         IconButton(
           key: _scafolldKey,
           onPressed: () {
-            Scaffold.of(_scafolldKey.currentContext).showSnackBar(SnackBar(
+            ScaffoldMessenger.of(_scafolldKey.currentContext)
+                .showSnackBar(SnackBar(
               backgroundColor: Colors.white,
               elevation: 5,
               content: Container(

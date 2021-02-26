@@ -49,7 +49,7 @@ class Company {
 
   String logoFileName;
 
-  int makesInIndia;
+  var makesInIndia;
   Company(
       {this.id,
       this.companyId,
@@ -90,13 +90,12 @@ class Company {
     story = json['story'] as String;
     description = json['description'] as String;
     logoFileName = json['logoFileName'] as String;
-    makesInIndia = json['makesInIndia'] as int;
+    makesInIndia = json['makesInIndia'];
     aboutCompany = json['aboutCompany'] as String;
     addedByImage = json['addedByImage'] as String;
     addedByName = json['addedByName'] as String;
     addedByPlace = json['addedByPlace'] as String;
-    
-    
+
     image = json['image'] as String;
     isActive = json['isActive'] as int;
     moderatorByImage = json['moderatorByImage'] as String;

@@ -32,7 +32,7 @@ class _AuthUsingEmailState extends State<AuthUsingEmail> {
                       iconSize: MediaQuery.of(context).size.height * 0.3,
                       onPressed: () {},
                       icon: Image.asset(
-                          "assets/images/Final_AatmNirbhar_logo.png")),
+                          "assets/images/Final_Aatmanirbhar_Logo.png")),
                 ),
               ),
               Padding(

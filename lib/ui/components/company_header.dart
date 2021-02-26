@@ -177,7 +177,8 @@ class CompanyHeader extends StatelessWidget {
                           ),
                           Text("Website",
                               style: TextStyle(
-                                  fontFamily: 'Roboto',
+                                  fontFamily: 'Ambit',
+                                  fontWeight: FontWeight.bold,
                                   fontSize: 10,
                                   color: Color.fromARGB(255, 0, 0, 136)))
                         ],
@@ -236,7 +237,8 @@ class CompanyHeader extends StatelessWidget {
                           ),
                           Text("Wikipedia",
                               style: TextStyle(
-                                  fontFamily: 'Roboto',
+                                  fontFamily: 'Ambit',
+                                  fontWeight: FontWeight.bold,
                                   fontSize: 10,
                                   color: Color.fromARGB(255, 0, 0, 136)))
                         ],
@@ -324,7 +326,8 @@ class CompanyHeader extends StatelessWidget {
                             ),
                             Text("Facts",
                                 style: TextStyle(
-                                    fontFamily: 'Roboto',
+                                    fontFamily: 'Ambit',
+                                    fontWeight: FontWeight.bold,
                                     fontSize: 10,
                                     color: Color.fromARGB(255, 0, 0, 136)))
                           ],
@@ -367,7 +370,8 @@ class CompanyHeader extends StatelessWidget {
                             ),
                             Text("Products",
                                 style: TextStyle(
-                                    fontFamily: 'Roboto',
+                                    fontFamily: 'Ambit',
+                                    fontWeight: FontWeight.bold,
                                     fontSize: 10,
                                     color: Color.fromARGB(255, 0, 0, 136)))
                           ],

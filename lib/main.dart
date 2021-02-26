@@ -1,3 +1,5 @@
+import 'package:atamnirbharapp/bloc/dbprovider.dart';
+import 'package:atamnirbharapp/ui/home_page.dart';
 import 'package:atamnirbharapp/ui/screens/splash_screen.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
@@ -15,12 +17,14 @@ void main() async {
       .then((_) {
     FirebaseAuth _auth = FirebaseAuth.instance;
     if (_auth.currentUser == null) _auth.signInAnonymously();
+
     runApp(new MyApp());
   });
 }
 
 class MyApp extends StatelessWidget {
   static FirebaseAnalytics _analytics = FirebaseAnalytics();
+  FirebaseAuth _auth = FirebaseAuth.instance;
   static FirebaseAnalyticsObserver observer =
       FirebaseAnalyticsObserver(analytics: _analytics);
   @override
@@ -37,6 +41,6 @@ class MyApp extends StatelessWidget {
               visualDensity: VisualDensity.adaptivePlatformDensity,
             ),
             navigatorObservers: [],
-            home: SplashScreen()));
+            home: _auth.currentUser == null ? SplashScreen() : MyHomePage()));
   }
 }

@@ -80,7 +80,7 @@ class _VerificationState extends State<Verification> {
                         iconSize: MediaQuery.of(context).size.height * 0.3,
                         onPressed: () {},
                         icon: Image.asset(
-                            "assets/images/Final_AatmNirbhar_logo.png")),
+                            "assets/images/Final_Aatmanirbhar_Logo.png")),
                     SizedBox(height: 30),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),

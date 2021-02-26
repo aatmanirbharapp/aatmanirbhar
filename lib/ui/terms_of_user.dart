@@ -15,7 +15,7 @@ class Terms extends StatelessWidget {
       appBar: AppBar(
         actions: [
           IconButton(
-            icon: Image.asset("assets/images/Final_AatmNirbhar_logo.png"),
+            icon: Image.asset("assets/images/Final_Aatmanirbhar_Logo.png"),
             iconSize: 70,
             onPressed: () {},
           ),

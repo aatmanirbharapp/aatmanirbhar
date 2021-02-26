@@ -87,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                           iconSize: MediaQuery.of(context).size.height * 0.3,
                           onPressed: () {},
                           icon: Image.asset(
-                              "assets/images/Final_AatmNirbhar_logo.png")),
+                              "assets/images/Final_Aatmanirbhar_Logo.png")),
                     ),
                   ),
                   Padding(
@@ -102,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: InkWell(
                           onTap: () async {
                             await signWithGoogle();
-                            _scaffoldKey.currentState.showSnackBar(SnackBar(
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: Text("Logged in successful",
                                   style: TextStyle(
                                       fontFamily: 'Ambit',

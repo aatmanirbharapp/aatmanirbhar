@@ -15,6 +15,7 @@ class ReportBug extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scafolldKey,
       appBar: AppBar(
         backgroundColor: Colors.orange[100],
         title: Text(

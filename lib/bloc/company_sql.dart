@@ -17,6 +17,13 @@ class CompanySql {
       this.logoFileName,
       this.makesInIndia,
       this.rating});
+  Map<String, dynamic> toJson() => {
+        'id': companyId,
+        'country': country,
+        'companyName': companyName,
+        'logoFileName': logoFileName,
+        'rating': rating
+      };
 
   CompanySql.fromJson(Map<String, dynamic> json) {
     companyId = json['company_id'] as String;

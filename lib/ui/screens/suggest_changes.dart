@@ -88,7 +88,7 @@ class _SuggestChangesState extends State<SuggestChanges> {
                             iconSize: MediaQuery.of(context).size.height * 0.2,
                             onPressed: () {},
                             icon: Image.asset(
-                                "assets/images/Final_AatmNirbhar_logo.png")),
+                                "assets/images/Final_Aatmanirbhar_Logo.png")),
                       ),
                       Padding(
                         padding: EdgeInsets.only(bottom: 8),
@@ -145,7 +145,7 @@ class _SuggestChangesState extends State<SuggestChanges> {
                                           setState(() {
                                             isLoading = false;
                                           }),
-                                          _scafolldKey.currentState
+                                          ScaffoldMessenger.of(context)
                                               .showSnackBar(SnackBar(
                                             content: Text(
                                                 "Thank you! Your suggestion has been received by our team. Once it is approved by our team, you can see your suggestion included here",
@@ -169,7 +169,7 @@ class _SuggestChangesState extends State<SuggestChanges> {
                                           setState(() {
                                             isLoading = false;
                                           }),
-                                          _scafolldKey.currentState
+                                          ScaffoldMessenger.of(context)
                                               .showSnackBar(SnackBar(
                                             backgroundColor:
                                                 Theme.of(this.context)
@@ -179,7 +179,8 @@ class _SuggestChangesState extends State<SuggestChanges> {
                                           ))
                                         });
                               } else {
-                                _scafolldKey.currentState.showSnackBar(SnackBar(
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
                                   backgroundColor: Theme.of(context).errorColor,
                                   content: Text(
                                       "Please check and enter missing required field"),

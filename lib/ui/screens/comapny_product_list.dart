@@ -1,7 +1,7 @@
 import 'package:atamnirbharapp/bloc/company.dart';
 import 'package:atamnirbharapp/bloc/product.dart';
 import 'package:atamnirbharapp/bloc/product_repo.dart';
-import 'package:atamnirbharapp/ui/components/alternate_company_header.dart';
+
 import 'package:atamnirbharapp/ui/components/alternate_product_header.dart';
 import 'package:atamnirbharapp/ui/drawer.dart';
 import 'package:atamnirbharapp/utils/comman_widgets.dart';
@@ -21,7 +21,7 @@ class CompanyProductList extends StatelessWidget {
       appBar: AppBar(
         actions: [
           IconButton(
-            icon: Image.asset("assets/images/Final_AatmNirbhar_logo.png"),
+            icon: Image.asset("assets/images/Final_Aatmanirbhar_Logo.png"),
             iconSize: 70,
             onPressed: () {},
           ),
@@ -58,9 +58,8 @@ class CompanyProductList extends StatelessWidget {
                 itemCount: snapshot.data.length,
                 itemBuilder: (context, index) {
                   return AlternateProductHeader(
-                    product:
-                        Product.fromJson(snapshot.data.elementAt(index).data())
-                  );
+                      product: Product.fromJson(
+                          snapshot.data.elementAt(index).data()));
                 },
               );
             } else if (snapshot.hasError) {

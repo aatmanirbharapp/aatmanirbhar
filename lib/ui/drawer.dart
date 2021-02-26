@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class DrawerClass extends StatelessWidget {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   GoogleSignIn _googleSignIn = GoogleSignIn();
   @override
@@ -82,7 +81,7 @@ class DrawerClass extends StatelessWidget {
                       settings: RouteSettings(name: 'home')));
                 },
                 title: new Text(
-                  "Dashboard",
+                  "Home",
                   style: TextStyle(
                       color: Color.fromARGB(255, 0, 0, 136),
                       fontFamily: 'Ambit',
@@ -90,7 +89,7 @@ class DrawerClass extends StatelessWidget {
                       fontWeight: FontWeight.bold),
                 ),
                 leading: new Icon(
-                  Icons.list,
+                  Icons.home,
                   color: Color.fromARGB(255, 0, 0, 136),
                 ),
                 trailing: new Icon(Icons.arrow_right,
@@ -109,11 +108,11 @@ class DrawerClass extends StatelessWidget {
                   else
                     {
                       Navigator.pop(context),
-                      Scaffold.of(context).showSnackBar(
+                      ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text("Please login first to add company",
                               style: TextStyle(
-                                  fontFamily: 'Roboto',
+                                  fontFamily: 'Ambit',
                                   fontWeight: FontWeight.bold)),
                           backgroundColor: Theme.of(context).errorColor,
                         ),

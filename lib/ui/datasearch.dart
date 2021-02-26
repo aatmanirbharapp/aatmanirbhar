@@ -1,16 +1,16 @@
+import 'dart:async';
 import 'dart:convert';
-import 'package:atamnirbharapp/bloc/check_internet.dart';
-import 'package:provider/provider.dart';
-import 'package:atamnirbharapp/http/faqrequest.dart';
+import 'package:atamnirbharapp/bloc/dbprovider.dart';
 import 'package:atamnirbharapp/ui/screens/forein_product_screen.dart';
 import 'package:atamnirbharapp/ui/screens/india_product_screen.dart';
 import 'package:atamnirbharapp/ui/screens/indiancompanyscreen.dart';
-
+import 'package:atamnirbharapp/bloc/IndexBloc.dart';
 import 'package:atamnirbharapp/ui/screens/outside_india_company.dart';
 import 'package:atamnirbharapp/utils/comman_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class DataSearch extends StatefulWidget {
   @override
@@ -19,18 +19,26 @@ class DataSearch extends StatefulWidget {
 
 class _DataSearchState extends State<DataSearch>
     with SingleTickerProviderStateMixin {
-  TabController _tabcontroller;
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   List<QueryDocumentSnapshot> data;
   String _searchText = "";
   final _controller = TextEditingController();
   String type;
-  List countryList = new List();
-  List sectorList = new List();
-  String _country = "";
+  List countryList = new List.empty(growable: true);
+  List sectorList = new List.empty(growable: true);
+  String _country = "India";
   int make = 1;
-  final _httpReq = SqlResponse();
+  bool _isConnected = true;
+  var radioValue = 2;
+  var radiotype = 1;
+  int makesInIndia = 2;
+  bool _isVisible = false;
+  final Connectivity _connectivity = Connectivity();
+  StreamSubscription<ConnectivityResult> _connectivitySubscription;
+  String _connectionStatus = 'Unknown';
 
   _DataSearchState() {
+    print(_controller.text);
     _controller.addListener(() {
       if (_controller.text.isEmpty) {
         setState(() {
@@ -44,21 +52,63 @@ class _DataSearchState extends State<DataSearch>
     });
   }
 
-  List<bool> _isChecked;
-
   @override
   void initState() {
     super.initState();
-    CheckInternet().checkConnection(context);
+    initConnectivity();
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+
     setState(() {
-      type = "company";
+      type = "product";
     });
-    _tabcontroller = TabController(length: 2, vsync: this);
+
     loadCountries();
-    _isChecked = List<bool>.filled(21, false);
+    //print(DBProvider.db.getAllCompanySearch());
   }
 
-  final Set _saved = Set();
+  Future<void> initConnectivity() async {
+    ConnectivityResult result;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      result = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e) {
+      print(e.toString());
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) {
+      return Future.value(null);
+    }
+
+    return _updateConnectionStatus(result);
+  }
+
+  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+    switch (result) {
+      case ConnectivityResult.wifi:
+        internetCheckBloc.updateCurrentIndex(true);
+        break;
+      case ConnectivityResult.mobile:
+        internetCheckBloc.updateCurrentIndex(true);
+        break;
+      case ConnectivityResult.none:
+        internetCheckBloc.updateCurrentIndex(false);
+        ScaffoldMessenger.of(_scaffoldKey.currentContext).showSnackBar(SnackBar(
+            backgroundColor: Theme.of(context).errorColor,
+            content: Text("Please check your internet connection.")));
+        break;
+      default:
+        internetCheckBloc.updateCurrentIndex(false);
+        ScaffoldMessenger.of(_scaffoldKey.currentContext).showSnackBar(SnackBar(
+            backgroundColor: Theme.of(context).errorColor,
+            content: Text("Please check your internet connection.")));
+        break;
+    }
+  }
+
   loadCountries() {
     final country =
         DefaultAssetBundle.of(context).loadString('assets/files/country.json');
@@ -85,280 +135,388 @@ class _DataSearchState extends State<DataSearch>
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    CheckInternet().listener.cancel();
+    _controller.dispose();
+    internetCheckBloc.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      primary: true,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.white,
-        actions: [
-          if (_searchText.isNotEmpty)
-            IconButton(
-              onPressed: () {
-                setState(() {
-                  _searchText = "";
-                  _controller.text = "";
-                });
-              },
-              icon: Icon(
-                Icons.clear,
-                color: Colors.black,
-              ),
-            ),
-        ],
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context, null);
-          },
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-        ),
-        title: TextField(
-          onChanged: (value) async {
-            String date = DateTime.now().toIso8601String();
-            FirebaseAnalytics analytics =
-                Provider.of<FirebaseAnalytics>(context, listen: false);
-            await analytics.logSearch(searchTerm: value, startDate: date);
-          },
-          controller: _controller,
-          enableSuggestions: true,
-          decoration: InputDecoration(
-            border: InputBorder.none,
-            focusedBorder: InputBorder.none,
-            enabledBorder: InputBorder.none,
-            errorBorder: InputBorder.none,
-            disabledBorder: InputBorder.none,
-            hintText: "Search by " + type + " name ...",
-          ),
-        ),
-      ),
-      body: ListView(children: [
-        ColoredBox(
-          color: Color.fromARGB(255, 0, 0, 136),
-          child: TabBar(
-            controller: _tabcontroller,
-            onTap: (index) {
-              if (index == 1) {
-                showModalBottomSheet(
-                    context: context,
-                    builder: (BuildContext bc) {
-                      return Container(
-                        height: 380,
-                        child: Column(
-                          children: <Widget>[
-                            new ListTile(
-                              leading: new Icon(Icons.all_inclusive),
-                              title: new Text('All Countries'),
-                              onTap: () => {
-                                setState(() {
-                                  _country = "";
-                                })
-                              },
-                            ),
-                            Container(
-                              height: 300,
-                              child: ListView.builder(
-                                itemCount: countryList.length,
-                                itemBuilder: (context, index) {
-                                  return ListTile(
-                                      leading: new Icon(Icons.flag),
-                                      title: new Text(
-                                          countryList.elementAt(index)),
-                                      onTap: () => {
-                                            setState(() {
-                                              _country =
-                                                  countryList.elementAt(index);
-                                            })
-                                          });
-                                },
-                              ),
-                            )
-                          ],
-                        ),
-                      );
-                    });
-              } else {
-                showModalBottomSheet(
-                    context: context,
-                    builder: (BuildContext bc) {
-                      return Container(
-                        child: new Wrap(
-                          children: <Widget>[
-                            new ListTile(
-                                leading:
-                                    Image.asset("assets/images/company.png"),
-                                title: new Text('Company',
-                                    style: TextStyle(
-                                        fontFamily: 'Ambit',
-                                        fontWeight: FontWeight.bold,
-                                        color: Color.fromARGB(255, 0, 0, 136))),
-                                onTap: () => {
-                                      setState(() {
-                                        type = "company";
-                                        _searchText = "";
-                                        _controller.text = "";
-                                      })
-                                    }),
-                            new ListTile(
-                              leading: Image.asset("assets/images/product.png"),
-                              title: new Text('Product',
-                                  style: TextStyle(
-                                      fontFamily: 'Ambit',
-                                      fontWeight: FontWeight.bold,
-                                      color: Color.fromARGB(255, 0, 0, 136))),
-                              onTap: () => {
-                                setState(() {
-                                  type = "product";
-                                  _searchText = "";
-                                  _controller.text = "";
-                                })
-                              },
-                            ),
-                          ],
-                        ),
-                      );
-                    });
-              }
-            },
-            tabs: [
-              Tab(
-                child: Text(
-                  "Type : " + type,
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-              Tab(
-                  child: Text(
-                "Country",
-                style: TextStyle(color: Colors.white),
-              )),
-            ],
-          ),
-        ),
-        Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            color: Colors.white,
-            child: type.isNotEmpty
-                ? FutureBuilder(
-                    future: type.contains('product')
-                        ? _httpReq.searchByProduct(
-                            type, _searchText, _country, make)
-                        : _httpReq.searchByCompany(
-                            type, _searchText, _country, make),
-                    builder: (BuildContext context, snapshot) {
-                      switch (snapshot.connectionState) {
-                        case ConnectionState.waiting:
-                          return CommanWidgets()
-                              .getCircularProgressIndicator(context);
-                        default:
-                          if (snapshot.hasError) {
-                            return Center(
-                              child: Text(
-                                  "No result found for the given search. More companies and products are added periodically in this app. Please check back late.",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontFamily: 'Ambit',
-                                      fontWeight: FontWeight.bold,
-                                      color: Color.fromARGB(255, 0, 0, 136))),
-                            );
-                          } else {
-                            return createListView(snapshot.data);
-                          }
-                      }
+        key: _scaffoldKey,
+        primary: true,
+        body: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: CustomScrollView(slivers: [
+            SliverAppBar(
+                pinned: false,
+                backgroundColor: Colors.orange[50],
+                actions: [
+                  if (_searchText.isNotEmpty)
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _searchText = "";
+                          _controller.text = "";
+                        });
+                      },
+                      icon: Icon(
+                        Icons.clear,
+                        color: Colors.black,
+                      ),
+                    ),
+                  IconButton(
+                    color: Colors.black,
+                    icon: Icon(Icons.filter_alt),
+                    onPressed: () {
+                      setState(() {
+                        _isVisible = true;
+                      });
                     },
                   )
-                : CommanWidgets().getCircularProgressIndicator(context)),
-      ]),
-    );
-  }
+                ],
+                leading: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context, null);
+                  },
+                  icon: Icon(Icons.arrow_back, color: Colors.black),
+                ),
+                floating: true,
+                title: Container(
+                    alignment: Alignment.bottomCenter,
+                    width: MediaQuery.of(context).size.width,
+                    height: 50,
+                    child: TextField(
+                      onChanged: (value) async {},
+                      controller: _controller,
+                      enableSuggestions: true,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                        hintText: "Search by " + type + " name ...",
+                      ),
+                    )),
+                centerTitle: true,
+                bottom: _isVisible
+                    ? PreferredSize(
+                        preferredSize: const Size.fromHeight(260),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(15),
+                                  bottomRight: Radius.circular(15))),
+                          alignment: Alignment.topCenter,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Text("Search by:",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18)),
+                                  Text("Product",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18)),
+                                  Radio(
+                                    value: 1,
+                                    groupValue: radiotype,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        radiotype = value;
+                                        type = "product";
+                                      });
+                                    },
+                                  ),
+                                  Text("Company",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18)),
+                                  Radio(
+                                    value: 0,
+                                    groupValue: radiotype,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        radiotype = value;
+                                        type = "company";
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                              Divider(),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                      padding: EdgeInsets.only(left: 15),
+                                      child: Text(
+                                        "Country :",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20),
+                                      )),
+                                  Spacer(),
+                                  DropdownButton(
+                                    hint: Text('Country'),
+                                    value: _country,
+                                    items: <String>[
+                                      "All Countries",
+                                      'India',
+                                      'China',
+                                      'United States of America',
+                                      'United Kingdom',
+                                      'Japan',
+                                      'South Korea',
+                                      'Germany'
+                                    ].map((String value) {
+                                      return new DropdownMenuItem<String>(
+                                        value: value,
+                                        child: new Text(value),
+                                      );
+                                    }).toList(),
+                                    onChanged: (String val) {
+                                      setState(() {
+                                        if (val == "All Countries")
+                                          _country = "";
+                                        _country = val;
+                                      });
+                                    },
+                                  ),
+                                  Spacer()
+                                ],
+                              ),
+                              Divider(),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                      padding: EdgeInsets.only(right: 20),
+                                      child: Text(
+                                        "Makes In India :",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18),
+                                      )),
+                                  Text("Yes",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18)),
+                                  Radio(
+                                    value: 1,
+                                    groupValue: radioValue,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        radioValue = value;
+                                        makesInIndia = value;
+                                      });
+                                    },
+                                  ),
+                                  Text("No",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18)),
+                                  Radio(
+                                    value: 0,
+                                    groupValue: radioValue,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        radioValue = value;
+                                        makesInIndia = value;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                              Divider(),
+                              Center(
+                                child: IconButton(
+                                    icon: Icon(Icons.close),
+                                    onPressed: () {
+                                      setState(() {
+                                        _isVisible = false;
+                                      });
+                                    }),
+                              )
+                            ],
+                          ),
+                        ),
+                      )
+                    : PreferredSize(
+                        preferredSize: const Size.fromHeight(60),
+                        child: Container(
+                            margin: EdgeInsets.only(bottom: 10),
+                            alignment: Alignment.topCenter,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Text("Search by:",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18)),
+                                Text("Product",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18)),
+                                Radio(
+                                  value: 1,
+                                  groupValue: radiotype,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      radiotype = value;
+                                      type = "product";
+                                    });
+                                  },
+                                ),
+                                Text("Company",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18)),
+                                Radio(
+                                  value: 0,
+                                  groupValue: radiotype,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      radiotype = value;
+                                      type = "company";
+                                    });
+                                  },
+                                ),
+                              ],
+                            )))),
+            SliverList(
+                delegate: SliverChildListDelegate([
+              Container(
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  color: Colors.white,
+                  child: type.isNotEmpty
+                      ? FutureBuilder(
+                          future: type.contains('product')
+                              ? DBProvider.db.productSearch(
+                                  _searchText, _country, makesInIndia, "", "")
+                              : DBProvider.db.companySearch(
+                                  _searchText, _country, makesInIndia, ""),
+                          builder: (BuildContext context, snapshot) {
+                            switch (snapshot.connectionState) {
+                              case ConnectionState.waiting:
+                                return CommanWidgets()
+                                    .getCircularProgressIndicator(context);
 
-  Widget _buildSearchList(List data) {
-    List<Map> searchList = List();
-    if (_searchText.isNotEmpty) {
-      for (int i = 0; i < data.length; i++) {
-        final Map company = data.elementAt(i);
-
-        if (company[type + '_name']
-            .toLowerCase()
-            .contains(_searchText.toLowerCase())) {
-          searchList.add(company);
-        }
-      }
-      return createListView(searchList);
-    }
-    return createListView(searchList);
+                              default:
+                                if (snapshot.hasError) {
+                                  return Center(
+                                    child: Text(
+                                        "No result found for the given search. More companies and products are added periodically in this app. Please check back late.",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontFamily: 'Ambit',
+                                            fontWeight: FontWeight.bold,
+                                            color: Color.fromARGB(
+                                                255, 0, 0, 136))),
+                                  );
+                                } else {
+                                  return createListView(snapshot.data);
+                                }
+                            }
+                          },
+                        )
+                      : CommanWidgets().getCircularProgressIndicator(context)),
+            ])),
+          ]),
+        ));
   }
 
   Widget createListView(List datalist) {
-    return ListView.builder(
-        shrinkWrap: true,
-        itemCount: datalist == null ? 0 : datalist.length,
-        scrollDirection: Axis.vertical,
-        itemBuilder: (BuildContext context, int index) {
-          return Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: ListTile(
-              onTap: () {
-                type.contains('product')
-                    ? datalist
-                            .elementAt(index)['country']
-                            .toLowerCase()
-                            .contains("india")
-                        ? Navigator.push(
-                            context,
-                            new MaterialPageRoute(
-                                builder: (context) => IndianProduct(
-                                      productId:
-                                          datalist.elementAt(index)['image'],
-                                    ),
-                                settings: RouteSettings(name: 'product')))
-                        : Navigator.push(
-                            context,
-                            new MaterialPageRoute(
-                                builder: (context) => ForeinProductPage(
-                                      productId:
-                                          datalist.elementAt(index)['image'],
-                                    ),
-                                settings:
-                                    RouteSettings(name: 'productOutside')))
-                    : datalist
-                            .elementAt(index)['country']
-                            .toLowerCase()
-                            .contains("india")
-                        ? Navigator.push(
-                            context,
-                            new MaterialPageRoute(
-                                builder: (context) => IndianCompany(
-                                      companyId:
-                                          datalist.elementAt(index)['id'],
-                                    ),
-                                settings: RouteSettings(name: 'company')))
-                        : Navigator.push(
-                            context,
-                            new MaterialPageRoute(
-                                builder: (context) => OutsideIndiaCompany(
-                                      companyId:
-                                          datalist.elementAt(index)['id'],
-                                    ),
-                                settings:
-                                    RouteSettings(name: 'companyOutside')));
-              },
-              leading:
-                  IconButton(onPressed: () => null, icon: Icon(Icons.search)),
-              title: Text(datalist.elementAt(index)[type + '_name'],
-                  style: TextStyle(
-                      fontFamily: 'Ambit',
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 0, 0, 136))),
-              subtitle: Text(datalist.elementAt(index)['country'],
-                  style: TextStyle(fontFamily: 'Ambit', color: Colors.black87)),
-            ),
-          );
+    return StreamBuilder(
+        stream: internetCheckBloc.isConnected,
+        initialData: true,
+        builder: (context, snapshot) {
+          return snapshot.data
+              ? ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: datalist == null ? 0 : datalist.length,
+                  scrollDirection: Axis.vertical,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: ListTile(
+                        onTap: () {
+                          type.contains('product')
+                              ? datalist
+                                      .elementAt(index)['first_country']
+                                      .toLowerCase()
+                                      .contains("india")
+                                  ? Navigator.push(
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (context) => IndianProduct(
+                                                productId: datalist
+                                                    .elementAt(index)['image'],
+                                              ),
+                                          settings:
+                                              RouteSettings(name: 'product')))
+                                  : Navigator.push(
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (context) =>
+                                              ForeinProductPage(
+                                                productId: datalist
+                                                    .elementAt(index)['image'],
+                                              ),
+                                          settings: RouteSettings(
+                                              name: 'productOutside')))
+                              : datalist
+                                      .elementAt(index)['first_country']
+                                      .toLowerCase()
+                                      .contains("india")
+                                  ? Navigator.push(
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (context) => IndianCompany(
+                                                companyId: datalist
+                                                    .elementAt(index)['id'],
+                                              ),
+                                          settings:
+                                              RouteSettings(name: 'company')))
+                                  : Navigator.push(
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (context) =>
+                                              OutsideIndiaCompany(
+                                                companyId: datalist
+                                                    .elementAt(index)['id'],
+                                              ),
+                                          settings: RouteSettings(
+                                              name: 'companyOutside')));
+                        },
+                        leading: IconButton(
+                            onPressed: () => null, icon: Icon(Icons.search)),
+                        title: Text(datalist.elementAt(index)[type + '_name'],
+                            style: TextStyle(
+                                fontFamily: 'Ambit',
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 0, 0, 136))),
+                        subtitle: Text(
+                            datalist.elementAt(index)['first_country'],
+                            style: TextStyle(
+                                fontFamily: 'Ambit', color: Colors.black87)),
+                      ),
+                    );
+                  })
+              : Container(
+                  height: MediaQuery.of(context).size.height,
+                );
         });
   }
 }

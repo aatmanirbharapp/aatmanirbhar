@@ -1,4 +1,3 @@
-
 import 'package:atamnirbharapp/utils/comman_widgets.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -8,7 +7,7 @@ class MiddleRow extends StatefulWidget {
   @override
   _MiddleRowState createState() => _MiddleRowState();
 
-  final int makesInIndia;
+  final makesInIndia;
 
   final String firstCountry;
   final String secondCountry;

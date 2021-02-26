@@ -7,45 +7,30 @@ import 'dart:convert';
 class SqlResponse {
   var repo = CompanyRepository();
 
-  Future<List> searchByCompany(
-      String tablename, String search, String country, int make) async {
-    Map<String, String> body = {
-      'action': 'SEARCH_COMPANY_LIKE',
-      'table': tablename,
-      'search': search,
-      'country': country,
-      'make': make.toString()
-    };
-
-    http.Response response = await http.post('${AppContants.url}',
-        body: body, headers: {"Accept": "application/json"});
+  Future<List> searchByCompany() async {
+    http.Response response = await http
+        .get(AppContants.company, headers: {"Accept": "application/json"});
 
     if (response.statusCode == 200) {
-      List<dynamic> jsondata = json.decode(response.body);
+      List jsondata = json.decode(response.body);
+
       return jsondata;
     } else {
-      return List();
+      return List.empty();
     }
   }
 
-  Future<List> searchByProduct(
-      String tablename, String search, String country, int make) async {
-    Map<String, String> body = {
-      'action': 'SEARCH_PRODUCT_LIKE',
-      'table': 'products',
-      'search': search,
-      'country': country,
-      'make': make.toString()
-    };
+  Future<List> searchByProduct() async {
+    http.Response response = await http
+        .get(AppContants.product, headers: {"Accept": "application/json"});
 
-    http.Response response = await http.post('${AppContants.url}',
-        body: body, headers: {"Accept": "application/json"});
+    print(response.statusCode);
 
     if (response.statusCode == 200) {
-      List<dynamic> jsondata = json.decode(response.body);
+      List jsondata = json.decode(response.body);
       return jsondata;
     } else {
-      return List();
+      return List.empty();
     }
   }
 
@@ -63,7 +48,7 @@ class SqlResponse {
       List<dynamic> jsondata = json.decode(response.body);
       return jsondata;
     } else {
-      return List();
+      return List.empty();
     }
   }
 
@@ -81,7 +66,7 @@ class SqlResponse {
       List<dynamic> jsondata = json.decode(response.body);
       return jsondata;
     } else {
-      return List();
+      return List.empty();
     }
   }
 
@@ -116,7 +101,7 @@ class SqlResponse {
       List<dynamic> jsondata = json.decode(response.body);
       return jsondata;
     } else {
-      return List();
+      return List.empty();
     }
   }
 }

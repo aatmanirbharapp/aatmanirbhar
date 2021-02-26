@@ -28,7 +28,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
         appBar: AppBar(
           actions: [
             IconButton(
-              icon: Image.asset("assets/images/Final_AatmNirbhar_logo.png"),
+              icon: Image.asset("assets/images/Final_Aatmanirbhar_Logo.png"),
               iconSize: 70,
               onPressed: () {},
             ),
@@ -72,7 +72,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
                               border: Border.all(color: Colors.black26)),
-                          height: 120,
                           width: MediaQuery.of(context).size.width * 0.80,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -87,7 +86,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                 radius: 50.0,
                               ),
                               Container(
-                                height: 120,
                                 width: MediaQuery.of(context).size.width * 0.60,
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,

@@ -1,9 +1,8 @@
 import 'package:atamnirbharapp/ui/components/searchbarwidget.dart';
 import 'package:atamnirbharapp/ui/components/titlewidget.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:share/share.dart';
 
 class CustomSliverAppBar extends StatelessWidget {
   CustomSliverAppBar({
@@ -14,7 +13,6 @@ class CustomSliverAppBar extends StatelessWidget {
 
   final GlobalKey<ScaffoldState> _scaffoldKey;
 
-  FirebaseAuth _auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
@@ -33,7 +31,7 @@ class CustomSliverAppBar extends StatelessWidget {
           child: SearchBarWidget(), preferredSize: const Size.fromHeight(60)),
       actions: [
         IconButton(
-          icon: Image.asset("assets/images/Final_AatmNirbhar_logo.png"),
+          icon: Image.asset("assets/images/Final_Aatmanirbhar_Logo.png"),
           iconSize: 70,
           onPressed: () {},
         ),

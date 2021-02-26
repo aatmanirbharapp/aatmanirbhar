@@ -34,7 +34,7 @@ class MyHomePage extends StatelessWidget {
         onPressed: () {
           final RenderBox box = context.findRenderObject();
           Share.share(
-              'Hello, Sharing the Aatmanirbhar app. Please download our app  https://play.google.com/store/apps/details?id=com.aatmanirbhar.flutter',
+              'Want to support made in India products that benefit India? Looking for Indian alternatives to foreign products? Want to support local businesses? Unaware of interesting aatmanirbhar stories and facts about Indian companies? Download and install The Aatmanirbhar App from the following link to find answers to all these questions. https://play.google.com/store/apps/details?id=com.aatmanirbhar.flutter',
               sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size);
         },
         child: Icon(

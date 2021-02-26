@@ -1,3 +1,5 @@
+import 'package:atamnirbharapp/bloc/dbprovider.dart';
+import 'package:atamnirbharapp/http/faqrequest.dart';
 import 'package:flutter/material.dart';
 import 'package:atamnirbharapp/ui/home_page.dart';
 import 'package:video_player/video_player.dart';
@@ -9,6 +11,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   VideoPlayerController _controller;
+  final _httpReq = SqlResponse();
   @override
   void initState() {
     super.initState();
@@ -19,10 +22,18 @@ class _SplashScreenState extends State<SplashScreen> {
         _controller.setLooping(true);
         setState(() {});
       });
+    _loadFromApi();
     Future.delayed(Duration(seconds: 8), () {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => MyHomePage()));
     });
+  }
+
+  _loadFromApi() async {
+    List companyList = await _httpReq.searchByCompany();
+    List productList = await _httpReq.searchByProduct();
+    if (companyList.isNotEmpty) await DBProvider.db.createCompany(companyList);
+    if (productList.isNotEmpty) await DBProvider.db.createProduct(productList);
   }
 
   @override

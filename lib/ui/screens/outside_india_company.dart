@@ -10,12 +10,11 @@ import 'package:atamnirbharapp/ui/components/suggest_button.dart';
 import 'package:atamnirbharapp/ui/drawer.dart';
 import 'package:atamnirbharapp/utils/comman_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 
 class OutsideIndiaCompany extends StatelessWidget {
   final String companyId;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   OutsideIndiaCompany({Key key, @required this.companyId}) : super(key: key);
 

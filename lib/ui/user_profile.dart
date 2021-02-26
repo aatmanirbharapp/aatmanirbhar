@@ -84,7 +84,7 @@ class _UserProfileState extends State<UserProfile> {
         appBar: AppBar(
           actions: [
             IconButton(
-              icon: Image.asset("assets/images/Final_AatmNirbhar_logo.png"),
+              icon: Image.asset("assets/images/Final_Aatmanirbhar_Logo.png"),
               iconSize: 70,
               onPressed: () {},
             ),
@@ -298,7 +298,7 @@ class _UserProfileState extends State<UserProfile> {
                                     userRepository
                                         .addOrUpdateUser(userDetails)
                                         .then((value) => {
-                                              _scafolldKey.currentState
+                                              ScaffoldMessenger.of(context)
                                                   .showSnackBar(SnackBar(
                                                 content: Text(
                                                     "Your profile has been successfully updated.",
@@ -321,7 +321,7 @@ class _UserProfileState extends State<UserProfile> {
                                               }),
                                             })
                                         .catchError((error) => {
-                                              _scafolldKey.currentState
+                                              ScaffoldMessenger.of(context)
                                                   .showSnackBar(SnackBar(
                                                 backgroundColor:
                                                     Theme.of(this.context)
@@ -331,7 +331,7 @@ class _UserProfileState extends State<UserProfile> {
                                               ))
                                             });
                                   } else {
-                                    _scafolldKey.currentState
+                                    ScaffoldMessenger.of(context)
                                         .showSnackBar(SnackBar(
                                       backgroundColor:
                                           Theme.of(context).errorColor,
