@@ -1,52 +1,46 @@
-import 'package:atamnirbharapp/components/sliverappbarwidget.dart';
-
-import 'package:atamnirbharapp/drawer.dart';
-
-import 'package:atamnirbharapp/screens/homescreen.dart';
+import 'package:atamnirbharapp/bloc/dbprovider.dart';
+import 'package:atamnirbharapp/ui/home_page.dart';
+import 'package:atamnirbharapp/ui/screens/splash_screen.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) {
+    FirebaseAuth _auth = FirebaseAuth.instance;
+    if (_auth.currentUser == null) _auth.signInAnonymously();
+
+    runApp(new MyApp());
+  });
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+  static FirebaseAnalytics _analytics = FirebaseAnalytics();
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  static FirebaseAnalyticsObserver observer =
+      FirebaseAnalyticsObserver(analytics: _analytics);
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      drawer: DrawerClass(),
-      body: SafeArea(
-          top: false,
-          bottom: false,
-          child: Container(
-            decoration: BoxDecoration(
-                image: DecorationImage(
-              image: AssetImage("assets/images/BG_Color.jpeg"),
-              fit: BoxFit.cover,
-            )),
-            child: CustomScrollView(slivers: [
-              CustomSliverAppBar(scaffoldKey: _scaffoldKey),
-              SliverList(
-                  delegate: SliverChildListDelegate([CompanyCardView()])),
-            ]),
-          )),
-    );
+    return MultiProvider(
+        providers: [
+          Provider<FirebaseAnalytics>.value(value: _analytics),
+          Provider<FirebaseAnalyticsObserver>.value(value: observer),
+        ],
+        child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              primaryColor: Color.fromARGB(255, 0, 0, 136),
+              visualDensity: VisualDensity.adaptivePlatformDensity,
+            ),
+            navigatorObservers: [],
+            home: _auth.currentUser == null ? SplashScreen() : MyHomePage()));
   }
 }

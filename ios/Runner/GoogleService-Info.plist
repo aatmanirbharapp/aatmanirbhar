@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>830859103786-of9iq5kesq8jpldbmmk3clt6eilheu27.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.830859103786-of9iq5kesq8jpldbmmk3clt6eilheu27</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>830859103786-201991ivlda9skhis9kguia29fbmeju0.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCV_pJlkFbzxETymDEC9LVOi6ROe3ag_m0</string>
+	<key>GCM_SENDER_ID</key>
+	<string>830859103786</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.atamnirbharapp</string>
+	<key>PROJECT_ID</key>
+	<string>aatmanirbhar</string>
+	<key>STORAGE_BUCKET</key>
+	<string>aatmanirbhar.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:830859103786:ios:029f8e6936c09e82e37d53</string>
+	<key>DATABASE_URL</key>
+	<string>https://aatmanirbhar.firebaseio.com</string>
+</dict>
+</plist>
