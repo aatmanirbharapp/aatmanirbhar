@@ -65,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Future signWithApple() async {
     if (!await AppleSignIn.isAvailable()) {
-      ScaffoldMessenger.of(_scaffoldKey.currentContext).showSnackBar(SnackBar(
+      Scaffold.of(_scaffoldKey.currentContext).showSnackBar(SnackBar(
         content: Text(
             "Apple sign in not supported on your device, please try using google sign in."),
         backgroundColor: Theme.of(_scaffoldKey.currentContext).errorColor,
@@ -106,14 +106,14 @@ class _LoginPageState extends State<LoginPage> {
           break;
         }
       case AuthorizationStatus.error:
-        ScaffoldMessenger.of(_scaffoldKey.currentContext).showSnackBar(SnackBar(
+        Scaffold.of(_scaffoldKey.currentContext).showSnackBar(SnackBar(
           content: Text("Error occured please try again later"),
           backgroundColor: Theme.of(_scaffoldKey.currentContext).errorColor,
         ));
         break;
 
       case AuthorizationStatus.cancelled:
-        ScaffoldMessenger.of(_scaffoldKey.currentContext)
+        Scaffold.of(_scaffoldKey.currentContext)
             .showSnackBar(SnackBar(content: Text("Sign in cancelled")));
 
         break;
@@ -159,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: InkWell(
                           onTap: () async {
                             await signWithGoogle();
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            Scaffold.of(context).showSnackBar(SnackBar(
                               content: Text("Logged in successful",
                                   style: TextStyle(
                                       fontFamily: 'Ambit',
@@ -202,7 +202,7 @@ class _LoginPageState extends State<LoginPage> {
                           onTap: () async {
                             await signWithApple();
                             if (!_auth.currentUser.isAnonymous) {
-                              ScaffoldMessenger.of(context)
+                              Scaffold.of(context)
                                   .showSnackBar(SnackBar(
                                 content: Text("Logged in successful",
                                     style: TextStyle(

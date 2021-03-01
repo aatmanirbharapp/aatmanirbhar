@@ -96,13 +96,13 @@ class _DataSearchState extends State<DataSearch>
         break;
       case ConnectivityResult.none:
         internetCheckBloc.updateCurrentIndex(false);
-        ScaffoldMessenger.of(_scaffoldKey.currentContext).showSnackBar(SnackBar(
+        Scaffold.of(_scaffoldKey.currentContext).showSnackBar(SnackBar(
             backgroundColor: Theme.of(context).errorColor,
             content: Text("Please check your internet connection.")));
         break;
       default:
         internetCheckBloc.updateCurrentIndex(false);
-        ScaffoldMessenger.of(_scaffoldKey.currentContext).showSnackBar(SnackBar(
+        Scaffold.of(_scaffoldKey.currentContext).showSnackBar(SnackBar(
             backgroundColor: Theme.of(context).errorColor,
             content: Text("Please check your internet connection.")));
         break;

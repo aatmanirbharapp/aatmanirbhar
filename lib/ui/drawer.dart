@@ -108,7 +108,7 @@ class DrawerClass extends StatelessWidget {
                   else
                     {
                       Navigator.pop(context),
-                      ScaffoldMessenger.of(context).showSnackBar(
+                      Scaffold.of(context).showSnackBar(
                         SnackBar(
                           content: Text("Please login first to add company",
                               style: TextStyle(

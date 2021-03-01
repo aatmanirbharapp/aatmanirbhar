@@ -166,7 +166,7 @@ class _AddCompanyState extends State<AddCompany> {
                                           setState(() {
                                             isLoading = false;
                                           }),
-                                          ScaffoldMessenger.of(context)
+                                  Scaffold.of(context)
                                               .showSnackBar(SnackBar(
                                             content: Text(
                                                 "Thank you! The company information you shared has been received by our team. Once it is approved by our team, this company will be available in the Aatmanirbhar app.",
@@ -190,7 +190,7 @@ class _AddCompanyState extends State<AddCompany> {
                                           setState(() {
                                             isLoading = false;
                                           }),
-                                          ScaffoldMessenger.of(context)
+                                  Scaffold.of(context)
                                               .showSnackBar(SnackBar(
                                             backgroundColor:
                                                 Theme.of(this.context)
@@ -200,7 +200,7 @@ class _AddCompanyState extends State<AddCompany> {
                                           ))
                                         });
                               } else {
-                                ScaffoldMessenger.of(context)
+                                Scaffold.of(context)
                                     .showSnackBar(SnackBar(
                                   backgroundColor: Theme.of(context).errorColor,
                                   content: Text(
@@ -453,7 +453,7 @@ class _AddCompanyState extends State<AddCompany> {
         IconButton(
           key: _scafolldKey,
           onPressed: () {
-            ScaffoldMessenger.of(_scafolldKey.currentContext)
+            Scaffold.of(_scafolldKey.currentContext)
                 .showSnackBar(SnackBar(
               backgroundColor: Colors.white,
               elevation: 5,

@@ -145,7 +145,7 @@ class _SuggestChangesState extends State<SuggestChanges> {
                                           setState(() {
                                             isLoading = false;
                                           }),
-                                          ScaffoldMessenger.of(context)
+                                          Scaffold.of(context)
                                               .showSnackBar(SnackBar(
                                             content: Text(
                                                 "Thank you! Your suggestion has been received by our team. Once it is approved by our team, you can see your suggestion included here",
@@ -169,7 +169,7 @@ class _SuggestChangesState extends State<SuggestChanges> {
                                           setState(() {
                                             isLoading = false;
                                           }),
-                                          ScaffoldMessenger.of(context)
+                                  Scaffold.of(context)
                                               .showSnackBar(SnackBar(
                                             backgroundColor:
                                                 Theme.of(this.context)
@@ -179,7 +179,7 @@ class _SuggestChangesState extends State<SuggestChanges> {
                                           ))
                                         });
                               } else {
-                                ScaffoldMessenger.of(context)
+                                Scaffold.of(context)
                                     .showSnackBar(SnackBar(
                                   backgroundColor: Theme.of(context).errorColor,
                                   content: Text(
