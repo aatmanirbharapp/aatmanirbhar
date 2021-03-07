@@ -169,7 +169,7 @@ class _AddCompanyState extends State<AddCompany> {
                                           setState(() {
                                             isLoading = false;
                                           }),
-                                  Scaffold.of(context)
+                                  _scafolldKey.currentState
                                               .showSnackBar(SnackBar(
                                             content: Text(
                                                 "Thank you! The company information you shared has been received by our team. Once it is approved by our team, this company will be available in the Aatmanirbhar app.",
@@ -193,7 +193,7 @@ class _AddCompanyState extends State<AddCompany> {
                                           setState(() {
                                             isLoading = false;
                                           }),
-                                  Scaffold.of(context)
+                                  _scafolldKey.currentState
                                               .showSnackBar(SnackBar(
                                             backgroundColor:
                                                 Theme.of(this.context)
@@ -203,7 +203,7 @@ class _AddCompanyState extends State<AddCompany> {
                                           ))
                                         });
                               } else {
-                                Scaffold.of(context)
+                                _scafolldKey.currentState
                                     .showSnackBar(SnackBar(
                                   backgroundColor: Theme.of(context).errorColor,
                                   content: Text(

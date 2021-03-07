@@ -148,7 +148,7 @@ class _AddReviewState extends State<AddReview> {
                         .collection("reviews")
                         .add(review.toJson())
                         .then((value) => {
-                      Scaffold.of(context)
+                      _scafolldKey.currentState
                                   .showSnackBar(SnackBar(
                                 content: Text(
                                     "Your review has been successfully added. Please check your all reviews in profile section.",
@@ -166,7 +166,7 @@ class _AddReviewState extends State<AddReview> {
                               }),
                             })
                         .catchError((error) => {
-                      Scaffold.of(context)
+                      _scafolldKey.currentState
                                   .showSnackBar(SnackBar(
                                 backgroundColor:
                                     Theme.of(this.context).errorColor,
@@ -175,7 +175,7 @@ class _AddReviewState extends State<AddReview> {
                               ))
                             });
                   } else {
-                    Scaffold.of(context).showSnackBar(SnackBar(
+                    _scafolldKey.currentState.showSnackBar(SnackBar(
                       backgroundColor: Theme.of(context).errorColor,
                       content:
                           Text("Please check and enter missing required field"),

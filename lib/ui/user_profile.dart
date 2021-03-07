@@ -301,7 +301,7 @@ class _UserProfileState extends State<UserProfile> {
                                     userRepository
                                         .addOrUpdateUser(userDetails)
                                         .then((value) => {
-                                              Scaffold.of(context)
+                                      _scafolldKey.currentState
                                                   .showSnackBar(SnackBar(
                                                 content: Text(
                                                     "Your profile has been successfully updated.",
@@ -324,7 +324,7 @@ class _UserProfileState extends State<UserProfile> {
                                               }),
                                             })
                                         .catchError((error) => {
-                                              Scaffold.of(context)
+                                      _scafolldKey.currentState
                                                   .showSnackBar(SnackBar(
                                                 backgroundColor:
                                                     Theme.of(this.context)
@@ -334,7 +334,7 @@ class _UserProfileState extends State<UserProfile> {
                                               ))
                                             });
                                   } else {
-                                    Scaffold.of(context).showSnackBar(SnackBar(
+                                    _scafolldKey.currentState.showSnackBar(SnackBar(
                                       backgroundColor:
                                           Theme.of(context).errorColor,
                                       content: Text(

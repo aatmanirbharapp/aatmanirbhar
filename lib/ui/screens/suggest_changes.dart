@@ -10,8 +10,10 @@ import 'package:flutter_country_picker/flutter_country_picker.dart';
 
 class SuggestChanges extends StatefulWidget {
   final Company company;
+
   @override
   _SuggestChangesState createState() => _SuggestChangesState();
+
   const SuggestChanges({this.company});
 }
 
@@ -145,7 +147,7 @@ class _SuggestChangesState extends State<SuggestChanges> {
                                           setState(() {
                                             isLoading = false;
                                           }),
-                                          Scaffold.of(context)
+                                          _scafolldKey.currentState
                                               .showSnackBar(SnackBar(
                                             content: Text(
                                                 "Thank you! Your suggestion has been received by our team. Once it is approved by our team, you can see your suggestion included here",
@@ -159,7 +161,7 @@ class _SuggestChangesState extends State<SuggestChanges> {
                                           Future.delayed(Duration(seconds: 3))
                                               .then((_) {
                                             Navigator.pop(context);
-                                            Navigator.of(this.context).push(
+                                            Navigator.of(context).push(
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         MyHomePage()));
@@ -169,7 +171,7 @@ class _SuggestChangesState extends State<SuggestChanges> {
                                           setState(() {
                                             isLoading = false;
                                           }),
-                                  Scaffold.of(context)
+                                  _scafolldKey.currentState
                                               .showSnackBar(SnackBar(
                                             backgroundColor:
                                                 Theme.of(this.context)
@@ -179,8 +181,7 @@ class _SuggestChangesState extends State<SuggestChanges> {
                                           ))
                                         });
                               } else {
-                                Scaffold.of(context)
-                                    .showSnackBar(SnackBar(
+                                _scafolldKey.currentState.showSnackBar(SnackBar(
                                   backgroundColor: Theme.of(context).errorColor,
                                   content: Text(
                                       "Please check and enter missing required field"),

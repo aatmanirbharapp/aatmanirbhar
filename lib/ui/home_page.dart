@@ -3,6 +3,9 @@ import 'package:atamnirbharapp/ui/components/sliverappbarwidget.dart';
 import 'package:atamnirbharapp/ui/drawer.dart';
 import 'package:atamnirbharapp/ui/screens/homescreen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_bubble/bubble_type.dart';
+import 'package:flutter_chat_bubble/chat_bubble.dart';
+import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_3.dart';
 import 'package:share/share.dart';
 import 'package:showcaseview/showcase_widget.dart';
 
@@ -23,6 +26,8 @@ class MyHomePage extends StatelessWidget {
         },
         builder: Builder(
           builder: (context) => SafeArea(
+            top: true,
+            bottom: true,
             child: Container(
               decoration: BoxDecoration(
                   image: DecorationImage(
@@ -32,8 +37,22 @@ class MyHomePage extends StatelessWidget {
               child: CustomScrollView(slivers: [
                 CustomSliverAppBar(scaffoldKey: _scaffoldKey),
                 SliverList(
-                    delegate: SliverChildListDelegate(
-                        [CompanyCardView(), FooterWidget()])),
+                    delegate: SliverChildListDelegate([
+                  ChatBubble(
+                    clipper: ChatBubbleClipper3(type: BubbleType.sendBubble),
+                    margin: EdgeInsets.all(10),
+                    backGroundColor: Color.fromARGB(255, 0, 0, 132),
+                    elevation: 5.0,
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Welcome to the Aatmanirbhar App!',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20,color: Colors.white),
+                    ),
+                  ),
+                  CompanyCardView(),
+                  FooterWidget()
+                ])),
               ]),
             ),
           ),

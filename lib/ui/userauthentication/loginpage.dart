@@ -39,7 +39,7 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  Future signWithGoogle() async {
+  Future signWithGoogle(BuildContext context) async {
     final GoogleSignInAccount googleSignInAccount =
         await _googleSignIn.signIn();
     final GoogleSignInAuthentication googleSignInAuthentication =
@@ -164,36 +164,38 @@ class _LoginPageState extends State<LoginPage> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(color: Colors.grey)),
-                      child: InkWell(
-                          onTap: () async {
-                            await signWithGoogle();
-                            Scaffold.of(context).showSnackBar(SnackBar(
-                              content: Text("Logged in successful",
-                                  style: TextStyle(
-                                      fontFamily: 'Ambit',
-                                      fontWeight: FontWeight.bold,
-                                      color: Color.fromARGB(255, 0, 0, 136))),
-                              backgroundColor: Colors.white,
-                            ));
+                      child: Builder(
+                        builder: (BuildContext context) => InkWell(
+                            onTap: () async {
+                              await signWithGoogle(context);
+                              Scaffold.of(context).showSnackBar(SnackBar(
+                                content: Text("Logged in successful",
+                                    style: TextStyle(
+                                        fontFamily: 'Ambit',
+                                        fontWeight: FontWeight.bold,
+                                        color: Color.fromARGB(255, 0, 0, 136))),
+                                backgroundColor: Colors.white,
+                              ));
 
-                            Future.delayed(Duration(seconds: 3)).then((_) {
-                              Navigator.pop(context);
-                            });
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              IconButton(
-                                icon: Image.asset("assets/images/glogo.png"),
-                                iconSize: 8,
-                                onPressed: null,
-                              ),
-                              Text(
-                                "Sign in with Google",
-                                style: Theme.of(context).textTheme.headline6,
-                              )
-                            ],
-                          )),
+                              Future.delayed(Duration(seconds: 3)).then((_) {
+                                Navigator.pop(context);
+                              });
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                  icon: Image.asset("assets/images/glogo.png"),
+                                  iconSize: 8,
+                                  onPressed: null,
+                                ),
+                                Text(
+                                  "Sign in with Google",
+                                  style: Theme.of(context).textTheme.headline6,
+                                )
+                              ],
+                            )),
+                      ),
                     ),
                   ),
                   Padding(

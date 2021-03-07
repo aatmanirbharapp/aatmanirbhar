@@ -83,7 +83,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                             _auth.currentUser.photoURL,
                                           )
                                         : Icon(Icons.face),
-                                radius: 50.0,
+                                radius: 30.0,
                               ),
                               Container(
                                 width: MediaQuery.of(context).size.width * 0.60,
