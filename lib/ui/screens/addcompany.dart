@@ -32,7 +32,8 @@ class _AddCompanyState extends State<AddCompany> {
       sector,
       fileUrl,
       userName,
-      userEmail;
+      userEmail,
+  cin;
 
   int makesInIndia;
   var formkey = GlobalKey<FormState>();
@@ -127,6 +128,7 @@ class _AddCompanyState extends State<AddCompany> {
                           child: Column(
                             children: [
                               _companyName(),
+                              _enterCin(),
                               _selectCountry(),
                               _radioButton(),
                               _wikiPage(),
@@ -149,6 +151,7 @@ class _AddCompanyState extends State<AddCompany> {
                                 formkey.currentState.save();
                                 var company = Company(
                                     companyName: name,
+                                    cin: cin,
                                     website: website,
                                     country: _selected.toString(),
                                     keyPerson: keyPerson,
@@ -403,6 +406,43 @@ class _AddCompanyState extends State<AddCompany> {
           labelText: "Sector",
           labelStyle:
               TextStyle(fontWeight: FontWeight.bold, color: Colors.black45),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        ),
+      ),
+    );
+  }
+
+
+  Widget _enterCin() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextFormField(
+        style: new TextStyle(
+          fontFamily: "Poppins",
+        ),
+        keyboardType: TextInputType.text,
+        autocorrect: true,
+        cursorHeight: 10,
+        onSaved: (value) {
+          cin = value;
+        },
+        validator: (String value) {
+          if (value == null || value.isEmpty)
+            return "Please enter valid CIN Numbersss";
+          return null;
+        },
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            Icons.featured_play_list,
+            color: Colors.grey,
+          ),
+          hintText: "Company Identification Number(CIN)",
+          fillColor: Colors.orange[50],
+          labelText: "CIN",
+          labelStyle:
+          TextStyle(fontWeight: FontWeight.bold, color: Colors.black45),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),

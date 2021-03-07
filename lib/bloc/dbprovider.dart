@@ -87,7 +87,7 @@ class DBProvider {
 
   Future<List> companySearch(
       String name, String country, int make, String sector) async {
-    print('inside search page');
+    print('inside search page' + country);
     final db = await database;
     var res = List.empty();
     if (country.isEmpty && make == 2 && sector.isEmpty)

@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
+
+import 'package:atamnirbharapp/bloc/IndexBloc.dart';
 import 'package:atamnirbharapp/bloc/dbprovider.dart';
 import 'package:atamnirbharapp/ui/screens/forein_product_screen.dart';
 import 'package:atamnirbharapp/ui/screens/india_product_screen.dart';
 import 'package:atamnirbharapp/ui/screens/indiancompanyscreen.dart';
-import 'package:atamnirbharapp/bloc/IndexBloc.dart';
 import 'package:atamnirbharapp/ui/screens/outside_india_company.dart';
 import 'package:atamnirbharapp/utils/comman_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -27,6 +28,7 @@ class _DataSearchState extends State<DataSearch>
   List countryList = new List.empty(growable: true);
   List sectorList = new List.empty(growable: true);
   String _country = "India";
+  String _dropDowncountry = "India";
   int make = 1;
   bool _isConnected = true;
   var radioValue = 2;
@@ -166,8 +168,8 @@ class _DataSearchState extends State<DataSearch>
                       ),
                     ),
                   IconButton(
-                    color: Colors.black,
-                    icon: Icon(Icons.filter_alt),
+                    color: Color.fromARGB(255, 0, 0, 136),
+                    icon: Icon(Icons.filter_list_sharp),
                     onPressed: () {
                       setState(() {
                         _isVisible = true;
@@ -265,7 +267,7 @@ class _DataSearchState extends State<DataSearch>
                                   Spacer(),
                                   DropdownButton(
                                     hint: Text('Country'),
-                                    value: _country,
+                                    value: _dropDowncountry,
                                     items: <String>[
                                       "All Countries",
                                       'India',
@@ -283,9 +285,14 @@ class _DataSearchState extends State<DataSearch>
                                     }).toList(),
                                     onChanged: (String val) {
                                       setState(() {
-                                        if (val == "All Countries")
+                                        print(val);
+                                        if (val.contains('All')) {
+                                          _dropDowncountry = val;
                                           _country = "";
-                                        _country = val;
+                                        } else {
+                                          _dropDowncountry = val;
+                                          _country = val;
+                                        }
                                       });
                                     },
                                   ),

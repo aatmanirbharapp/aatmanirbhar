@@ -163,7 +163,7 @@ class FooterWidget extends StatelessWidget {
           Divider(),
           Row(children: [
             Text(
-              "Copyright © 2020 The Aatmanirbhar Trust.",
+              "Copyright © 2021 The Aatmanirbhar Trust.",
               style: TextStyle(
                   color: Color.fromARGB(255, 0, 0, 136),
                   fontFamily: 'Ambit',

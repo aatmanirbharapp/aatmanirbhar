@@ -7,7 +7,9 @@ import 'package:flutter/material.dart';
 
 class SimilarIndianCompanies extends StatelessWidget {
   Company company;
+
   SimilarIndianCompanies({this.company});
+
   final companyRepo = CompanyRepository();
 
   @override
@@ -45,17 +47,24 @@ class SimilarIndianCompanies extends StatelessWidget {
                                     fontFamily: 'Ambit',
                                     fontWeight: FontWeight.bold,
                                     color: Color.fromARGB(255, 0, 0, 136)))
-                            : ListView.builder(
-                                shrinkWrap: true,
-                                scrollDirection: Axis.horizontal,
-                                itemCount: snapshot.data.length,
-                                itemBuilder: (context, int index) {
-                                  return AlternateCompanyHeader(
-                                    company: Company.fromJson(
-                                        snapshot.data.elementAt(index).data()),
-                                  );
-                                },
-                              );
+                            : {
+                                snapshot.data.where((element) {
+                                  if (element.id == company.id)
+                                     snapshot.data.remove(element);
+                                }),
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: snapshot.data.length,
+                                  itemBuilder: (context, int index) {
+                                    return AlternateCompanyHeader(
+                                      company: Company.fromJson(snapshot.data
+                                          .elementAt(index)
+                                          .data()),
+                                    );
+                                  },
+                                )
+                              };
                       } else {
                         return Text(
                             "No Similar companies found for sector " +

@@ -2,9 +2,9 @@ import 'package:atamnirbharapp/ui/components/footerwidget.dart';
 import 'package:atamnirbharapp/ui/components/sliverappbarwidget.dart';
 import 'package:atamnirbharapp/ui/drawer.dart';
 import 'package:atamnirbharapp/ui/screens/homescreen.dart';
-
 import 'package:flutter/material.dart';
 import 'package:share/share.dart';
+import 'package:showcaseview/showcase_widget.dart';
 
 class MyHomePage extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -14,22 +14,32 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(
       key: _scaffoldKey,
       drawer: DrawerClass(),
-      body: SafeArea(
-          top: false,
-          bottom: false,
-          child: Container(
-            decoration: BoxDecoration(
-                image: DecorationImage(
-              image: AssetImage("assets/images/BG_Color.jpeg"),
-              fit: BoxFit.cover,
-            )),
-            child: CustomScrollView(slivers: [
-              CustomSliverAppBar(scaffoldKey: _scaffoldKey),
-              SliverList(
-                  delegate: SliverChildListDelegate(
-                      [CompanyCardView(), FooterWidget()])),
-            ]),
-          )),
+      body: ShowCaseWidget(
+        onStart: (index, key) {
+          //log('onStart: $index, $key');
+        },
+        onComplete: (index, key) {
+          //log('onComplete: $index, $key');
+        },
+        builder: Builder(
+          builder: (context) => SafeArea(
+            child: Container(
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                image: AssetImage("assets/images/BG_Color.jpeg"),
+                fit: BoxFit.cover,
+              )),
+              child: CustomScrollView(slivers: [
+                CustomSliverAppBar(scaffoldKey: _scaffoldKey),
+                SliverList(
+                    delegate: SliverChildListDelegate(
+                        [CompanyCardView(), FooterWidget()])),
+              ]),
+            ),
+          ),
+        ),
+        autoPlay: false,
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           final RenderBox box = context.findRenderObject();

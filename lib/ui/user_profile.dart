@@ -31,6 +31,7 @@ class _UserProfileState extends State<UserProfile> {
   String username, email, phonenumber, bio, birthdate, userId;
 
   var userDetails = UserDetails();
+
   Future _selectDate() async {
     DateTime picked = await showDatePicker(
         context: _scafolldKey.currentContext,
@@ -86,7 +87,9 @@ class _UserProfileState extends State<UserProfile> {
             IconButton(
               icon: Image.asset("assets/images/Final_Aatmanirbhar_Logo.png"),
               iconSize: 70,
-              onPressed: () {},
+              onPressed: () => Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => MyHomePage()),
+                  (route) => false),
             ),
           ],
           leading: IconButton(
@@ -298,7 +301,7 @@ class _UserProfileState extends State<UserProfile> {
                                     userRepository
                                         .addOrUpdateUser(userDetails)
                                         .then((value) => {
-                                      Scaffold.of(context)
+                                              Scaffold.of(context)
                                                   .showSnackBar(SnackBar(
                                                 content: Text(
                                                     "Your profile has been successfully updated.",
@@ -321,7 +324,7 @@ class _UserProfileState extends State<UserProfile> {
                                               }),
                                             })
                                         .catchError((error) => {
-                                      Scaffold.of(context)
+                                              Scaffold.of(context)
                                                   .showSnackBar(SnackBar(
                                                 backgroundColor:
                                                     Theme.of(this.context)
@@ -331,8 +334,7 @@ class _UserProfileState extends State<UserProfile> {
                                               ))
                                             });
                                   } else {
-                                    Scaffold.of(context)
-                                        .showSnackBar(SnackBar(
+                                    Scaffold.of(context).showSnackBar(SnackBar(
                                       backgroundColor:
                                           Theme.of(context).errorColor,
                                       content: Text(

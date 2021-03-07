@@ -1,4 +1,5 @@
 import 'package:atamnirbharapp/bloc/cloud_firestore.dart';
+import 'package:atamnirbharapp/ui/home_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,9 @@ class Terms extends StatelessWidget {
           IconButton(
             icon: Image.asset("assets/images/Final_Aatmanirbhar_Logo.png"),
             iconSize: 70,
-            onPressed: () {},
+            onPressed: () => Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => MyHomePage()),
+                    (route) => false),
           ),
         ],
         leading: IconButton(

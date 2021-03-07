@@ -49,7 +49,10 @@ class Company {
 
   String logoFileName;
 
+  String cin;
+
   var makesInIndia;
+
   Company(
       {this.id,
       this.companyId,
@@ -76,7 +79,8 @@ class Company {
       this.moderatorByImage,
       this.moderatorByName,
       this.moderatorByPlace,
-      this.firstCountry});
+      this.firstCountry,
+      this.cin});
 
   Company.fromJson(Map<String, dynamic> json) {
     id = json['id'] as String;
@@ -95,7 +99,7 @@ class Company {
     addedByImage = json['addedByImage'] as String;
     addedByName = json['addedByName'] as String;
     addedByPlace = json['addedByPlace'] as String;
-
+    cin = json['cin'] as String;
     image = json['image'] as String;
     isActive = json['isActive'] as int;
     moderatorByImage = json['moderatorByImage'] as String;
@@ -110,6 +114,7 @@ class Company {
         'id': id,
         'companyId': companyId,
         'companyName': companyName,
+        'cin': cin,
         'wikiPage': wikiPage,
         'website': website,
         'keyPerson': keyPerson,

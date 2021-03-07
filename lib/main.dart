@@ -1,4 +1,3 @@
-import 'package:atamnirbharapp/bloc/dbprovider.dart';
 import 'package:atamnirbharapp/ui/home_page.dart';
 import 'package:atamnirbharapp/ui/screens/splash_screen.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -8,15 +7,20 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
+  SharedPreferences _prefs = await SharedPreferences.getInstance();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
     FirebaseAuth _auth = FirebaseAuth.instance;
-    if (_auth.currentUser == null) _auth.signInAnonymously();
+    if (_auth.currentUser == null) {
+      _prefs.setBool('loggedIn', true);
+      _auth.signInAnonymously();
+    }
+    ;
 
     runApp(new MyApp());
   });
@@ -27,6 +31,7 @@ class MyApp extends StatelessWidget {
   FirebaseAuth _auth = FirebaseAuth.instance;
   static FirebaseAnalyticsObserver observer =
       FirebaseAnalyticsObserver(analytics: _analytics);
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(

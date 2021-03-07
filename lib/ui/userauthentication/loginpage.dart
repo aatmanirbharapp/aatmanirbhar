@@ -1,5 +1,4 @@
 import 'package:apple_sign_in/apple_sign_in.dart';
-import 'package:atamnirbharapp/bloc/check_internet.dart';
 import 'package:atamnirbharapp/bloc/user_details.dart';
 import 'package:atamnirbharapp/bloc/user_repo.dart';
 import 'package:atamnirbharapp/ui/userauthentication/verification.dart';
@@ -8,7 +7,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginPage extends StatefulWidget {
@@ -63,12 +61,12 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
-  Future signWithApple() async {
+  Future signWithApple(BuildContext context) async {
     if (!await AppleSignIn.isAvailable()) {
-      Scaffold.of(_scaffoldKey.currentContext).showSnackBar(SnackBar(
+      Scaffold.of(context).showSnackBar(SnackBar(
         content: Text(
             "Apple sign in not supported on your device, please try using google sign in."),
-        backgroundColor: Theme.of(_scaffoldKey.currentContext).errorColor,
+        backgroundColor: Theme.of(context).errorColor,
       ));
       return null; //Break from the program
     }
@@ -106,14 +104,14 @@ class _LoginPageState extends State<LoginPage> {
           break;
         }
       case AuthorizationStatus.error:
-        Scaffold.of(_scaffoldKey.currentContext).showSnackBar(SnackBar(
+        Scaffold.of(context).showSnackBar(SnackBar(
           content: Text("Error occured please try again later"),
-          backgroundColor: Theme.of(_scaffoldKey.currentContext).errorColor,
+          backgroundColor: Theme.of(context).errorColor,
         ));
         break;
 
       case AuthorizationStatus.cancelled:
-        Scaffold.of(_scaffoldKey.currentContext)
+        Scaffold.of(context)
             .showSnackBar(SnackBar(content: Text("Sign in cancelled")));
 
         break;
@@ -123,6 +121,16 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+          color: Colors.black,
+          onPressed: () => Navigator.pop(context),
+          icon: Icon(Icons.arrow_back_rounded),
+        ),
+      ),
       key: _scaffoldKey,
       body: SafeArea(
           top: false,
@@ -198,48 +206,50 @@ class _LoginPageState extends State<LoginPage> {
                           color: Colors.black,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(color: Colors.grey)),
-                      child: InkWell(
-                          onTap: () async {
-                            await signWithApple();
-                            if (!_auth.currentUser.isAnonymous) {
-                              Scaffold.of(context)
-                                  .showSnackBar(SnackBar(
-                                content: Text("Logged in successful",
-                                    style: TextStyle(
-                                        fontFamily: 'Ambit',
-                                        fontWeight: FontWeight.bold,
-                                        color: Color.fromARGB(255, 0, 0, 136))),
-                                backgroundColor: Colors.white,
-                              ));
+                      child: Builder(
+                        builder: (BuildContext context) => InkWell(
+                            onTap: () async {
+                              await signWithApple(context);
+                              if (!_auth.currentUser.isAnonymous) {
+                                Scaffold.of(context).showSnackBar(SnackBar(
+                                  content: Text("Logged in successful",
+                                      style: TextStyle(
+                                          fontFamily: 'Ambit',
+                                          fontWeight: FontWeight.bold,
+                                          color:
+                                              Color.fromARGB(255, 0, 0, 136))),
+                                  backgroundColor: Colors.white,
+                                ));
 
-                              Future.delayed(Duration(seconds: 3)).then((_) {
-                                Navigator.pop(context);
-                              });
-                            }
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              IconButton(
-                                alignment: Alignment.topCenter,
-                                icon: FaIcon(
-                                  FontAwesomeIcons.apple,
-                                  color: Colors.white,
-                                ),
-                                iconSize: 40,
-                                onPressed: null,
-                              ),
-                              Text(
-                                "Sign in with Apple",
-                                style: TextStyle(
+                                Future.delayed(Duration(seconds: 3)).then((_) {
+                                  Navigator.pop(context);
+                                });
+                              }
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                  alignment: Alignment.topCenter,
+                                  icon: FaIcon(
+                                    FontAwesomeIcons.apple,
                                     color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20),
-                              )
-                            ],
-                          )),
+                                  ),
+                                  iconSize: 40,
+                                  onPressed: null,
+                                ),
+                                Text(
+                                  "Sign in with Apple",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20),
+                                )
+                              ],
+                            )),
+                      ),
                     ),
-                  ) /* 
+                  ) /*
                     Padding(
                       padding: const EdgeInsets.all(20),
                       child: Center(
