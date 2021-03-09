@@ -35,6 +35,7 @@ class _DataSearchState extends State<DataSearch>
   var radiotype = 1;
   int makesInIndia = 2;
   bool _isVisible = false;
+  bool _ignorePointer = false;
   final Connectivity _connectivity = Connectivity();
   StreamSubscription<ConnectivityResult> _connectivitySubscription;
   String _connectionStatus = 'Unknown';
@@ -91,23 +92,43 @@ class _DataSearchState extends State<DataSearch>
   Future<void> _updateConnectionStatus(ConnectivityResult result) async {
     switch (result) {
       case ConnectivityResult.wifi:
-        internetCheckBloc.updateCurrentIndex(true);
-        break;
+        {
+          setState(() {
+            _ignorePointer = false;
+          });
+          internetCheckBloc.updateCurrentIndex(true);
+          break;
+        }
       case ConnectivityResult.mobile:
-        internetCheckBloc.updateCurrentIndex(true);
-        break;
+        {
+          setState(() {
+            _ignorePointer = false;
+          });
+          internetCheckBloc.updateCurrentIndex(true);
+          break;
+        }
       case ConnectivityResult.none:
-        internetCheckBloc.updateCurrentIndex(false);
-        Scaffold.of(_scaffoldKey.currentContext).showSnackBar(SnackBar(
-            backgroundColor: Theme.of(context).errorColor,
-            content: Text("Please check your internet connection.")));
-        break;
+        {
+          setState(() {
+            _ignorePointer = true;
+          });
+          internetCheckBloc.updateCurrentIndex(false);
+          _scaffoldKey.currentState.showSnackBar(SnackBar(
+              backgroundColor: Theme.of(context).errorColor,
+              content: Text("Please check your internet connection.")));
+          break;
+        }
       default:
-        internetCheckBloc.updateCurrentIndex(false);
-        Scaffold.of(_scaffoldKey.currentContext).showSnackBar(SnackBar(
-            backgroundColor: Theme.of(context).errorColor,
-            content: Text("Please check your internet connection.")));
-        break;
+        {
+          setState(() {
+            _ignorePointer = true;
+          });
+          internetCheckBloc.updateCurrentIndex(false);
+          _scaffoldKey.currentState.showSnackBar(SnackBar(
+              backgroundColor: Theme.of(context).errorColor,
+              content: Text("Please check your internet connection.")));
+          break;
+        }
     }
   }
 
@@ -450,77 +471,87 @@ class _DataSearchState extends State<DataSearch>
         initialData: true,
         builder: (context, snapshot) {
           return snapshot.data
-              ? ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: datalist == null ? 0 : datalist.length,
-                  scrollDirection: Axis.vertical,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: ListTile(
-                        onTap: () {
-                          type.contains('product')
-                              ? datalist
-                                      .elementAt(index)['first_country']
-                                      .toLowerCase()
-                                      .contains("india")
-                                  ? Navigator.push(
-                                      context,
-                                      new MaterialPageRoute(
-                                          builder: (context) => IndianProduct(
-                                                productId: datalist
-                                                    .elementAt(index)['image'],
-                                              ),
-                                          settings:
-                                              RouteSettings(name: 'product')))
-                                  : Navigator.push(
-                                      context,
-                                      new MaterialPageRoute(
-                                          builder: (context) =>
-                                              ForeinProductPage(
-                                                productId: datalist
-                                                    .elementAt(index)['image'],
-                                              ),
-                                          settings: RouteSettings(
-                                              name: 'productOutside')))
-                              : datalist
-                                      .elementAt(index)['first_country']
-                                      .toLowerCase()
-                                      .contains("india")
-                                  ? Navigator.push(
-                                      context,
-                                      new MaterialPageRoute(
-                                          builder: (context) => IndianCompany(
-                                                companyId: datalist
-                                                    .elementAt(index)['id'],
-                                              ),
-                                          settings:
-                                              RouteSettings(name: 'company')))
-                                  : Navigator.push(
-                                      context,
-                                      new MaterialPageRoute(
-                                          builder: (context) =>
-                                              OutsideIndiaCompany(
-                                                companyId: datalist
-                                                    .elementAt(index)['id'],
-                                              ),
-                                          settings: RouteSettings(
-                                              name: 'companyOutside')));
-                        },
-                        leading: IconButton(
-                            onPressed: () => null, icon: Icon(Icons.search)),
-                        title: Text(datalist.elementAt(index)[type + '_name'],
-                            style: TextStyle(
-                                fontFamily: 'Ambit',
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromARGB(255, 0, 0, 136))),
-                        subtitle: Text(
-                            datalist.elementAt(index)['first_country'],
-                            style: TextStyle(
-                                fontFamily: 'Ambit', color: Colors.black87)),
-                      ),
-                    );
-                  })
+              ? IgnorePointer(
+                  ignoring: _ignorePointer,
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: datalist == null ? 0 : datalist.length,
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: ListTile(
+                            onTap: () {
+                              type.contains('product')
+                                  ? datalist
+                                          .elementAt(index)['first_country']
+                                          .toLowerCase()
+                                          .contains("india")
+                                      ? Navigator.push(
+                                          context,
+                                          new MaterialPageRoute(
+                                              builder: (context) =>
+                                                  IndianProduct(
+                                                    productId:
+                                                        datalist.elementAt(
+                                                            index)['image'],
+                                                  ),
+                                              settings: RouteSettings(
+                                                  name: 'product')))
+                                      : Navigator.push(
+                                          context,
+                                          new MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ForeinProductPage(
+                                                    productId:
+                                                        datalist.elementAt(
+                                                            index)['image'],
+                                                  ),
+                                              settings: RouteSettings(
+                                                  name: 'productOutside')))
+                                  : datalist
+                                          .elementAt(index)['first_country']
+                                          .toLowerCase()
+                                          .contains("india")
+                                      ? Navigator.push(
+                                          context,
+                                          new MaterialPageRoute(
+                                              builder: (context) =>
+                                                  IndianCompany(
+                                                    companyId: datalist
+                                                        .elementAt(index)['id'],
+                                                  ),
+                                              settings: RouteSettings(
+                                                  name: 'company')))
+                                      : Navigator.push(
+                                          context,
+                                          new MaterialPageRoute(
+                                              builder: (context) =>
+                                                  OutsideIndiaCompany(
+                                                    companyId: datalist
+                                                        .elementAt(index)['id'],
+                                                  ),
+                                              settings: RouteSettings(
+                                                  name: 'companyOutside')));
+                            },
+                            leading: IconButton(
+                                onPressed: () => null,
+                                icon: Icon(Icons.search)),
+                            title: Text(
+                                datalist.elementAt(index)[type + '_name'],
+                                style: TextStyle(
+                                    fontFamily: 'Ambit',
+                                    fontWeight: FontWeight.bold,
+                                    color: Color.fromARGB(255, 0, 0, 136))),
+                            subtitle: Text(
+                                datalist.elementAt(index)['first_country'],
+                                style: TextStyle(
+                                    fontFamily: 'Ambit',
+                                    color: Colors.black87)),
+                          ),
+                        );
+                      }),
+                )
               : Container(
                   height: MediaQuery.of(context).size.height,
                 );

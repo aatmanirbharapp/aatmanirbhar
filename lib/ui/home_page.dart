@@ -47,7 +47,7 @@ class MyHomePage extends StatelessWidget {
                     child: Text(
                       'Welcome to the Aatmanirbhar App!',
                       style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20,color: Colors.white),
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 15,color: Colors.white),
                     ),
                   ),
                   CompanyCardView(),

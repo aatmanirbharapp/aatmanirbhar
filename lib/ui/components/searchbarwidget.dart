@@ -42,8 +42,8 @@ class SearchBarWidget extends StatelessWidget {
                 ),
                 Expanded(
                     child: Text(
-                  "Search here",
-                  style: TextStyle(fontSize: 20, color: Colors.black45),
+                  "Search companies/products here",
+                  style: TextStyle(fontSize: 15, color: Colors.black45),
                   textAlign: TextAlign.left,
                 )),
               ],

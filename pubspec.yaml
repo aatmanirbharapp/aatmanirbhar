@@ -53,6 +53,7 @@ dependencies:
   showcaseview: ^0.1.6
   shared_preferences: ^0.5.12+4
   flutter_chat_bubble: ^1.0.2
+  change_app_package_name: ^0.1.2
 
 dev_dependencies:
   flutter_launcher_icons: ^0.8.1

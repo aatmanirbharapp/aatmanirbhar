@@ -62,7 +62,7 @@ class CustomSliverAppBar extends StatelessWidget {
           child: Showcase(
               key: _one,
               title: 'Search here',
-              description: 'PLease search company/products here.',
+              description: 'Please search companies/products here.',
               child: SearchBarWidget()),
           preferredSize: const Size.fromHeight(60)),
       actions: [

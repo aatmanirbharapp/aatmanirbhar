@@ -5,7 +5,6 @@ import 'package:atamnirbharapp/bloc/company_repo.dart';
 import 'package:atamnirbharapp/bloc/user_details.dart';
 import 'package:atamnirbharapp/bloc/user_repo.dart';
 import 'package:atamnirbharapp/ui/home_page.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -27,13 +26,14 @@ class _AddCompanyState extends State<AddCompany> {
       website,
       keyPerson,
       wikiUrl,
+      secondCountry,
       facts,
       description,
       sector,
       fileUrl,
       userName,
       userEmail,
-  cin;
+      cin;
 
   int makesInIndia;
   var formkey = GlobalKey<FormState>();
@@ -130,6 +130,7 @@ class _AddCompanyState extends State<AddCompany> {
                               _companyName(),
                               _enterCin(),
                               _selectCountry(),
+                              _secCountry(),
                               _radioButton(),
                               _wikiPage(),
                               _websitePage(),
@@ -152,6 +153,7 @@ class _AddCompanyState extends State<AddCompany> {
                                 var company = Company(
                                     companyName: name,
                                     cin: cin,
+                                    secondCountry: secondCountry,
                                     website: website,
                                     country: _selected.toString(),
                                     keyPerson: keyPerson,
@@ -169,7 +171,7 @@ class _AddCompanyState extends State<AddCompany> {
                                           setState(() {
                                             isLoading = false;
                                           }),
-                                  _scafolldKey.currentState
+                                          _scafolldKey.currentState
                                               .showSnackBar(SnackBar(
                                             content: Text(
                                                 "Thank you! The company information you shared has been received by our team. Once it is approved by our team, this company will be available in the Aatmanirbhar app.",
@@ -193,7 +195,7 @@ class _AddCompanyState extends State<AddCompany> {
                                           setState(() {
                                             isLoading = false;
                                           }),
-                                  _scafolldKey.currentState
+                                          _scafolldKey.currentState
                                               .showSnackBar(SnackBar(
                                             backgroundColor:
                                                 Theme.of(this.context)
@@ -203,8 +205,7 @@ class _AddCompanyState extends State<AddCompany> {
                                           ))
                                         });
                               } else {
-                                _scafolldKey.currentState
-                                    .showSnackBar(SnackBar(
+                                _scafolldKey.currentState.showSnackBar(SnackBar(
                                   backgroundColor: Theme.of(context).errorColor,
                                   content: Text(
                                       "Please check and enter missing required field"),
@@ -291,6 +292,7 @@ class _AddCompanyState extends State<AddCompany> {
           ),
           Center(
             child: CountryPicker(
+
               nameTextStyle:
                   TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               onChanged: (Country country) {
@@ -303,6 +305,37 @@ class _AddCompanyState extends State<AddCompany> {
           ),
           Spacer()
         ],
+      ),
+    );
+  }
+
+  Widget _secCountry() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextFormField(
+        style: new TextStyle(
+          fontFamily: "Poppins",
+        ),
+        keyboardType: TextInputType.url,
+        autocorrect: true,
+        cursorHeight: 10,
+        onSaved: (value) {
+          secondCountry = value;
+        },
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            Icons.link,
+            color: Colors.grey,
+          ),
+          hintText: "Second most benefiting.",
+          fillColor: Colors.orange[50],
+          labelText: "Second Country",
+          labelStyle:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.black45),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        ),
       ),
     );
   }
@@ -414,7 +447,6 @@ class _AddCompanyState extends State<AddCompany> {
     );
   }
 
-
   Widget _enterCin() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -442,7 +474,7 @@ class _AddCompanyState extends State<AddCompany> {
           fillColor: Colors.orange[50],
           labelText: "CIN",
           labelStyle:
-          TextStyle(fontWeight: FontWeight.bold, color: Colors.black45),
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.black45),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
@@ -493,8 +525,7 @@ class _AddCompanyState extends State<AddCompany> {
         IconButton(
           key: _scafolldKey,
           onPressed: () {
-            Scaffold.of(_scafolldKey.currentContext)
-                .showSnackBar(SnackBar(
+            Scaffold.of(_scafolldKey.currentContext).showSnackBar(SnackBar(
               backgroundColor: Colors.white,
               elevation: 5,
               content: Container(
