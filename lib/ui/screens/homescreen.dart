@@ -137,7 +137,7 @@ class _CompanyCardViewState extends State<CompanyCardView> {
           child: CarouselSlider(
             options: CarouselOptions(
                 viewportFraction: 1,
-                autoPlay: true,
+                autoPlay: false,
                 autoPlayInterval: Duration(seconds: 15),
                 pauseAutoPlayOnTouch: true,
                 pauseAutoPlayOnManualNavigate: true,
