@@ -1,5 +1,6 @@
 import 'package:atamnirbharapp/ui/home_page.dart';
 import 'package:atamnirbharapp/ui/screens/splash_screen.dart';
+import 'package:atamnirbharapp/utils/comman_widgets.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -18,6 +19,8 @@ void main() async {
     FirebaseAuth _auth = FirebaseAuth.instance;
     if (_auth.currentUser == null) {
       _prefs.setBool('loggedIn', true);
+      _prefs.setBool(CommanWidgets.PREFERENCES_IS_FIRST_LAUNCH_SEARCH_PAGE, true);
+      _prefs.setBool(CommanWidgets.PREFERENCES_IS_FIRST_LAUNCH_COMPANY_PAGE ,true);
       _auth.signInAnonymously();
     }
     ;

@@ -161,7 +161,7 @@ class FooterWidget extends StatelessWidget {
             ],
           ),
           Divider(),
-          Row(children: [
+          Column(mainAxisAlignment: MainAxisAlignment.start, children: [
             Text(
               "Copyright © 2021 The Aatmanirbhar Trust.",
               style: TextStyle(

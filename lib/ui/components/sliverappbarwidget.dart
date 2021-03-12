@@ -11,6 +11,8 @@ import 'package:showcaseview/showcase_widget.dart';
 class CustomSliverAppBar extends StatelessWidget {
   static const PREFERENCES_IS_FIRST_LAUNCH_STRING =
       "loggedIn";
+
+
   GlobalKey _one = GlobalKey();
   GlobalKey _two = GlobalKey();
   final FirebaseAuth _auth = FirebaseAuth.instance;

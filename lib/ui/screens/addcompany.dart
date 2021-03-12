@@ -287,9 +287,6 @@ class _AddCompanyState extends State<AddCompany> {
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             textAlign: TextAlign.center,
           ),
-          Spacer(
-            flex: 3,
-          ),
           Center(
             child: CountryPicker(
 
