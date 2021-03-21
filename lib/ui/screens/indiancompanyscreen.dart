@@ -2,7 +2,7 @@ import 'package:atamnirbharapp/bloc/company.dart';
 import 'package:atamnirbharapp/bloc/company_repo.dart';
 import 'package:atamnirbharapp/ui/components/company_header.dart';
 import 'package:atamnirbharapp/ui/components/innerpageappbar.dart';
-import 'package:atamnirbharapp/ui/components/middlelogorow.dart';
+import 'package:atamnirbharapp/ui/components/middlelogosShowCase.dart';
 import 'package:atamnirbharapp/ui/components/review_list.dart';
 import 'package:atamnirbharapp/ui/components/similar_indian_components.dart';
 import 'package:atamnirbharapp/ui/components/suggest_button.dart';
@@ -11,6 +11,8 @@ import 'package:atamnirbharapp/utils/comman_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:showcaseview/showcase.dart';
 import 'package:showcaseview/showcase_widget.dart';
 
 class IndianCompany extends StatelessWidget {
@@ -23,12 +25,36 @@ class IndianCompany extends StatelessWidget {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
+  GlobalKey _first = GlobalKey();
+  GlobalKey _second = GlobalKey();
+  GlobalKey _three = GlobalKey();
+
+  Future<bool> _isFirstLaunch() async {
+    final sharedPreferences = await SharedPreferences.getInstance();
+    bool isFirstLaunch = sharedPreferences
+            .getBool(CommanWidgets.PREFERENCES_IS_FIRST_LAUNCH_COMPANY_PAGE) ??
+        true;
+
+    if (isFirstLaunch)
+      sharedPreferences.setBool(
+          CommanWidgets.PREFERENCES_IS_FIRST_LAUNCH_COMPANY_PAGE, false);
+
+    return isFirstLaunch;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         key: _scaffoldKey,
         drawer: DrawerClass(),
         body: ShowCaseWidget(builder: Builder(builder: (context) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _isFirstLaunch().then((result) {
+              if (result)
+                ShowCaseWidget.of(context)
+                    .startShowCase([_first, _second, _three]);
+            });
+          });
           return Container(
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
@@ -55,6 +81,7 @@ class IndianCompany extends StatelessWidget {
                                 delegate: SliverChildListDelegate([
                               CompanyHeader(
                                 company: company,
+                                firstKey: _first,
                               ),
                               Container(
                                 height: 150,
@@ -62,6 +89,7 @@ class IndianCompany extends StatelessWidget {
                                   firstCountry: company.firstCountry,
                                   secondCountry: company.secondCountry,
                                   makesInIndia: company.makesInIndia,
+                                  sedKey: _second,
                                 ),
                               ),
                               Container(
@@ -92,8 +120,14 @@ class IndianCompany extends StatelessWidget {
                                           ))
                                     ]),
                               ),
-                              SimilarIndianCompanies(
-                                company: company,
+                              Showcase(
+                                key: _three,
+                                title: "Indian Company",
+                                description:
+                                    "Choose Indian alternatives for this company",
+                                child: SimilarIndianCompanies(
+                                  company: company,
+                                ),
                               ),
                               Padding(
                                 padding: EdgeInsets.all(8),

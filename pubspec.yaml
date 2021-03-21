@@ -43,7 +43,6 @@ dependencies:
   video_player: 0.10.0+2
   firebase_analytics: ^7.0.1
   provider: ^4.3.3
-  youtube_player_iframe: ^1.2.0+2
   data_connection_checker: ^0.3.4
   share: ^0.6.5+4
   dots_indicator: ^1.2.0
@@ -54,6 +53,7 @@ dependencies:
   shared_preferences: ^0.5.12+4
   flutter_chat_bubble: ^1.0.2
   change_app_package_name: ^0.1.2
+  number_slide_animation: ^0.1.1
 
 dev_dependencies:
   flutter_launcher_icons: ^0.8.1

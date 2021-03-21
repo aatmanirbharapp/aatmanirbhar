@@ -1,121 +1,47 @@
 import 'package:atamnirbharapp/bloc/IndexBloc.dart';
 import 'package:atamnirbharapp/bloc/company_repo.dart';
-import 'package:dots_indicator/dots_indicator.dart';
-
+import 'package:atamnirbharapp/ui/components/searchbarwidget.dart';
+import 'package:atamnirbharapp/ui/components/titlewidget.dart';
 import 'package:atamnirbharapp/utils/comman_widgets.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+import 'package:flutter_chat_bubble/bubble_type.dart';
+import 'package:flutter_chat_bubble/chat_bubble.dart';
+import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_3.dart';
+import 'package:number_slide_animation/number_slide_animation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:showcaseview/showcase.dart';
+import 'package:showcaseview/showcase_widget.dart';
 
 class CompanyCardView extends StatefulWidget {
+  CompanyCardView({
+    Key key,
+    @required GlobalKey<ScaffoldState> scaffoldKey,
+  })  : _scaffoldKey = scaffoldKey,
+        super(key: key);
+  final GlobalKey<ScaffoldState> _scaffoldKey;
+
   @override
   _CompanyCardViewState createState() => _CompanyCardViewState();
 }
 
 class _CompanyCardViewState extends State<CompanyCardView> {
-  YoutubePlayerController _youtubecontroller;
-  YoutubePlayerController _youtubecontrollerSec;
-  YoutubePlayerController _youtubecontrollerThird;
+  GlobalKey _one = GlobalKey();
+  GlobalKey _two = GlobalKey();
+  GlobalKey _three = GlobalKey();
   PageController _controller = PageController(initialPage: 0, keepPage: true);
   bool _isPlayerReady = false;
   var selectedPage = 0;
-
+  final FirebaseFirestore store = FirebaseFirestore.instance;
   final FirebaseStorage storageRef = FirebaseStorage.instance;
   CompanyRepository companyRepo = CompanyRepository();
 
   @override
   void initState() {
     super.initState();
-    _youtubecontroller = YoutubePlayerController(
-        initialVideoId: YoutubePlayerController.convertUrlToId(
-            "https://www.youtube.com/watch?v=Z1-kYZ9SVAg"),
-        params: const YoutubePlayerParams(
-          autoPlay: false,
-          showControls: true,
-          showFullscreenButton: true,
-          desktopMode: true,
-          privacyEnhanced: true,
-        ));
-
-    _youtubecontroller.onEnterFullscreen = () {
-      SystemChrome.setPreferredOrientations([
-        DeviceOrientation.landscapeLeft,
-        DeviceOrientation.landscapeRight,
-      ]);
-    };
-    _youtubecontroller.onExitFullscreen = () {
-      SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-      Future.delayed(const Duration(seconds: 1), () {
-        _youtubecontroller.play();
-      });
-      Future.delayed(const Duration(seconds: 5), () {
-        SystemChrome.setPreferredOrientations(DeviceOrientation.values);
-      });
-    };
-    _youtubecontrollerSec = YoutubePlayerController(
-        initialVideoId: YoutubePlayerController.convertUrlToId(
-            "https://www.youtube.com/watch?v=I0O26nTJUYg"),
-        params: const YoutubePlayerParams(
-          autoPlay: false,
-          showControls: true,
-          showFullscreenButton: true,
-          desktopMode: true,
-          privacyEnhanced: true,
-        ));
-
-    _youtubecontrollerSec.onEnterFullscreen = () {
-      SystemChrome.setPreferredOrientations([
-        DeviceOrientation.landscapeLeft,
-        DeviceOrientation.landscapeRight,
-      ]);
-    };
-    _youtubecontrollerSec.onExitFullscreen = () {
-      SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-      Future.delayed(const Duration(seconds: 1), () {
-        _youtubecontrollerSec.play();
-      });
-      Future.delayed(const Duration(seconds: 5), () {
-        SystemChrome.setPreferredOrientations(DeviceOrientation.values);
-      });
-    };
-    _youtubecontrollerThird = YoutubePlayerController(
-        initialVideoId: YoutubePlayerController.convertUrlToId(
-            "https://www.youtube.com/watch?v=F7nHOdwD30o"),
-        params: const YoutubePlayerParams(
-          autoPlay: false,
-          showControls: true,
-          showFullscreenButton: true,
-          desktopMode: true,
-          privacyEnhanced: true,
-        ));
-
-    _youtubecontrollerThird.onEnterFullscreen = () {
-      SystemChrome.setPreferredOrientations([
-        DeviceOrientation.landscapeLeft,
-        DeviceOrientation.landscapeRight,
-      ]);
-    };
-    _youtubecontrollerThird.onExitFullscreen = () {
-      SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-      Future.delayed(const Duration(seconds: 1), () {
-        _youtubecontrollerThird.play();
-      });
-      Future.delayed(const Duration(seconds: 5), () {
-        SystemChrome.setPreferredOrientations(DeviceOrientation.values);
-      });
-    };
-  }
-
-  void listener() {
-    if (_isPlayerReady && mounted && !_youtubecontroller.value.isFullScreen) {
-      setState(() {});
-    }
   }
 
   @override
@@ -125,90 +51,135 @@ class _CompanyCardViewState extends State<CompanyCardView> {
     _controller.dispose();
   }
 
+  Future<bool> _isFirstLaunch() async {
+    final sharedPreferences = await SharedPreferences.getInstance();
+    bool isFirstLaunch = sharedPreferences
+            .getBool(CommanWidgets.PREFERENCES_IS_FIRST_LAUNCH_STRING) ??
+        true;
+
+    if (isFirstLaunch)
+      sharedPreferences.setBool(
+          CommanWidgets.PREFERENCES_IS_FIRST_LAUNCH_STRING, false);
+
+    return isFirstLaunch;
+  }
+
   @override
   Widget build(BuildContext context) {
-    const player = YoutubePlayerIFrame();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _isFirstLaunch().then((result) {
+        if (result) ShowCaseWidget.of(context).startShowCase([_one,_two]);
+      });
+    });
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Container(
-          height: MediaQuery.of(context).size.height * 0.3,
-          width: MediaQuery.of(context).size.width,
-          child: CarouselSlider(
-            options: CarouselOptions(
-                viewportFraction: 1,
-                autoPlay: false,
-                autoPlayInterval: Duration(seconds: 15),
-                pauseAutoPlayOnTouch: true,
-                pauseAutoPlayOnManualNavigate: true,
-                onPageChanged: (index, reason) {
-                  indexBloc.updateCurrentIndex(index);
-                }),
-            items: [
-              YoutubePlayerControllerProvider(
-                  controller: _youtubecontroller,
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      if (kIsWeb && constraints.maxWidth > 800) {
-                        return Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Expanded(child: player),
-                          ],
-                        );
-                      }
-                      return player;
-                    },
-                  )),
-              YoutubePlayerControllerProvider(
-                  controller: _youtubecontrollerSec,
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      if (kIsWeb && constraints.maxWidth > 800) {
-                        return Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Expanded(child: player),
-                          ],
-                        );
-                      }
-                      return player;
-                    },
-                  )),
-              YoutubePlayerControllerProvider(
-                  controller: _youtubecontrollerThird,
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      if (kIsWeb && constraints.maxWidth > 800) {
-                        return Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Expanded(child: player),
-                          ],
-                        );
-                      }
-                      return player;
-                    },
-                  ))
-            ],
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            IconButton(
+              icon: Image.asset("assets/images/sidebar.png"),
+              onPressed: () {
+                widget._scaffoldKey.currentState.openDrawer();
+              },
+            ),
+            TitleWidget(),
+            IconButton(
+              icon: Image.asset("assets/images/Final_Aatmanirbhar_Logo.png"),
+              iconSize: 70,
+              onPressed: () {},
+            ),
+          ],
+        ),
+        ChatBubble(
+          clipper: ChatBubbleClipper3(type: BubbleType.sendBubble),
+          margin: EdgeInsets.all(10),
+          backGroundColor: Color.fromARGB(255, 0, 0, 132),
+          elevation: 5.0,
+          alignment: Alignment.center,
+          child: Showcase(
+            key: _two,
+            title: "Use this app to:",
+            description:
+                "* Know where your money goes \n1) Find Indian alternatives for foreign products \n2) Add local companies and products \n3) Know stories about Indian companies",
+            child: Text(
+              'Welcome to the Aatmanirbhar App!',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                  color: Colors.white),
+            ),
           ),
         ),
-        StreamBuilder(
-            stream: indexBloc.currentIndex,
-            initialData: 0,
+        Showcase(
+            key: _one,
+            title: 'Search here',
+            description: 'Please search companies/products here.',
+            child: SearchBarWidget()),
+        FutureBuilder<QuerySnapshot>(
+            future: store.collection("count").get(),
             builder: (context, snapshot) {
-              return DotsIndicator(
-                dotsCount: 3,
-                position: snapshot.data.toDouble(),
-                decorator: DotsDecorator(
-                  size: const Size.square(9.0),
-                  activeSize: const Size(18.0, 9.0),
-                  activeShape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.0)),
-                ),
-              );
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
+                  return LinearProgressIndicator();
+                default:
+                  if (snapshot.hasData) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Search From",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontFamily: 'Ambit',
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 0, 0, 136))),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 5, right: 5),
+                          child: NumberSlideAnimation(
+                              number: snapshot.data.docs.first
+                                  .data()['company']
+                                  .toString(),
+                              curve: Curves.bounceInOut,
+                              duration: const Duration(seconds: 2),
+                              textStyle: TextStyle(
+                                  fontFamily: 'Ambit',
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black)),
+                        ),
+                        Text("Companies and ",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontFamily: 'Ambit',
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 0, 0, 136))),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 5, right: 5),
+                          child: NumberSlideAnimation(
+                              number: snapshot.data.docs.first
+                                  .data()['product']
+                                  .toString(),
+                              curve: Curves.fastOutSlowIn,
+                              duration: const Duration(seconds: 2),
+                              textStyle: TextStyle(
+                                  fontFamily: 'Ambit',
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black)),
+                        ),
+                        Text("Products",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontFamily: 'Ambit',
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 0, 0, 136))),
+                      ],
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text("Error occurred while loading the data"));
+                  } else {
+                    return Center(child: Text("Error occurred while loading the data"));
+                  }
+              }
             }),
-        Divider(),
         Padding(
           padding: EdgeInsets.only(top: 15, right: 8, left: 8),
           child: Text("Trending Aatmanirbhar Companies",
@@ -437,11 +408,9 @@ class _CompanyCardViewState extends State<CompanyCardView> {
                   icon: Icon(Icons.arrow_forward),
                   highlightColor: Colors.pink,
                   onPressed: () {
-                    if (selectedPage < 3) {
+                    if (selectedPage < 4) {
                       selectedPage = selectedPage + 1;
                       _controller.jumpToPage(selectedPage);
-
-                      print("VALUES==>> $selectedPage");
                     }
                   },
                 ),

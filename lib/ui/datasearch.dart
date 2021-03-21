@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:atamnirbharapp/bloc/IndexBloc.dart';
 import 'package:atamnirbharapp/bloc/dbprovider.dart';
+import 'package:atamnirbharapp/http/faqrequest.dart';
 import 'package:atamnirbharapp/ui/screens/forein_product_screen.dart';
 import 'package:atamnirbharapp/ui/screens/india_product_screen.dart';
 import 'package:atamnirbharapp/ui/screens/indiancompanyscreen.dart';
@@ -48,6 +49,7 @@ class _DataSearchState extends State<DataSearch>
   final Connectivity _connectivity = Connectivity();
   StreamSubscription<ConnectivityResult> _connectivitySubscription;
   String _connectionStatus = 'Unknown';
+  final _httpReq = SqlResponse();
 
   _DataSearchState() {
     print(_controller.text);
@@ -71,13 +73,20 @@ class _DataSearchState extends State<DataSearch>
     initConnectivity();
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
-
+    _loadFromApi();
     setState(() {
       type = "product";
     });
 
     loadCountries();
     //print(DBProvider.db.getAllCompanySearch());
+  }
+
+  _loadFromApi() async {
+    List companyList = await _httpReq.searchByCompany();
+    List productList = await _httpReq.searchByProduct();
+    if (companyList.isNotEmpty) await DBProvider.db.createCompany(companyList);
+    if (productList.isNotEmpty) await DBProvider.db.createProduct(productList);
   }
 
   Future<void> initConnectivity() async {
@@ -174,11 +183,13 @@ class _DataSearchState extends State<DataSearch>
 
   Future<bool> _isFirstLaunch() async {
     final sharedPreferences = await SharedPreferences.getInstance();
-    bool isFirstLaunch =
-        sharedPreferences.getBool(CommanWidgets.PREFERENCES_IS_FIRST_LAUNCH_SEARCH_PAGE) ?? true;
+    bool isFirstLaunch = sharedPreferences
+            .getBool(CommanWidgets.PREFERENCES_IS_FIRST_LAUNCH_SEARCH_PAGE) ??
+        true;
 
     if (isFirstLaunch)
-      sharedPreferences.setBool(CommanWidgets.PREFERENCES_IS_FIRST_LAUNCH_SEARCH_PAGE, false);
+      sharedPreferences.setBool(
+          CommanWidgets.PREFERENCES_IS_FIRST_LAUNCH_SEARCH_PAGE, false);
 
     return isFirstLaunch;
   }
@@ -191,9 +202,7 @@ class _DataSearchState extends State<DataSearch>
         body: ShowCaseWidget(builder: Builder(builder: (context) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             _isFirstLaunch().then((result) {
-              if (result)
-                ShowCaseWidget.of(context)
-                    .startShowCase([_three, _fourth, _five, _six]);
+              if (result) ShowCaseWidget.of(context).startShowCase([_three]);
             });
           });
           return Container(
@@ -219,9 +228,8 @@ class _DataSearchState extends State<DataSearch>
                       ),
                     Showcase(
                       key: _three,
-                      title: 'Filter',
-                      description:
-                          'Please click here to select different filters',
+                      title: 'Filters',
+                      description: 'Search companies from different countries',
                       child: IconButton(
                         color: Color.fromARGB(255, 0, 0, 136),
                         icon: Icon(Icons.filter_list_sharp),
@@ -233,16 +241,11 @@ class _DataSearchState extends State<DataSearch>
                       ),
                     )
                   ],
-                  leading: Showcase(
-                    key: _fourth,
-                    title: 'Press back',
-                    description: 'Press back button to go home screen',
-                    child: IconButton(
-                      onPressed: () {
-                        Navigator.pop(context, null);
-                      },
-                      icon: Icon(Icons.arrow_back, color: Colors.black),
-                    ),
+                  leading: IconButton(
+                    onPressed: () {
+                      Navigator.pop(context, null);
+                    },
+                    icon: Icon(Icons.arrow_back, color: Colors.black),
                   ),
                   floating: true,
                   title: Container(

@@ -11,7 +11,7 @@ class SearchBarWidget extends StatelessWidget {
       child: Container(
         height: 43,
         width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.only(left: 10, right: 10),
+        padding: EdgeInsets.only(left: 25, right: 25),
         child: DecoratedBox(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),

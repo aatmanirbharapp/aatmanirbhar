@@ -35,22 +35,11 @@ class MyHomePage extends StatelessWidget {
                 fit: BoxFit.cover,
               )),
               child: CustomScrollView(slivers: [
-                CustomSliverAppBar(scaffoldKey: _scaffoldKey),
+                //CustomSliverAppBar(scaffoldKey: _scaffoldKey),
                 SliverList(
                     delegate: SliverChildListDelegate([
-                  ChatBubble(
-                    clipper: ChatBubbleClipper3(type: BubbleType.sendBubble),
-                    margin: EdgeInsets.all(10),
-                    backGroundColor: Color.fromARGB(255, 0, 0, 132),
-                    elevation: 5.0,
-                    alignment: Alignment.center,
-                    child: Text(
-                      'Welcome to the Aatmanirbhar App!',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 15,color: Colors.white),
-                    ),
-                  ),
-                  CompanyCardView(),
+
+                  CompanyCardView(scaffoldKey: _scaffoldKey),
                   FooterWidget()
                 ])),
               ]),

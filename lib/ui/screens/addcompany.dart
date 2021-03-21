@@ -40,6 +40,7 @@ class _AddCompanyState extends State<AddCompany> {
   PickedFile image;
   Country _selected;
   var radioValue = 1;
+  var typeOfCompany;
   bool isLoading = false;
   UserDetails userDetails;
   var userNameController;
@@ -132,6 +133,7 @@ class _AddCompanyState extends State<AddCompany> {
                               _selectCountry(),
                               _secCountry(),
                               _radioButton(),
+                              _typeOfCompany(),
                               _wikiPage(),
                               _websitePage(),
                               _enterSector(),
@@ -159,6 +161,7 @@ class _AddCompanyState extends State<AddCompany> {
                                     keyPerson: keyPerson,
                                     sector: sector,
                                     wikiPage: wikiUrl,
+                                    image: typeOfCompany,
                                     makesInIndia: makesInIndia);
                                 setState(() {
                                   isLoading = true;
@@ -283,13 +286,12 @@ class _AddCompanyState extends State<AddCompany> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            "Benefiting Country :",
+            "Benefiting Country:",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             textAlign: TextAlign.center,
           ),
           Center(
             child: CountryPicker(
-
               nameTextStyle:
                   TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               onChanged: (Country country) {
@@ -324,9 +326,9 @@ class _AddCompanyState extends State<AddCompany> {
             Icons.link,
             color: Colors.grey,
           ),
-          hintText: "Second most benefiting.",
+          hintText: "Benefiting Country #2.",
           fillColor: Colors.orange[50],
-          labelText: "Second Country",
+          labelText: "Benefiting Country #2",
           labelStyle:
               TextStyle(fontWeight: FontWeight.bold, color: Colors.black45),
           border: OutlineInputBorder(
@@ -412,6 +414,43 @@ class _AddCompanyState extends State<AddCompany> {
       ),
     );
   }
+
+  Widget _typeOfCompany() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextFormField(
+        style: new TextStyle(
+          fontFamily: "Poppins",
+        ),
+        keyboardType: TextInputType.url,
+        autocorrect: true,
+        cursorHeight: 10,
+        onSaved: (value) {
+          typeOfCompany = value;
+        },
+        validator: (String value) {
+          if (value == null || value.isEmpty)
+            return "Please enter type of company.";
+          return null;
+        },
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            Icons.link,
+            color: Colors.grey,
+          ),
+          hintText: "Product or Service",
+          fillColor: Colors.orange[50],
+          labelText: "Type of Company",
+          labelStyle:
+          TextStyle(fontWeight: FontWeight.bold, color: Colors.black45),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        ),
+      ),
+    );
+  }
+
 
   Widget _enterSector() {
     return Padding(

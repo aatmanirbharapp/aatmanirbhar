@@ -1,4 +1,3 @@
-import 'package:atamnirbharapp/ui/components/searchbarwidget.dart';
 import 'package:atamnirbharapp/ui/components/titlewidget.dart';
 import 'package:atamnirbharapp/ui/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,12 +8,10 @@ import 'package:showcaseview/showcase.dart';
 import 'package:showcaseview/showcase_widget.dart';
 
 class CustomSliverAppBar extends StatelessWidget {
-  static const PREFERENCES_IS_FIRST_LAUNCH_STRING =
-      "loggedIn";
-
+  static const PREFERENCES_IS_FIRST_LAUNCH_STRING = "loggedIn";
 
   GlobalKey _one = GlobalKey();
-  GlobalKey _two = GlobalKey();
+
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   CustomSliverAppBar({
@@ -38,15 +35,16 @@ class CustomSliverAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _isFirstLaunch().then((result) {
-        if (result) ShowCaseWidget.of(context).startShowCase([_one,_two]);
-      });
-    });
+
     return SliverAppBar(
       backgroundColor: Colors.orange[100],
+      elevation: 10,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(15),
+              bottomRight: Radius.circular(15))),
       leading: Showcase(
-        key: _two,
+        key: _one,
         title: 'Menu',
         description: 'Use menu for login and many more options',
         child: IconButton(
@@ -60,13 +58,6 @@ class CustomSliverAppBar extends StatelessWidget {
       pinned: true,
       floating: false,
       title: TitleWidget(),
-      bottom: PreferredSize(
-          child: Showcase(
-              key: _one,
-              title: 'Search here',
-              description: 'Please search companies/products here.',
-              child: SearchBarWidget()),
-          preferredSize: const Size.fromHeight(60)),
       actions: [
         IconButton(
           icon: Image.asset("assets/images/Final_Aatmanirbhar_Logo.png"),
