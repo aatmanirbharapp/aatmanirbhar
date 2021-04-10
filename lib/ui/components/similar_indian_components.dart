@@ -4,7 +4,7 @@ import 'package:atamnirbharapp/ui/components/alternate_company_header.dart';
 import 'package:atamnirbharapp/utils/comman_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 class SimilarIndianCompanies extends StatelessWidget {
   Company company;
 
@@ -20,7 +20,7 @@ class SimilarIndianCompanies extends StatelessWidget {
         children: [
           Padding(
             padding: EdgeInsets.all(8),
-            child: Text("Similar Indian Companies",
+            child: Text("company_similar".tr().toString(),
                 textAlign: TextAlign.left,
                 style: TextStyle(
                     fontSize: 20,

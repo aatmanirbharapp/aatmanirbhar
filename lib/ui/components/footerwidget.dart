@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class FooterWidget extends StatelessWidget {
   const FooterWidget({
@@ -95,7 +96,7 @@ class FooterWidget extends StatelessWidget {
                         settings: RouteSettings(name: 'aboutUs')));
                   },
                   child: Text(
-                    "About Us",
+                    "footer_about".tr().toString(),
                     style: TextStyle(
                         color: Color.fromARGB(255, 0, 0, 136),
                         fontFamily: 'Ambit',
@@ -109,7 +110,7 @@ class FooterWidget extends StatelessWidget {
                         settings: RouteSettings(name: 'faq')));
                   },
                   child: Text(
-                    "FAQs",
+                    "footer_faq".tr().toString(),
                     style: TextStyle(
                         color: Color.fromARGB(255, 0, 0, 136),
                         fontFamily: 'Ambit',
@@ -123,7 +124,7 @@ class FooterWidget extends StatelessWidget {
                         settings: RouteSettings(name: 'privacy')));
                   },
                   child: Text(
-                    "Privacy Policy",
+                    "footer_privacy".tr().toString(),
                     style: TextStyle(
                         color: Color.fromARGB(255, 0, 0, 136),
                         fontFamily: 'Ambit',
@@ -137,7 +138,7 @@ class FooterWidget extends StatelessWidget {
                         settings: RouteSettings(name: 'terms')));
                   },
                   child: Text(
-                    "Terms Of Use",
+                    "footer_terms".tr().toString(),
                     style: TextStyle(
                         color: Color.fromARGB(255, 0, 0, 136),
                         fontFamily: 'Ambit',
@@ -151,7 +152,7 @@ class FooterWidget extends StatelessWidget {
                         settings: RouteSettings(name: 'feedback')));
                   },
                   child: Text(
-                    "Feedback",
+                    "footer_feedback".tr().toString(),
                     style: TextStyle(
                         color: Color.fromARGB(255, 0, 0, 136),
                         fontFamily: 'Ambit',
@@ -163,7 +164,7 @@ class FooterWidget extends StatelessWidget {
           Divider(),
           Column(mainAxisAlignment: MainAxisAlignment.start, children: [
             Text(
-              "Copyright © 2021 The Aatmanirbhar Trust.",
+              "footer_copyright".tr().toString(),
               style: TextStyle(
                   color: Color.fromARGB(255, 0, 0, 136),
                   fontFamily: 'Ambit',
@@ -182,7 +183,7 @@ class FooterWidget extends StatelessWidget {
                 }
               },
               child: Text(
-                "Created by Yash Agrawal",
+                "footer_author".tr().toString(),
                 style: TextStyle(
                     color: Color.fromARGB(255, 0, 0, 136),
                     fontFamily: 'Ambit',

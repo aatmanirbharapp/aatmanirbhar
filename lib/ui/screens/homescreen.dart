@@ -4,6 +4,7 @@ import 'package:atamnirbharapp/ui/components/searchbarwidget.dart';
 import 'package:atamnirbharapp/ui/components/titlewidget.dart';
 import 'package:atamnirbharapp/utils/comman_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -15,6 +16,7 @@ import 'package:number_slide_animation/number_slide_animation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcase.dart';
 import 'package:showcaseview/showcase_widget.dart';
+import 'package:translator/translator.dart';
 
 class CompanyCardView extends StatefulWidget {
   CompanyCardView({
@@ -38,6 +40,8 @@ class _CompanyCardViewState extends State<CompanyCardView> {
   final FirebaseFirestore store = FirebaseFirestore.instance;
   final FirebaseStorage storageRef = FirebaseStorage.instance;
   CompanyRepository companyRepo = CompanyRepository();
+  String _selection = "";
+  final translator = GoogleTranslator();
 
   @override
   void initState() {
@@ -68,7 +72,7 @@ class _CompanyCardViewState extends State<CompanyCardView> {
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _isFirstLaunch().then((result) {
-        if (result) ShowCaseWidget.of(context).startShowCase([_one,_two]);
+        if (result) ShowCaseWidget.of(context).startShowCase([_one, _two]);
       });
     });
     return Column(
@@ -76,6 +80,7 @@ class _CompanyCardViewState extends State<CompanyCardView> {
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
           children: [
             IconButton(
               icon: Image.asset("assets/images/sidebar.png"),
@@ -83,11 +88,29 @@ class _CompanyCardViewState extends State<CompanyCardView> {
                 widget._scaffoldKey.currentState.openDrawer();
               },
             ),
-            TitleWidget(),
-            IconButton(
-              icon: Image.asset("assets/images/Final_Aatmanirbhar_Logo.png"),
-              iconSize: 70,
-              onPressed: () {},
+            Padding(
+              padding: const EdgeInsets.all(15),
+              child: TitleWidget(),
+            ),
+            PopupMenuButton(
+              captureInheritedThemes: false,
+              itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                const PopupMenuItem<String>(
+                  value: "en",
+                  child: Text('English'),
+                ),
+                const PopupMenuItem<String>(
+                  value: "hi",
+                  child: Text('Hindi'),
+                ),
+              ],
+              onSelected: (String result) {
+                print(result);
+                this.setState(() {
+                  context.locale = Locale(result);
+                });
+              },
+              icon: Icon(Icons.translate),
             ),
           ],
         ),
@@ -103,7 +126,7 @@ class _CompanyCardViewState extends State<CompanyCardView> {
             description:
                 "1) Know where your money goes \n2) Find Indian alternatives for foreign products \n3) Add local companies and products \n4) Know stories about Indian companies",
             child: Text(
-              'Welcome to the Aatmanirbhar App!',
+              'home_welcome'.tr().toString(),
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 15,
@@ -127,7 +150,7 @@ class _CompanyCardViewState extends State<CompanyCardView> {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Search From",
+                        Text("home_search_from".tr().toString(),
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontFamily: 'Ambit',
@@ -146,7 +169,7 @@ class _CompanyCardViewState extends State<CompanyCardView> {
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black)),
                         ),
-                        Text("Companies and ",
+                        Text("home_search_company".tr().toString(),
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontFamily: 'Ambit',
@@ -165,7 +188,7 @@ class _CompanyCardViewState extends State<CompanyCardView> {
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black)),
                         ),
-                        Text("Products",
+                        Text("home_search_product".tr().toString(),
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontFamily: 'Ambit',
@@ -174,15 +197,17 @@ class _CompanyCardViewState extends State<CompanyCardView> {
                       ],
                     );
                   } else if (snapshot.hasError) {
-                    return Center(child: Text("Error occurred while loading the data"));
+                    return Center(
+                        child: Text("Error occurred while loading the data"));
                   } else {
-                    return Center(child: Text("Error occurred while loading the data"));
+                    return Center(
+                        child: Text("Error occurred while loading the data"));
                   }
               }
             }),
         Padding(
           padding: EdgeInsets.only(top: 15, right: 8, left: 8),
-          child: Text("Trending Aatmanirbhar Companies",
+          child: Text("home_trending".tr().toString(),
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 20,
@@ -290,23 +315,66 @@ class _CompanyCardViewState extends State<CompanyCardView> {
                                                   .size
                                                   .width,
                                               child: SingleChildScrollView(
-                                                child: Text(
-                                                  snapshot.data
-                                                      .elementAt(index)
-                                                      .data()['companyName'],
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      color: Color.fromARGB(
-                                                          255, 0, 0, 136),
-                                                      fontFamily: 'Ambit',
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                  overflow:
-                                                      TextOverflow.visible,
-                                                  softWrap: true,
-                                                  maxLines: null,
-                                                ),
+                                                child: FutureBuilder<
+                                                        Translation>(
+                                                    future:
+                                                        translator.translate(
+                                                            snapshot.data
+                                                                    .elementAt(
+                                                                        index)
+                                                                    .data()[
+                                                                'companyName'],
+                                                            to: context.locale
+                                                                .languageCode),
+                                                    builder:
+                                                        (context, snapshot) {
+                                                      switch (snapshot
+                                                          .connectionState) {
+                                                        case ConnectionState
+                                                            .waiting:
+                                                          return CommanWidgets()
+                                                              .getCircularProgressIndicator(
+                                                                  context);
+                                                        default:
+                                                          if (snapshot
+                                                              .hasData) {
+                                                            return Text(
+                                                              snapshot
+                                                                  .data.text,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                  color: Color
+                                                                      .fromARGB(
+                                                                          255,
+                                                                          0,
+                                                                          0,
+                                                                          136),
+                                                                  fontFamily:
+                                                                      'Ambit',
+                                                                  fontSize: 18,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .visible,
+                                                              softWrap: true,
+                                                              maxLines: null,
+                                                            );
+                                                          } else if (snapshot
+                                                              .hasError) {
+                                                            return Center(
+                                                                child: Text(
+                                                                    "Loading ..."));
+                                                          } else {
+                                                            return Center(
+                                                                child: Text(
+                                                                    "Loading ..."));
+                                                          }
+                                                      }
+                                                    }),
                                               ),
                                             ),
                                             FutureBuilder<Object>(
@@ -372,22 +440,62 @@ class _CompanyCardViewState extends State<CompanyCardView> {
                                                   .size
                                                   .width,
                                               child: SingleChildScrollView(
-                                                child: Text(
-                                                  snapshot.data
-                                                      .elementAt(index)
-                                                      .data()['catchyline'],
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontFamily: 'Ambit',
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                  overflow:
-                                                      TextOverflow.visible,
-                                                  softWrap: true,
-                                                  maxLines: null,
-                                                ),
+                                                child: FutureBuilder<
+                                                        Translation>(
+                                                    future:
+                                                        translator.translate(
+                                                            snapshot.data
+                                                                    .elementAt(
+                                                                        index)
+                                                                    .data()[
+                                                                'catchyline'],
+                                                            to: context.locale
+                                                                .languageCode),
+                                                    builder:
+                                                        (context, snapshot) {
+                                                      switch (snapshot
+                                                          .connectionState) {
+                                                        case ConnectionState
+                                                            .waiting:
+                                                          return CommanWidgets()
+                                                              .getCircularProgressIndicator(
+                                                                  context);
+                                                        default:
+                                                          if (snapshot
+                                                              .hasData) {
+                                                            return Text(
+                                                              snapshot
+                                                                  .data.text,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontFamily:
+                                                                      'Ambit',
+                                                                  fontSize: 18,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .visible,
+                                                              softWrap: true,
+                                                              maxLines: null,
+                                                            );
+                                                          } else if (snapshot
+                                                              .hasError) {
+                                                            return Center(
+                                                                child: Text(
+                                                                    "Loading ..."));
+                                                          } else {
+                                                            return Center(
+                                                                child: Text(
+                                                                    "Loading ..."));
+                                                          }
+                                                      }
+                                                    }),
                                               ),
                                             ),
                                           ],

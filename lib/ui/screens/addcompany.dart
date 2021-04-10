@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:easy_localization/easy_localization.dart';
 import 'package:atamnirbharapp/bloc/company.dart';
 import 'package:atamnirbharapp/bloc/company_repo.dart';
 import 'package:atamnirbharapp/bloc/user_details.dart';
@@ -177,7 +177,7 @@ class _AddCompanyState extends State<AddCompany> {
                                           _scafolldKey.currentState
                                               .showSnackBar(SnackBar(
                                             content: Text(
-                                                "Thank you! The company information you shared has been received by our team. Once it is approved by our team, this company will be available in the Aatmanirbhar app.",
+                                                "thank_you".tr().toString(),
                                                 style: TextStyle(
                                                     fontFamily: 'Ambit',
                                                     fontWeight: FontWeight.bold,
@@ -217,7 +217,7 @@ class _AddCompanyState extends State<AddCompany> {
                             },
                             child: Center(
                                 child: Text(
-                              "Add".toUpperCase(),
+                              "add".tr().toUpperCase(),
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 18,
@@ -265,7 +265,7 @@ class _AddCompanyState extends State<AddCompany> {
             Icons.featured_play_list,
             color: Colors.grey,
           ),
-          hintText: "Enter Company's/Product's Name",
+          hintText: "add_company_name".tr().toString(),
           fillColor: Colors.orange[50],
           labelText: "Name",
           labelStyle:
@@ -286,7 +286,7 @@ class _AddCompanyState extends State<AddCompany> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            "Benefiting Country:",
+            "add_country".tr().toString(),
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             textAlign: TextAlign.center,
           ),
@@ -326,9 +326,9 @@ class _AddCompanyState extends State<AddCompany> {
             Icons.link,
             color: Colors.grey,
           ),
-          hintText: "Benefiting Country #2.",
+          hintText: "add_country_sec".tr().toString(),
           fillColor: Colors.orange[50],
-          labelText: "Benefiting Country #2",
+          labelText: "add_country_sec".tr().toString(),
           labelStyle:
               TextStyle(fontWeight: FontWeight.bold, color: Colors.black45),
           border: OutlineInputBorder(
@@ -362,9 +362,9 @@ class _AddCompanyState extends State<AddCompany> {
             Icons.link,
             color: Colors.grey,
           ),
-          hintText: "Company's Wikipedia link/ If not then NA",
+          hintText: "add_company_wiki".tr().toString(),
           fillColor: Colors.orange[50],
-          labelText: "Wikipedia Link",
+          labelText: "add_wiki".tr().toString(),
           labelStyle:
               TextStyle(fontWeight: FontWeight.bold, color: Colors.black45),
           border: OutlineInputBorder(
@@ -383,10 +383,10 @@ class _AddCompanyState extends State<AddCompany> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            "Makes In India :",
+            "search_makes".tr().toString() + " :",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
           ),
-          Text("Yes",
+          Text("yes".tr().toString(),
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
           Radio(
             value: 1,
@@ -398,7 +398,7 @@ class _AddCompanyState extends State<AddCompany> {
               });
             },
           ),
-          Text("No",
+          Text("no".tr().toString(),
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
           Radio(
             value: 0,
@@ -438,9 +438,9 @@ class _AddCompanyState extends State<AddCompany> {
             Icons.link,
             color: Colors.grey,
           ),
-          hintText: "Product or Service",
+          hintText: "add_product".tr().toString(),
           fillColor: Colors.orange[50],
-          labelText: "Type of Company",
+          labelText: "add_type".tr().toString(),
           labelStyle:
           TextStyle(fontWeight: FontWeight.bold, color: Colors.black45),
           border: OutlineInputBorder(
@@ -470,9 +470,9 @@ class _AddCompanyState extends State<AddCompany> {
             Icons.featured_play_list,
             color: Colors.grey,
           ),
-          hintText: "Enter Sector ",
+          hintText: "add_enter_sector".tr().toString(),
           fillColor: Colors.orange[50],
-          labelText: "Sector",
+          labelText: "add_sector".tr().toString(),
           labelStyle:
               TextStyle(fontWeight: FontWeight.bold, color: Colors.black45),
           border: OutlineInputBorder(
@@ -508,7 +508,7 @@ class _AddCompanyState extends State<AddCompany> {
           ),
           hintText: "Company Identification Number(CIN)",
           fillColor: Colors.orange[50],
-          labelText: "CIN",
+          labelText: "add_cin".tr().toString(),
           labelStyle:
               TextStyle(fontWeight: FontWeight.bold, color: Colors.black45),
           border: OutlineInputBorder(
@@ -537,7 +537,7 @@ class _AddCompanyState extends State<AddCompany> {
             Icons.link,
             color: Colors.grey,
           ),
-          hintText: "Website link/ If not then NA",
+          hintText: "add_web".tr().toString(),
           fillColor: Colors.orange[50],
           labelText: "Website",
           labelStyle:

@@ -7,6 +7,7 @@ import 'package:atamnirbharapp/utils/comman_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ReviewList extends StatelessWidget {
   String userId, companyId;
@@ -53,7 +54,7 @@ class ReviewList extends StatelessWidget {
                                             Color.fromARGB(255, 0, 0, 136))));
                       },
                     )
-                  : Text("Be the first to add comments/review.",
+                  : Text("company_review".tr().toString(),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontFamily: 'Ambit',

@@ -5,16 +5,17 @@ import 'package:atamnirbharapp/ui/screens/show_web_view.dart';
 import 'package:atamnirbharapp/utils/comman_widgets.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcase.dart';
-import 'package:showcaseview/showcase_widget.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:translator/translator.dart';
 
 class CompanyHeader extends StatelessWidget {
   final Company company;
 
   final GlobalKey firstKey;
-  CompanyHeader({Key key, this.company,this.firstKey}) : super(key: key);
 
+  CompanyHeader({Key key, this.company, this.firstKey}) : super(key: key);
+  final translator = GoogleTranslator();
   final _httpReq = SqlResponse();
 
   @override
@@ -54,18 +55,37 @@ class CompanyHeader extends StatelessWidget {
                       width: MediaQuery.of(context).size.width * 0.65 - 50,
                       child: SingleChildScrollView(
                         padding: EdgeInsets.only(top: 8),
-                        child: Text(
-                          company.companyName,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: Color.fromARGB(255, 0, 0, 136),
-                              fontFamily: 'Ambit',
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold),
-                          overflow: TextOverflow.visible,
-                          softWrap: true,
-                          maxLines: null,
-                        ),
+                        child: FutureBuilder<Translation>(
+                            future: translator.translate(company.companyName,
+                                to: context.locale.languageCode),
+                            builder: (context, snapshot) {
+                              switch (snapshot.connectionState) {
+                                case ConnectionState.waiting:
+                                  return LinearProgressIndicator(
+                                    value: 1,
+                                    backgroundColor: Colors.transparent,
+                                  );
+                                default:
+                                  if (snapshot.hasData) {
+                                    return Text(
+                                      snapshot.data.text,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: Color.fromARGB(255, 0, 0, 136),
+                                          fontFamily: 'Ambit',
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
+                                      overflow: TextOverflow.visible,
+                                      softWrap: true,
+                                      maxLines: null,
+                                    );
+                                  } else if (snapshot.hasError) {
+                                    return Center(child: Text("Loading ..."));
+                                  } else {
+                                    return Center(child: Text("Loading ..."));
+                                  }
+                              }
+                            }),
                       ),
                     ),
                     // Padding(
@@ -179,7 +199,7 @@ class CompanyHeader extends StatelessWidget {
                                       "assets/images/Website_Icon.png")),
                             ),
                           ),
-                          Text("Website",
+                          Text("company_website".tr().toString(),
                               style: TextStyle(
                                   fontFamily: 'Ambit',
                                   fontWeight: FontWeight.bold,
@@ -239,7 +259,7 @@ class CompanyHeader extends StatelessWidget {
                                       "assets/images/Wikipedia_Icon.png")),
                             ),
                           ),
-                          Text("Wikipedia",
+                          Text("wikipedia".tr().toString(),
                               style: TextStyle(
                                   fontFamily: 'Ambit',
                                   fontWeight: FontWeight.bold,
@@ -336,7 +356,7 @@ class CompanyHeader extends StatelessWidget {
                                           "assets/images/Fact_Icon.png")),
                                 ),
                               ),
-                              Text("Facts",
+                              Text("facts".tr().toString(),
                                   style: TextStyle(
                                       fontFamily: 'Ambit',
                                       fontWeight: FontWeight.bold,

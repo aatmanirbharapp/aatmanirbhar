@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html_view/flutter_html_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 class Aboutus extends StatelessWidget {
   final _faqGetRequest = CommanGetCalls();
   final storageRef = FirebaseStorage.instance;
@@ -35,7 +35,7 @@ class Aboutus extends StatelessWidget {
         elevation: 10,
         backgroundColor: Colors.orange[50],
         centerTitle: true,
-        title: Text("About Us",
+        title: Text("about".tr().toString(),
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontFamily: 'Ambit',

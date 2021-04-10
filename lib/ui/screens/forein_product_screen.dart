@@ -14,7 +14,7 @@ import 'package:atamnirbharapp/utils/comman_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 class ForeinProductPage extends StatelessWidget {
   final String productId;
 
@@ -67,7 +67,7 @@ class ForeinProductPage extends StatelessWidget {
                               AlternateContainer(context, product),
                               Padding(
                                 padding: EdgeInsets.all(8),
-                                child: Text("Top Reviews",
+                                child: Text("company_top".tr().toString(),
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontSize: 20,

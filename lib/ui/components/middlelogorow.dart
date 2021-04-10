@@ -1,7 +1,9 @@
 import 'package:atamnirbharapp/utils/comman_widgets.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:translator/translator.dart';
 
 class MiddleRow extends StatefulWidget {
   @override
@@ -51,10 +53,10 @@ class _MiddleRowState extends State<MiddleRow> {
                   ? RichText(
                       textAlign: TextAlign.center,
                       text: TextSpan(
-                          text: "Makes ",
+                          text: "search_makes1".tr().toString() + " ",
                           children: [
                             TextSpan(
-                                text: "In India",
+                                text: "search_makes2".tr().toString(),
                                 style: TextStyle(color: Colors.green))
                           ],
                           style: TextStyle(color: Colors.orange)),
@@ -62,7 +64,7 @@ class _MiddleRowState extends State<MiddleRow> {
                   : RichText(
                       textAlign: TextAlign.center,
                       text: TextSpan(
-                          text: "Imported",
+                          text: "imported".tr().toString(),
                           style: TextStyle(color: Colors.red)),
                     )
             ],
@@ -91,10 +93,10 @@ class _MiddleRowState extends State<MiddleRow> {
                   ? RichText(
                       textAlign: TextAlign.center,
                       text: TextSpan(
-                          text: "Prefer ",
+                          text: "company_prefer".tr().toString() + " ",
                           children: [
                             TextSpan(
-                                text: "This",
+                                text: "company_this".tr().toString(),
                                 style: TextStyle(color: Colors.green))
                           ],
                           style: TextStyle(color: Colors.orange)),
@@ -102,7 +104,7 @@ class _MiddleRowState extends State<MiddleRow> {
                   : RichText(
                       textAlign: TextAlign.center,
                       text: TextSpan(
-                          text: "Prefer Alternatives ",
+                          text: "company_prefer_alternatives".tr().toString(),
                           style: TextStyle(color: Colors.red)),
                     )
             ],
@@ -218,6 +220,7 @@ Widget getSecondCompany(String companyName, BuildContext context) {
 }
 
 getPopUp(BuildContext context, String title, String content) {
+  final translator = GoogleTranslator();
   return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -237,11 +240,28 @@ getPopUp(BuildContext context, String title, String content) {
                   fontFamily: 'Ambit',
                   fontWeight: FontWeight.bold,
                   color: Color.fromARGB(255, 0, 0, 136))),
-          content: Text(content,
-              style: TextStyle(
-                fontFamily: 'OpenSans',
-                color: Colors.grey[700],
-              )),
+          content: FutureBuilder<Translation>(
+              future: translator.translate(content,
+                  to: context.locale.languageCode),
+              builder: (context, snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.waiting:
+                    return CommanWidgets()
+                        .getCircularProgressIndicator(context);
+                  default:
+                    if (snapshot.hasData) {
+                      return Text(content,
+                          style: TextStyle(
+                            fontFamily: 'OpenSans',
+                            color: Colors.grey[700],
+                          ));
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text("Loading ..."));
+                    } else {
+                      return Center(child: Text("Loading ..."));
+                    }
+                }
+              }),
         );
       });
 }
