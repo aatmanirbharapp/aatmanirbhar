@@ -18,10 +18,12 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.10.0 <3.0.0"
 
 dependencies:
   flutter:
+    sdk: flutter
+  flutter_localizations:
     sdk: flutter
   font_awesome_flutter: ^8.8.1
   carousel_slider: ^2.3.1
@@ -54,6 +56,9 @@ dependencies:
   flutter_chat_bubble: ^1.0.2
   change_app_package_name: ^0.1.2
   number_slide_animation: ^0.1.1
+  translator: ^0.1.5
+  easy_localization: ^2.3.3
+
 
 dev_dependencies:
   flutter_launcher_icons: ^0.8.1
@@ -67,6 +72,7 @@ dev_dependencies:
 
   
 flutter:
+  generate: true
   assets:
     - assets/images/BG_Color.jpeg
     - assets/images/sidebar_dash_icon.png
@@ -89,6 +95,8 @@ flutter:
     - assets/video/Opening_Animation_The_Aatmanirbhar_App.mp4
     - assets/files/country.json
     - assets/images/apple-logo.png
+    - assets/lang/en.json
+    - assets/lang/hi.json
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -143,3 +151,5 @@ flutter_icons:
        - asset: assets/fonts/Ambit/Ambit-SemiBoldItalic.ttf
        - asset: assets/fonts/Ambit/Ambit-Thin.ttf
        - asset: assets/fonts/Ambit/Ambit-ThinItalic.ttf
+flutter_intl:
+  enabled: true

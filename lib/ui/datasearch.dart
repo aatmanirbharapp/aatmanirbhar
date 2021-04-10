@@ -11,6 +11,7 @@ import 'package:atamnirbharapp/ui/screens/outside_india_company.dart';
 import 'package:atamnirbharapp/utils/comman_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -262,7 +263,9 @@ class _DataSearchState extends State<DataSearch>
                           enabledBorder: InputBorder.none,
                           errorBorder: InputBorder.none,
                           disabledBorder: InputBorder.none,
-                          hintText: "Search by " + type + " name ...",
+                          hintText: "search".tr().toString() + " " +
+                              "search_${type}".tr().toString() + " " +
+                              "search_name".tr().toString() + "...",
                         ),
                       )),
                   centerTitle: true,
@@ -282,11 +285,11 @@ class _DataSearchState extends State<DataSearch>
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    Text("Search by:",
+                                    Text("search".tr().toString() + " :",
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 18)),
-                                    Text("Product",
+                                    Text("search_product".tr().toString(),
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 18)),
@@ -306,7 +309,7 @@ class _DataSearchState extends State<DataSearch>
                                         },
                                       ),
                                     ),
-                                    Text("Company",
+                                    Text("search_company".tr().toString(),
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 18)),
@@ -335,7 +338,8 @@ class _DataSearchState extends State<DataSearch>
                                     Padding(
                                         padding: EdgeInsets.only(left: 15),
                                         child: Text(
-                                          "Country :",
+                                          "search_country".tr().toString() +
+                                              " :",
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 20),
@@ -384,12 +388,12 @@ class _DataSearchState extends State<DataSearch>
                                     Padding(
                                         padding: EdgeInsets.only(right: 20),
                                         child: Text(
-                                          "Makes In India :",
+                                          "search_makes".tr().toString() + " :",
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 18),
                                         )),
-                                    Text("Yes",
+                                    Text("yes".tr().toString(),
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 18)),
@@ -403,7 +407,7 @@ class _DataSearchState extends State<DataSearch>
                                         });
                                       },
                                     ),
-                                    Text("No",
+                                    Text("no".tr().toString(),
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 18)),
@@ -442,12 +446,12 @@ class _DataSearchState extends State<DataSearch>
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  Text("Search by:",
+                                  Text("search".tr().toString() + ":",
                                       textAlign: TextAlign.left,
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 18)),
-                                  Text("Product",
+                                  Text("search_product".tr().toString(),
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 18)),
@@ -461,7 +465,7 @@ class _DataSearchState extends State<DataSearch>
                                       });
                                     },
                                   ),
-                                  Text("Company",
+                                  Text("search_company".tr().toString(),
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 18)),

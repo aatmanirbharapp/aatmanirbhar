@@ -11,7 +11,7 @@ import 'package:atamnirbharapp/utils/comman_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 class IndianProduct extends StatelessWidget {
   final String productId;
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -63,7 +63,7 @@ class IndianProduct extends StatelessWidget {
                               ),
                               Padding(
                                 padding: EdgeInsets.all(8),
-                                child: Text("Top Reviews",
+                                child: Text("company_top".tr().toString(),
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontSize: 20,

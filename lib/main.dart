@@ -1,6 +1,7 @@
 import 'package:atamnirbharapp/ui/home_page.dart';
 import 'package:atamnirbharapp/ui/screens/splash_screen.dart';
 import 'package:atamnirbharapp/utils/comman_widgets.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,30 +20,40 @@ void main() async {
     FirebaseAuth _auth = FirebaseAuth.instance;
     if (_auth.currentUser == null) {
       _prefs.setBool('loggedIn', true);
-      _prefs.setBool(CommanWidgets.PREFERENCES_IS_FIRST_LAUNCH_SEARCH_PAGE, true);
-      _prefs.setBool(CommanWidgets.PREFERENCES_IS_FIRST_LAUNCH_COMPANY_PAGE ,true);
+      _prefs.setBool(
+          CommanWidgets.PREFERENCES_IS_FIRST_LAUNCH_SEARCH_PAGE, true);
+      _prefs.setBool(
+          CommanWidgets.PREFERENCES_IS_FIRST_LAUNCH_COMPANY_PAGE, true);
       _auth.signInAnonymously();
     }
     ;
 
-    runApp(new MyApp());
+    runApp(EasyLocalization(
+      child: new MyApp(),
+      supportedLocales: [Locale('en'), Locale('hi')],
+      path: "assets/lang",
+      saveLocale: true,
+    ));
   });
 }
 
 class MyApp extends StatelessWidget {
   static FirebaseAnalytics _analytics = FirebaseAnalytics();
-  FirebaseAuth _auth = FirebaseAuth.instance;
   static FirebaseAnalyticsObserver observer =
       FirebaseAnalyticsObserver(analytics: _analytics);
+  FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
-          Provider<FirebaseAnalytics>.value(value: _analytics),
-          Provider<FirebaseAnalyticsObserver>.value(value: observer),
+          Provider<FirebaseAnalytics>.value(value: MyApp._analytics),
+          Provider<FirebaseAnalyticsObserver>.value(value: MyApp.observer),
         ],
         child: MaterialApp(
+            locale: context.locale,
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: [const Locale('en'), const Locale('hi')],
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
               primaryColor: Color.fromARGB(255, 0, 0, 136),

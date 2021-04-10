@@ -7,7 +7,7 @@ import 'package:atamnirbharapp/utils/comman_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 Widget AlternateContainer(BuildContext context, Product product) {
   var productRepo = ProductRepository();
 
@@ -26,7 +26,7 @@ Widget AlternateContainer(BuildContext context, Product product) {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Text(
-                "Alternative Indian Products",
+                "product_alternate".tr().toString(),
                 style: TextStyle(
                     fontFamily: 'ambit',
                     fontWeight: FontWeight.bold,
@@ -38,7 +38,7 @@ Widget AlternateContainer(BuildContext context, Product product) {
                             product: product,
                           ),
                       settings: RouteSettings(name: 'productList'))),
-                  child: Text("View All",
+                  child: Text("product_view".tr().toString(),
                       style: TextStyle(
                           fontFamily: 'ambit',
                           fontWeight: FontWeight.bold,

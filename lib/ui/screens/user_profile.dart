@@ -8,6 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 import 'package:atamnirbharapp/bloc/user_repo.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class UserProfilePage extends StatefulWidget {
   @override
@@ -91,7 +92,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      "Welcome Aatmanirbhar",
+                                      "profile_welcome".tr().toString(),
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           fontStyle: FontStyle.italic,
@@ -203,7 +204,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                             child: ListTile(
                               leading: Icon(Icons.rate_review),
                               title: Text(
-                                'Reviews Added by You',
+                                'profile_reviews'.tr().toString(),
                                 maxLines: null,
                                 style: new TextStyle(
                                   fontFamily: "OpenSans",

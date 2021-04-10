@@ -9,6 +9,7 @@ import 'package:atamnirbharapp/ui/userauthentication/loginpage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class DrawerClass extends StatelessWidget {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -60,7 +61,7 @@ class DrawerClass extends StatelessWidget {
                                 settings: RouteSettings(name: 'login')));
                       },
                       title: new Text(
-                        "Login",
+                        "drawer_login".tr().toString(),
                         style: TextStyle(
                             color: Color.fromARGB(255, 0, 0, 136),
                             fontFamily: 'Ambit',
@@ -81,7 +82,7 @@ class DrawerClass extends StatelessWidget {
                       settings: RouteSettings(name: 'home')));
                 },
                 title: new Text(
-                  "Home",
+                  "home".tr().toString(),
                   style: TextStyle(
                       color: Color.fromARGB(255, 0, 0, 136),
                       fontFamily: 'Ambit',
@@ -120,7 +121,7 @@ class DrawerClass extends StatelessWidget {
                     }
                 },
                 title: new Text(
-                  "Add Company",
+                  "drawer_add".tr().toString(),
                   style: TextStyle(
                       color: Color.fromARGB(255, 0, 0, 136),
                       fontFamily: 'Ambit',
@@ -141,7 +142,7 @@ class DrawerClass extends StatelessWidget {
                       settings: RouteSettings(name: 'privacy')));
                 },
                 title: new Text(
-                  "Privacy Policy",
+                  "footer_privacy".tr().toString(),
                   style: TextStyle(
                       color: Color.fromARGB(255, 0, 0, 136),
                       fontFamily: 'Ambit',
@@ -162,7 +163,7 @@ class DrawerClass extends StatelessWidget {
                       settings: RouteSettings(name: 'terms')));
                 },
                 title: new Text(
-                  "Terms Of Use",
+                  "footer_terms".tr().toString(),
                   style: TextStyle(
                       color: Color.fromARGB(255, 0, 0, 136),
                       fontFamily: 'Ambit',
@@ -183,7 +184,7 @@ class DrawerClass extends StatelessWidget {
                       settings: RouteSettings(name: 'aboutUs')));
                 },
                 title: new Text(
-                  "About Us",
+                  "footer_about".tr().toString(),
                   style: TextStyle(
                       color: Color.fromARGB(255, 0, 0, 136),
                       fontFamily: 'Ambit',
@@ -204,7 +205,7 @@ class DrawerClass extends StatelessWidget {
                       settings: RouteSettings(name: 'faq')));
                 },
                 title: new Text(
-                  "FAQs",
+                  "footer_faq".tr().toString(),
                   style: TextStyle(
                       color: Color.fromARGB(255, 0, 0, 136),
                       fontFamily: 'Ambit',
@@ -231,7 +232,7 @@ class DrawerClass extends StatelessWidget {
                             settings: RouteSettings(name: 'login')));
                   },
                   title: new Text(
-                    "Logout",
+                    "drawer_logout".tr().toString(),
                     style: TextStyle(
                         color: Color.fromARGB(255, 0, 0, 136),
                         fontFamily: 'Ambit',

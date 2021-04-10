@@ -3,7 +3,7 @@ import 'package:atamnirbharapp/bloc/company_repo.dart';
 import 'package:atamnirbharapp/ui/components/company_header.dart';
 import 'package:atamnirbharapp/ui/components/innerpageappbar.dart';
 import 'package:atamnirbharapp/ui/components/middlelogorow.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 import 'package:atamnirbharapp/ui/components/review_list.dart';
 import 'package:atamnirbharapp/ui/components/similar_indian_components.dart';
 import 'package:atamnirbharapp/ui/components/suggest_button.dart';
@@ -12,6 +12,7 @@ import 'package:atamnirbharapp/utils/comman_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
+import 'package:translator/translator.dart';
 
 class OutsideIndiaCompany extends StatelessWidget {
   final String companyId;
@@ -19,6 +20,7 @@ class OutsideIndiaCompany extends StatelessWidget {
   OutsideIndiaCompany({Key key, @required this.companyId}) : super(key: key);
 
   final companyRepo = CompanyRepository();
+  final translator = GoogleTranslator();
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   @override
@@ -76,18 +78,45 @@ class OutsideIndiaCompany extends StatelessWidget {
                                     padding: EdgeInsets.only(
                                         left: 8, right: 8, top: 8),
                                     children: [
-                                      Text("About Company",
+                                      Text("company_about".tr().toString(),
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               fontFamily: 'Ambit',
                                               fontWeight: FontWeight.bold,
                                               color: Color.fromARGB(
                                                   255, 0, 0, 136))),
-                                      Text("\n\n" + company.aboutCompany,
-                                          textAlign: TextAlign.justify,
-                                          style: TextStyle(
-                                              fontFamily: 'OpenSans',
-                                              color: Colors.black))
+                                      FutureBuilder<Translation>(
+                                          future: translator.translate(
+                                              company.aboutCompany,
+                                              to: context.locale.languageCode),
+                                          builder: (context, snapshot) {
+                                            switch (snapshot.connectionState) {
+                                              case ConnectionState.waiting:
+                                                return CommanWidgets()
+                                                    .getCircularProgressIndicator(
+                                                    context);
+                                              default:
+                                                if (snapshot.hasData) {
+                                                  return Text(
+                                                      "\n\n" +
+                                                          snapshot.data.text,
+                                                      textAlign:
+                                                      TextAlign.justify,
+                                                      style: TextStyle(
+                                                        fontFamily: 'OpenSans',
+                                                        color: Colors.black,
+                                                      ));
+                                                } else if (snapshot.hasError) {
+                                                  return Center(
+                                                      child: Text(
+                                                          "Loading ..."));
+                                                } else {
+                                                  return Center(
+                                                      child: Text(
+                                                          "Loading ..."));
+                                                }
+                                            }
+                                          })
                                     ]),
                               ),
                               SimilarIndianCompanies(
@@ -95,7 +124,7 @@ class OutsideIndiaCompany extends StatelessWidget {
                               ),
                               Padding(
                                 padding: EdgeInsets.all(8),
-                                child: Text("Top Reviews",
+                                child: Text("company_top".tr().toString(),
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontSize: 20,

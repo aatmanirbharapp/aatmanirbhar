@@ -1,7 +1,7 @@
 import 'package:atamnirbharapp/ui/datasearch.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
-
+import 'package:easy_localization/easy_localization.dart';
 class InnerSliverAppBar extends StatelessWidget {
   const InnerSliverAppBar({
     Key key,
@@ -26,7 +26,7 @@ class InnerSliverAppBar extends StatelessWidget {
       floating: true,
       centerTitle: true,
       title: Text(
-        "Aatmanirbhar",
+        "header".tr().toString(),
         textAlign: TextAlign.center,
         style: TextStyle(
             fontStyle: FontStyle.italic,

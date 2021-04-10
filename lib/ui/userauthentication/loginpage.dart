@@ -8,7 +8,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -169,7 +169,7 @@ class _LoginPageState extends State<LoginPage> {
                             onTap: () async {
                               await signWithGoogle(context);
                               Scaffold.of(context).showSnackBar(SnackBar(
-                                content: Text("Logged in successful",
+                                content: Text("login_success".tr().toString(),
                                     style: TextStyle(
                                         fontFamily: 'Ambit',
                                         fontWeight: FontWeight.bold,
@@ -190,7 +190,7 @@ class _LoginPageState extends State<LoginPage> {
                                   onPressed: null,
                                 ),
                                 Text(
-                                  "Sign in with Google",
+                                  "login_google".tr().toString(),
                                   style: Theme.of(context).textTheme.headline6,
                                 )
                               ],
@@ -241,7 +241,7 @@ class _LoginPageState extends State<LoginPage> {
                                   onPressed: null,
                                 ),
                                 Text(
-                                  "Sign in with Apple",
+                                  "login_apple".tr().toString(),
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,

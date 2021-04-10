@@ -9,15 +9,18 @@ import 'package:atamnirbharapp/ui/components/suggest_button.dart';
 import 'package:atamnirbharapp/ui/drawer.dart';
 import 'package:atamnirbharapp/utils/comman_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcase.dart';
 import 'package:showcaseview/showcase_widget.dart';
+import 'package:translator/translator.dart';
 
 class IndianCompany extends StatelessWidget {
   final String companyId;
-
+  final translator = GoogleTranslator();
+  final langCode = 'en';
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   IndianCompany({Key key, @required this.companyId}) : super(key: key);
@@ -105,19 +108,45 @@ class IndianCompany extends StatelessWidget {
                                     padding: EdgeInsets.only(
                                         left: 8, right: 8, top: 8),
                                     children: [
-                                      Text("About Company",
+                                      Text("company_about".tr().toString(),
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               fontFamily: 'Ambit',
                                               fontWeight: FontWeight.bold,
                                               color: Color.fromARGB(
                                                   255, 0, 0, 136))),
-                                      Text("\n\n" + company.aboutCompany,
-                                          textAlign: TextAlign.justify,
-                                          style: TextStyle(
-                                            fontFamily: 'OpenSans',
-                                            color: Colors.black,
-                                          ))
+                                      FutureBuilder<Translation>(
+                                          future: translator.translate(
+                                              company.aboutCompany,
+                                              to: context.locale.languageCode),
+                                          builder: (context, snapshot) {
+                                            switch (snapshot.connectionState) {
+                                              case ConnectionState.waiting:
+                                                return CommanWidgets()
+                                                    .getCircularProgressIndicator(
+                                                        context);
+                                              default:
+                                                if (snapshot.hasData) {
+                                                  return Text(
+                                                      "\n\n" +
+                                                          snapshot.data.text,
+                                                      textAlign:
+                                                          TextAlign.justify,
+                                                      style: TextStyle(
+                                                        fontFamily: 'OpenSans',
+                                                        color: Colors.black,
+                                                      ));
+                                                } else if (snapshot.hasError) {
+                                                  return Center(
+                                                      child: Text(
+                                                          "Loading ..."));
+                                                } else {
+                                                  return Center(
+                                                      child: Text(
+                                                          "Loading ..."));
+                                                }
+                                            }
+                                          })
                                     ]),
                               ),
                               Showcase(
@@ -131,7 +160,7 @@ class IndianCompany extends StatelessWidget {
                               ),
                               Padding(
                                 padding: EdgeInsets.all(8),
-                                child: Text("Top Reviews",
+                                child: Text("company_top".tr().toString(),
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontSize: 20,
