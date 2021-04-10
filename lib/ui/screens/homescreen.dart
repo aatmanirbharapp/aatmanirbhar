@@ -101,7 +101,7 @@ class _CompanyCardViewState extends State<CompanyCardView> {
             key: _two,
             title: "Use this app to:",
             description:
-                "* Know where your money goes \n1) Find Indian alternatives for foreign products \n2) Add local companies and products \n3) Know stories about Indian companies",
+                "1) Know where your money goes \n2) Find Indian alternatives for foreign products \n3) Add local companies and products \n4) Know stories about Indian companies",
             child: Text(
               'Welcome to the Aatmanirbhar App!',
               style: TextStyle(
