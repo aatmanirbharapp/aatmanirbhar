@@ -72,7 +72,7 @@ class _CompanyCardViewState extends State<CompanyCardView> {
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _isFirstLaunch().then((result) {
-        if (result) ShowCaseWidget.of(context).startShowCase([_one, _two,_three]);
+        if (result) ShowCaseWidget.of(context).startShowCase([_one, _two]);
       });
     });
     return Column(
@@ -80,6 +80,7 @@ class _CompanyCardViewState extends State<CompanyCardView> {
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
           children: [
             IconButton(
               icon: Image.asset("assets/images/sidebar.png"),
@@ -275,7 +276,7 @@ class _CompanyCardViewState extends State<CompanyCardView> {
                                                                     .elementAt(
                                                                         index)
                                                                     .data()[
-                                                                'trendingImage${_selection}'])
+                                                                'trendingImage'])
                                                         .getDownloadURL(),
                                                     builder:
                                                         (context, snapshot) {
@@ -403,7 +404,6 @@ class _CompanyCardViewState extends State<CompanyCardView> {
                                                         icon: Image.network(
                                                             innersnapshot.data),
                                                         onPressed: () async {
-                                                          print('trendingImage${_selection}');
                                                           await showDialog(
                                                               context: context,
                                                               builder: (_) =>
