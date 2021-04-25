@@ -3,10 +3,10 @@ import 'package:atamnirbharapp/http/faqrequest.dart';
 import 'package:atamnirbharapp/ui/screens/comapny_product_list.dart';
 import 'package:atamnirbharapp/ui/screens/show_web_view.dart';
 import 'package:atamnirbharapp/utils/comman_widgets.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:showcaseview/showcase.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:translator/translator.dart';
 
 class CompanyHeader extends StatelessWidget {
@@ -283,19 +283,43 @@ class CompanyHeader extends StatelessWidget {
                                     onPressed: () => Navigator.pop(context),
                                   )
                                 ],
-                                title: Text("Aatmanirbhar Story and Facts",
+                                title: Text(
+                                    "aatmanirbhar_story_and_facts"
+                                        .tr()
+                                        .toString(),
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontSize: 20,
                                         fontFamily: 'Ambit',
                                         fontWeight: FontWeight.bold,
                                         color: Color.fromARGB(255, 0, 0, 136))),
-                                content: Text(company.story,
-                                    textAlign: TextAlign.justify,
-                                    style: TextStyle(
-                                      fontFamily: 'OpenSans',
-                                      color: Colors.grey[700],
-                                    )),
+                                content: FutureBuilder<Translation>(
+                                    future: translator.translate(company.story,
+                                        to: context.locale.languageCode),
+                                    builder: (context, snapshot) {
+                                      switch (snapshot.connectionState) {
+                                        case ConnectionState.waiting:
+                                          return LinearProgressIndicator(
+                                            value: 1,
+                                            backgroundColor: Colors.transparent,
+                                          );
+                                        default:
+                                          if (snapshot.hasData) {
+                                            return Text(snapshot.data.text,
+                                                textAlign: TextAlign.justify,
+                                                style: TextStyle(
+                                                  fontFamily: 'OpenSans',
+                                                  color: Colors.grey[700],
+                                                ));
+                                          } else if (snapshot.hasError) {
+                                            return Center(
+                                                child: Text("Loading ..."));
+                                          } else {
+                                            return Center(
+                                                child: Text("Loading ..."));
+                                          }
+                                      }
+                                    }),
                               );
                             }),
                         child: Showcase(
@@ -333,7 +357,9 @@ class CompanyHeader extends StatelessWidget {
                                                   )
                                                 ],
                                                 title: Text(
-                                                    "Aatmanirbhar Story and Facts",
+                                                    "aatmanirbhar_story_and_facts"
+                                                        .tr()
+                                                        .toString(),
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
                                                         fontSize: 20,
@@ -342,13 +368,53 @@ class CompanyHeader extends StatelessWidget {
                                                             FontWeight.bold,
                                                         color: Color.fromARGB(
                                                             255, 0, 0, 136))),
-                                                content: Text(company.story,
-                                                    textAlign:
-                                                        TextAlign.justify,
-                                                    style: TextStyle(
-                                                      fontFamily: 'OpenSans',
-                                                      color: Colors.grey[700],
-                                                    )),
+                                                content: FutureBuilder<
+                                                        Translation>(
+                                                    future:
+                                                        translator.translate(
+                                                            company.story,
+                                                            to: context.locale
+                                                                .languageCode),
+                                                    builder:
+                                                        (context, snapshot) {
+                                                      switch (snapshot
+                                                          .connectionState) {
+                                                        case ConnectionState
+                                                            .waiting:
+                                                          return LinearProgressIndicator(
+                                                            value: 1,
+                                                            backgroundColor:
+                                                                Colors
+                                                                    .transparent,
+                                                          );
+                                                        default:
+                                                          if (snapshot
+                                                              .hasData) {
+                                                            return Text(
+                                                                snapshot.data.text,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .justify,
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontFamily:
+                                                                      'OpenSans',
+                                                                  color: Colors
+                                                                          .grey[
+                                                                      700],
+                                                                ));
+                                                          } else if (snapshot
+                                                              .hasError) {
+                                                            return Center(
+                                                                child: Text(
+                                                                    "Loading ..."));
+                                                          } else {
+                                                            return Center(
+                                                                child: Text(
+                                                                    "Loading ..."));
+                                                          }
+                                                      }
+                                                    }),
                                               );
                                             });
                                       },
@@ -356,7 +422,7 @@ class CompanyHeader extends StatelessWidget {
                                           "assets/images/Fact_Icon.png")),
                                 ),
                               ),
-                              Text("facts".tr().toString(),
+                              Text("Facts".tr().toString(),
                                   style: TextStyle(
                                       fontFamily: 'Ambit',
                                       fontWeight: FontWeight.bold,
@@ -401,7 +467,7 @@ class CompanyHeader extends StatelessWidget {
                                     )),
                               ),
                             ),
-                            Text("Products",
+                            Text("home_search_product".tr().toString(),
                                 style: TextStyle(
                                     fontFamily: 'Ambit',
                                     fontWeight: FontWeight.bold,

@@ -2,17 +2,18 @@ import 'package:atamnirbharapp/bloc/about_us.dart';
 import 'package:atamnirbharapp/bloc/cloud_firestore.dart';
 import 'package:atamnirbharapp/utils/comman_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html_view/flutter_html_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:easy_localization/easy_localization.dart';
+
 class Aboutus extends StatelessWidget {
   final _faqGetRequest = CommanGetCalls();
   final storageRef = FirebaseStorage.instance;
+
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> _scaffoldKey =
@@ -35,7 +36,7 @@ class Aboutus extends StatelessWidget {
         elevation: 10,
         backgroundColor: Colors.orange[50],
         centerTitle: true,
-        title: Text("about".tr().toString(),
+        title: Text("footer_about".tr().toString(),
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontFamily: 'Ambit',
@@ -74,7 +75,7 @@ class Aboutus extends StatelessWidget {
                                     scrollable: true)),
                             Divider(),
                             Text(
-                              "Our Core Team",
+                              "about".tr().toString(),
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontFamily: 'Ambit',
@@ -210,7 +211,9 @@ class TeamHeader extends StatelessWidget {
                                     throw 'Could not launch ';
                                   }
                                 },
-                                icon: FaIcon(FontAwesomeIcons.linkedinIn),
+                                icon: team['url'].toString().contains("youtube")
+                                    ? FaIcon(FontAwesomeIcons.youtube)
+                                    : FaIcon(FontAwesomeIcons.linkedin),
                                 iconSize: 15,
                                 color: Color.fromARGB(255, 0, 0, 136),
                               )

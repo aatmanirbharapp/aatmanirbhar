@@ -2,13 +2,16 @@ import 'package:atamnirbharapp/bloc/product.dart';
 import 'package:atamnirbharapp/ui/screens/indiancompanyscreen.dart';
 import 'package:atamnirbharapp/ui/screens/show_web_view.dart';
 import 'package:atamnirbharapp/utils/comman_widgets.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:translator/translator.dart';
 
 class ProductHeader extends StatelessWidget {
   final Product product;
+  final translator = GoogleTranslator();
 
-  const ProductHeader({Key key, this.product});
+  ProductHeader({Key key, this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -49,20 +52,39 @@ class ProductHeader extends StatelessWidget {
                     Container(
                       width: MediaQuery.of(context).size.width * 0.65 - 50,
                       child: SingleChildScrollView(
-                        padding: EdgeInsets.only(top: 8),
-                        child: Text(
-                          product.productName,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: Color.fromARGB(255, 0, 0, 136),
-                              fontFamily: 'Ambit',
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold),
-                          overflow: TextOverflow.visible,
-                          softWrap: true,
-                          maxLines: null,
-                        ),
-                      ),
+                          padding: EdgeInsets.only(top: 8),
+                          child: FutureBuilder<Translation>(
+                              future: translator.translate(product.productName,
+                                  to: context.locale.languageCode),
+                              builder: (context, snapshot) {
+                                switch (snapshot.connectionState) {
+                                  case ConnectionState.waiting:
+                                    return LinearProgressIndicator(
+                                      value: 1,
+                                      backgroundColor: Colors.transparent,
+                                    );
+                                  default:
+                                    if (snapshot.hasData) {
+                                      return Text(
+                                        snapshot.data.text,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color:
+                                                Color.fromARGB(255, 0, 0, 136),
+                                            fontFamily: 'Ambit',
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold),
+                                        overflow: TextOverflow.visible,
+                                        softWrap: true,
+                                        maxLines: null,
+                                      );
+                                    } else if (snapshot.hasError) {
+                                      return Center(child: Text("Loading ..."));
+                                    } else {
+                                      return Center(child: Text("Loading ..."));
+                                    }
+                                }
+                              })),
                     ),
                   ],
                 ),
@@ -91,7 +113,7 @@ class ProductHeader extends StatelessWidget {
                                     "assets/images/Website_Icon.png")),
                           ),
                         ),
-                        Text("Website",
+                        Text("company_website".tr().toString(),
                             style: TextStyle(
                                 fontSize: 10,
                                 color: Color.fromARGB(255, 0, 0, 128)))
@@ -131,7 +153,7 @@ class ProductHeader extends StatelessWidget {
                                     }),
                               )),
                         ),
-                        Text("Company Link",
+                        Text("company_link".tr().toString(),
                             style: TextStyle(
                                 fontSize: 10,
                                 color: Color.fromARGB(255, 0, 0, 128)))

@@ -1,20 +1,25 @@
 class AboutUs {
   String description;
 
+  String descriptionhi;
+
   List team;
 
   String last;
+  String lasthi;
 
-  AboutUs({this.description, this.last, this.team});
+  AboutUs({this.description, this.last, this.team,this.descriptionhi,this.lasthi});
 
   AboutUs.fromJson(Map<String, dynamic> json) {
     description = json['description'] as String;
     team = json['team'] as List;
     last = json['last'] as String;
+    lasthi = json['lasthi'] as String;
+    descriptionhi = json['descriptionhi'] as String;
   }
 
   Map<String, dynamic> toJson() =>
-      {'description': description, 'team': team, 'last': last};
+      {'description': description, 'team': team, 'last': last,'descriptionhi' : descriptionhi,'lasthi' : lasthi};
 }
 
 class Team {

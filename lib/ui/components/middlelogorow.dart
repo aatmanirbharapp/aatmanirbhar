@@ -28,7 +28,7 @@ class _MiddleRowState extends State<MiddleRow> {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         GestureDetector(
           onTap: () => widget.makesInIndia == 1
@@ -70,7 +70,7 @@ class _MiddleRowState extends State<MiddleRow> {
             ],
           ),
         ),
-        GestureDetector(
+        /*GestureDetector(
           onTap: () => widget.firstCountry.contains("India")
               ? getPopUp(context, "Prefer This",
                   "We encourage the user to choose this company as India benefits from this company to a good extent.")
@@ -109,7 +109,7 @@ class _MiddleRowState extends State<MiddleRow> {
                     )
             ],
           ),
-        ),
+        )*/
         widget.secondCountry.isEmpty
             ? GestureDetector(
                 onTap: () => getPopUp(context, "Country",
@@ -148,7 +148,7 @@ class _MiddleRowState extends State<MiddleRow> {
                         width: MediaQuery.of(context).size.width * 0.25,
                         child: SingleChildScrollView(
                             child: Text(
-                          widget.firstCountry,
+                          widget.firstCountry.replaceAll(" ", "").tr().toString(),
                           maxLines: null,
                           textAlign: TextAlign.center,
                           softWrap: true,
@@ -207,7 +207,7 @@ Widget getSecondCompany(String companyName, BuildContext context) {
           width: MediaQuery.of(context).size.width * 0.25,
           child: SingleChildScrollView(
               child: Text(
-            companyName,
+            companyName.replaceAll(" ", "").tr().toString(),
             maxLines: null,
             textAlign: TextAlign.center,
             softWrap: true,

@@ -1,11 +1,12 @@
 import 'dart:io';
-import 'package:easy_localization/easy_localization.dart';
+
 import 'package:atamnirbharapp/bloc/company.dart';
 import 'package:atamnirbharapp/bloc/company_repo.dart';
 import 'package:atamnirbharapp/bloc/user_details.dart';
 import 'package:atamnirbharapp/bloc/user_repo.dart';
 import 'package:atamnirbharapp/ui/home_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_country_picker/flutter_country_picker.dart';
@@ -38,7 +39,7 @@ class _AddCompanyState extends State<AddCompany> {
   int makesInIndia;
   var formkey = GlobalKey<FormState>();
   PickedFile image;
-  Country _selected;
+  Country _selected = Country.IN;
   var radioValue = 1;
   var typeOfCompany;
   bool isLoading = false;
@@ -113,7 +114,7 @@ class _AddCompanyState extends State<AddCompany> {
                         child: Align(
                           alignment: Alignment.center,
                           child: Text(
-                            "Add Company/Products",
+                            "drawer_add".tr().toString(),
                             style: TextStyle(
                                 fontFamily: 'Ambit',
                                 fontWeight: FontWeight.bold,
@@ -157,7 +158,7 @@ class _AddCompanyState extends State<AddCompany> {
                                     cin: cin,
                                     secondCountry: secondCountry,
                                     website: website,
-                                    country: _selected.toString(),
+                                    country: _selected.name,
                                     keyPerson: keyPerson,
                                     sector: sector,
                                     wikiPage: wikiUrl,
@@ -267,7 +268,7 @@ class _AddCompanyState extends State<AddCompany> {
           ),
           hintText: "add_company_name".tr().toString(),
           fillColor: Colors.orange[50],
-          labelText: "Name",
+          labelText: "search_name".tr().toString(),
           labelStyle:
               TextStyle(fontWeight: FontWeight.bold, color: Colors.black45),
           border: OutlineInputBorder(
@@ -290,6 +291,7 @@ class _AddCompanyState extends State<AddCompany> {
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             textAlign: TextAlign.center,
           ),
+          Spacer(),
           Center(
             child: CountryPicker(
               nameTextStyle:
@@ -442,7 +444,7 @@ class _AddCompanyState extends State<AddCompany> {
           fillColor: Colors.orange[50],
           labelText: "add_type".tr().toString(),
           labelStyle:
-          TextStyle(fontWeight: FontWeight.bold, color: Colors.black45),
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.black45),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
@@ -450,7 +452,6 @@ class _AddCompanyState extends State<AddCompany> {
       ),
     );
   }
-
 
   Widget _enterSector() {
     return Padding(
@@ -506,7 +507,7 @@ class _AddCompanyState extends State<AddCompany> {
             Icons.featured_play_list,
             color: Colors.grey,
           ),
-          hintText: "Company Identification Number(CIN)",
+          hintText: "add_identification".tr().toString(),
           fillColor: Colors.orange[50],
           labelText: "add_cin".tr().toString(),
           labelStyle:
@@ -539,7 +540,7 @@ class _AddCompanyState extends State<AddCompany> {
           ),
           hintText: "add_web".tr().toString(),
           fillColor: Colors.orange[50],
-          labelText: "Website",
+          labelText: "company_website".tr().toString(),
           labelStyle:
               TextStyle(fontWeight: FontWeight.bold, color: Colors.black45),
           border: OutlineInputBorder(

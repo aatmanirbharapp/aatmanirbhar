@@ -1,7 +1,8 @@
 import 'dart:io';
-import 'package:sqflite/sqflite.dart';
+
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:sqflite/sqflite.dart';
 
 class DBProvider {
   static Database _database;
@@ -85,65 +86,73 @@ class DBProvider {
     return res;
   }
 
-  Future<List> companySearch(
-      String name, String country, int make, String sector) async {
+  Future<List> companySearch(String name, String country, int make,
+      String sector, bool isListing) async {
     print('inside search page' + country);
-    final db = await database;
-    var res = List.empty();
-    if (country.isEmpty && make == 2 && sector.isEmpty)
-      res = await db.query('company',
-          where: "company_name LIKE '%$name%'", limit: 50);
-    else if (country.isNotEmpty && make == 2 && sector.isEmpty)
-      res = await db.query('company',
-          where: "company_name LIKE '%$name%' and  first_country = ?",
-          whereArgs: [country],
-          limit: 50);
-    else if (country.isNotEmpty && make != 2 && sector.isEmpty)
-      res = await db.query('company',
-          where:
-              "company_name LIKE '%$name%' and  first_country = ? and made_in_india = ?",
-          whereArgs: [country, make],
-          limit: 50);
-    else
-      res = await db.query('company',
-          where:
-              "company_name LIKE '%$name%' and  first_country = ? and made_in_india = ? and sector = ?",
-          whereArgs: [country, make, sector],
-          limit: 50);
-    List list = res.isNotEmpty ? res.map((c) => c).toList() : [];
 
-    return list;
+    final db = await database;
+
+    var res = List.empty();
+    if (isListing) {
+      return res;
+    } else {
+      if (country.isEmpty && make == 2 && sector.isEmpty)
+        res = await db.query('company',
+            where: "company_name LIKE '%$name%'", limit: 50);
+      else if (country.isNotEmpty && make == 2 && sector.isEmpty)
+        res = await db.query('company',
+            where: "company_name LIKE '%$name%' and  first_country = ?",
+            whereArgs: [country],
+            limit: 50);
+      else if (country.isNotEmpty && make != 2 && sector.isEmpty)
+        res = await db.query('company',
+            where:
+                "company_name LIKE '%$name%' and  first_country = ? and made_in_india = ?",
+            whereArgs: [country, make],
+            limit: 50);
+      else
+        res = await db.query('company',
+            where:
+                "company_name LIKE '%$name%' and  first_country = ? and made_in_india = ? and sector = ?",
+            whereArgs: [country, make, sector],
+            limit: 50);
+      res = res.isNotEmpty ? res.map((c) => c).toList() : [];
+    }
+    return res;
   }
 
   Future<List> productSearch(String name, String country, int make,
-      String manufacture, String keyword) async {
+      String manufacture, String keyword, bool isListing) async {
     final db = await database;
     var res = List.empty();
-    if (country.isEmpty && make == 2 && manufacture.isEmpty)
-      res = await db.query('product',
-          where: "product_name LIKE '%$name%' or keywords LIKE '%$keyword%'",
-          limit: 50);
-    else if (country.isNotEmpty && make == 2 && manufacture.isEmpty)
-      res = await db.query('product',
-          where: "product_name LIKE '%$name%' and  first_country = ?",
-          whereArgs: [country],
-          limit: 50);
-    else if (country.isNotEmpty && make != 2 && manufacture.isEmpty)
-      res = await db.query('product',
-          where:
-              "product_name LIKE '%$name%' and  first_country = ? and made_in_india = ?",
-          whereArgs: [country, make],
-          limit: 50);
-    else
-      res = await db.query('product',
-          where:
-              "product_name LIKE '%$name%' and  first_country = ? and made_in_india = ? and sector = ?",
-          whereArgs: [country, make, manufacture],
-          limit: 50);
+    if (isListing) {
+      return res;
+    } else {
+      if (country.isEmpty && make == 2 && manufacture.isEmpty)
+        res = await db.query('product',
+            where: "product_name LIKE '%$name%' or keywords LIKE '%$keyword%'",
+            limit: 50);
+      else if (country.isNotEmpty && make == 2 && manufacture.isEmpty)
+        res = await db.query('product',
+            where: "product_name LIKE '%$name%' and  first_country = ?",
+            whereArgs: [country],
+            limit: 50);
+      else if (country.isNotEmpty && make != 2 && manufacture.isEmpty)
+        res = await db.query('product',
+            where:
+                "product_name LIKE '%$name%' and  first_country = ? and made_in_india = ?",
+            whereArgs: [country, make],
+            limit: 50);
+      else
+        res = await db.query('product',
+            where:
+                "product_name LIKE '%$name%' and  first_country = ? and made_in_india = ? and sector = ?",
+            whereArgs: [country, make, manufacture],
+            limit: 50);
 
-    List list = res.isNotEmpty ? res.map((c) => c).toList() : [];
-
-    return list;
+      res = res.isNotEmpty ? res.map((c) => c).toList() : [];
+    }
+    return res;
   }
 
   Future<List> getAllCompanySearch() async {

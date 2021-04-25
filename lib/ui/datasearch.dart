@@ -3,12 +3,14 @@ import 'dart:convert';
 
 import 'package:atamnirbharapp/bloc/IndexBloc.dart';
 import 'package:atamnirbharapp/bloc/dbprovider.dart';
+import 'package:atamnirbharapp/bloc/search_bloc.dart';
 import 'package:atamnirbharapp/http/faqrequest.dart';
 import 'package:atamnirbharapp/ui/screens/forein_product_screen.dart';
 import 'package:atamnirbharapp/ui/screens/india_product_screen.dart';
 import 'package:atamnirbharapp/ui/screens/indiancompanyscreen.dart';
 import 'package:atamnirbharapp/ui/screens/outside_india_company.dart';
 import 'package:atamnirbharapp/utils/comman_widgets.dart';
+import 'package:avatar_glow/avatar_glow.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -17,6 +19,7 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcase.dart';
 import 'package:showcaseview/showcase_widget.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 class DataSearch extends StatefulWidget {
   @override
@@ -28,7 +31,8 @@ class _DataSearchState extends State<DataSearch>
   static const PREFERENCES_IS_FIRST_LAUNCH_STRING = "loggedIn";
   GlobalKey _three = GlobalKey();
   GlobalKey _fourth = GlobalKey();
-
+  final SpeechToText speech = SpeechToText();
+  bool isListing = false;
   GlobalKey _five = GlobalKey();
   GlobalKey _six = GlobalKey();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -51,21 +55,10 @@ class _DataSearchState extends State<DataSearch>
   StreamSubscription<ConnectivityResult> _connectivitySubscription;
   String _connectionStatus = 'Unknown';
   final _httpReq = SqlResponse();
-
-  _DataSearchState() {
-    print(_controller.text);
-    _controller.addListener(() {
-      if (_controller.text.isEmpty) {
-        setState(() {
-          _searchText = "";
-        });
-      } else {
-        setState(() {
-          _searchText = _controller.text;
-        });
-      }
-    });
-  }
+  double level = 0.0;
+  double minSoundLevel = 50000;
+  double maxSoundLevel = -50000;
+  FocusNode _focus = new FocusNode();
 
   @override
   void initState() {
@@ -74,12 +67,12 @@ class _DataSearchState extends State<DataSearch>
     initConnectivity();
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
-    _loadFromApi();
+    //_loadFromApi();
     setState(() {
       type = "product";
     });
 
-    loadCountries();
+    //loadCountries();
     //print(DBProvider.db.getAllCompanySearch());
   }
 
@@ -163,17 +156,6 @@ class _DataSearchState extends State<DataSearch>
     });
   }
 
-  loadSectors() {
-    final country =
-        DefaultAssetBundle.of(context).loadString('assets/files/sectors.json');
-    country.then((string) {
-      Map<String, dynamic> country = json.decode(string);
-      setState(() {
-        sectorList = country['sectorlist'];
-      });
-    });
-  }
-
   @override
   void dispose() {
     // TODO: implement dispose
@@ -195,6 +177,50 @@ class _DataSearchState extends State<DataSearch>
     return isFirstLaunch;
   }
 
+  void soundLevelListener(double level) {
+    setState(() {
+      this.level = level;
+    });
+  }
+
+  void _listen() async {
+    print('inside listen method');
+    if (!isListing) {
+      print('inside listen method true');
+      bool available = await speech.initialize(
+          onError: (val) => print('onError ${val}'),
+          onStatus: (val) => print(' onStatus ${val}'));
+      if (available) {
+        setState(() {
+          isListing = true;
+        });
+        speech.listen(
+            listenFor: Duration(seconds: 10),
+            pauseFor: Duration(seconds: 10),
+            localeId: 'en',
+            onSoundLevelChange: soundLevelListener,
+            cancelOnError: true,
+            listenMode: ListenMode.confirmation,
+            onResult: (val) {
+              searchTextBloc.updateSearchText(val.recognizedWords);
+              setState(() {
+                _controller.text = val.recognizedWords;
+                isListing = false;
+              });
+            });
+      }
+    } else {
+      setState(() {
+        isListing = false;
+        speech.stop();
+      });
+    }
+  }
+
+  void _onFocusChange() {
+    debugPrint("Focus: " + _focus.hasFocus.toString());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -214,19 +240,41 @@ class _DataSearchState extends State<DataSearch>
                   pinned: false,
                   backgroundColor: Colors.orange[50],
                   actions: [
-                    if (_searchText.isNotEmpty)
-                      IconButton(
-                        onPressed: () {
-                          setState(() {
-                            _searchText = "";
-                            _controller.text = "";
-                          });
-                        },
-                        icon: Icon(
-                          Icons.clear,
-                          color: Colors.black,
-                        ),
-                      ),
+                    StreamBuilder<String>(
+                        initialData: "",
+                        stream: searchTextBloc.getSearchText,
+                        builder: (context, snapshot) {
+                          if (snapshot.data.isNotEmpty)
+                            return IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  _controller.text = "";
+                                });
+                                searchTextBloc.updateSearchText("");
+                              },
+                              icon: Icon(
+                                Icons.clear,
+                                color: Colors.black,
+                              ),
+                            );
+                          else
+                            return IconButton(
+                              onPressed: null,
+                              icon: Icon(Icons.search_outlined),
+                            );
+                        }),
+                    AvatarGlow(
+                        animate: isListing,
+                        glowColor: Colors.blue,
+                        duration: const Duration(microseconds: 2000),
+                        repeat: true,
+                        showTwoGlows: true,
+                        shape: BoxShape.circle,
+                        child: IconButton(
+                            color: Colors.black,
+                            icon: Icon(isListing ? Icons.mic : Icons.mic_none),
+                            onPressed: _listen),
+                        endRadius: 20),
                     Showcase(
                       key: _three,
                       title: 'Filters',
@@ -254,7 +302,9 @@ class _DataSearchState extends State<DataSearch>
                       width: MediaQuery.of(context).size.width,
                       height: 50,
                       child: TextField(
-                        onChanged: (value) async {},
+                        onChanged: (value) async {
+                          searchTextBloc.updateSearchText(value);
+                        },
                         controller: _controller,
                         enableSuggestions: true,
                         decoration: InputDecoration(
@@ -263,9 +313,12 @@ class _DataSearchState extends State<DataSearch>
                           enabledBorder: InputBorder.none,
                           errorBorder: InputBorder.none,
                           disabledBorder: InputBorder.none,
-                          hintText: "search".tr().toString() + " " +
-                              "search_${type}".tr().toString() + " " +
-                              "search_name".tr().toString() + "...",
+                          hintText: "search".tr().toString() +
+                              " " +
+                              "search_${type}".tr().toString() +
+                              " " +
+                              "search_name".tr().toString() +
+                              "...",
                         ),
                       )),
                   centerTitle: true,
@@ -488,37 +541,48 @@ class _DataSearchState extends State<DataSearch>
                     width: MediaQuery.of(context).size.width,
                     color: Colors.white,
                     child: type.isNotEmpty
-                        ? FutureBuilder(
-                            future: type.contains('product')
-                                ? DBProvider.db.productSearch(
-                                    _searchText, _country, makesInIndia, "", "")
-                                : DBProvider.db.companySearch(
-                                    _searchText, _country, makesInIndia, ""),
-                            builder: (BuildContext context, snapshot) {
-                              switch (snapshot.connectionState) {
-                                case ConnectionState.waiting:
-                                  return CommanWidgets()
-                                      .getCircularProgressIndicator(context);
+                        ? StreamBuilder<String>(
+                            initialData: "",
+                            stream: searchTextBloc.getSearchText,
+                            builder: (context, snapshot) {
+                              return FutureBuilder(
+                                future: type.contains('product')
+                                    ? DBProvider.db.productSearch(
+                                        snapshot.data,
+                                        _country,
+                                        makesInIndia,
+                                        "",
+                                        "",
+                                        isListing)
+                                    : DBProvider.db.companySearch(snapshot.data,
+                                        _country, makesInIndia, "", isListing),
+                                builder: (BuildContext context, snapshot) {
+                                  switch (snapshot.connectionState) {
+                                    case ConnectionState.waiting:
+                                      return CommanWidgets()
+                                          .getCircularProgressIndicator(
+                                              context);
 
-                                default:
-                                  if (snapshot.hasError) {
-                                    return Center(
-                                      child: Text(
-                                          "No result found for the given search. More companies and products are added periodically in this app. Please check back late.",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              fontFamily: 'Ambit',
-                                              fontWeight: FontWeight.bold,
-                                              color: Color.fromARGB(
-                                                  255, 0, 0, 136))),
-                                    );
-                                  } else {
-                                    return createListView(snapshot.data);
+                                    default:
+                                      if (snapshot.hasError) {
+                                        return Center(
+                                          child: Text(
+                                              "No result found for the given search. More companies and products are added periodically in this app. Please check back late.",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontFamily: 'Ambit',
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Color.fromARGB(
+                                                      255, 0, 0, 136))),
+                                        );
+                                      } else {
+                                        return createListView(snapshot.data);
+                                      }
                                   }
-                              }
-                            },
-                          )
+                                },
+                              );
+                            })
                         : CommanWidgets()
                             .getCircularProgressIndicator(context)),
               ])),

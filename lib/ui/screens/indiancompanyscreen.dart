@@ -153,7 +153,7 @@ class IndianCompany extends StatelessWidget {
                                 key: _three,
                                 title: "Indian Company",
                                 description:
-                                    "Choose Indian alternatives for this company",
+                                    "Choose Indian similar for this company",
                                 child: SimilarIndianCompanies(
                                   company: company,
                                 ),

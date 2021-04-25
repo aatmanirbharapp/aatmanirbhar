@@ -1,8 +1,10 @@
-import 'package:atamnirbharapp/ui/datasearch.dart';
-import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
+
+import 'package:atamnirbharapp/ui/datasearch.dart';
 import 'package:easy_localization/easy_localization.dart';
-class InnerSliverAppBar extends StatelessWidget {
+import 'package:flutter/material.dart';
+
+class InnerSliverAppBar extends StatefulWidget {
   const InnerSliverAppBar({
     Key key,
     @required GlobalKey<ScaffoldState> scaffoldKey,
@@ -12,6 +14,11 @@ class InnerSliverAppBar extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey;
 
   @override
+  _InnerSliverAppBarState createState() => _InnerSliverAppBarState();
+}
+
+class _InnerSliverAppBarState extends State<InnerSliverAppBar> {
+  @override
   Widget build(BuildContext context) {
     return SliverAppBar(
       backgroundColor: Colors.orange[100],
@@ -19,7 +26,7 @@ class InnerSliverAppBar extends StatelessWidget {
         iconSize: 10,
         icon: Image.asset("assets/images/sidebar.png"),
         onPressed: () {
-          _scaffoldKey.currentState.openDrawer();
+          widget._scaffoldKey.currentState.openDrawer();
         },
       ),
       pinned: true,
@@ -50,10 +57,25 @@ class InnerSliverAppBar extends StatelessWidget {
                 new MaterialPageRoute(builder: (context) => DataSearch()));
           },
         ),
-        IconButton(
-          icon: Image.asset("assets/images/MakeInIndiaLogo.png"),
-          iconSize: 50,
-          onPressed: () {},
+        PopupMenuButton(
+          captureInheritedThemes: false,
+          itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+            const PopupMenuItem<String>(
+              value: "en",
+              child: Text('English'),
+            ),
+            const PopupMenuItem<String>(
+              value: "hi",
+              child: Text('Hindi'),
+            ),
+          ],
+          onSelected: (String result) {
+            print(result);
+            this.setState(() {
+              context.locale = Locale(result);
+            });
+          },
+          icon: Icon(Icons.language,color: Colors.black,),
         ),
       ],
     );

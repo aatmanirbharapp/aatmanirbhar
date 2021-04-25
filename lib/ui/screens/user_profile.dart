@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 import 'package:atamnirbharapp/bloc/user_repo.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:translator/translator.dart';
 
 class UserProfilePage extends StatefulWidget {
   @override
@@ -21,6 +22,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   final FirebaseStorage storageRef = FirebaseStorage.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   UserDetails userDetails;
+  final translator = GoogleTranslator();
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +46,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
           backgroundColor: Colors.orange[50],
           centerTitle: true,
           title: Text(
-            "Profile",
+            "drawer_profile".tr().toString(),
             style: TextStyle(
                 fontFamily: 'Ambit',
                 color: Colors.black,
@@ -117,19 +119,57 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                               50,
                                           child: SingleChildScrollView(
                                             padding: EdgeInsets.only(top: 8),
-                                            child: Text(
-                                              snapshot.data['name'],
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  color: Color.fromARGB(
-                                                      255, 0, 0, 136),
-                                                  fontFamily: 'Ambit',
-                                                  fontSize: 25,
-                                                  fontWeight: FontWeight.bold),
-                                              overflow: TextOverflow.visible,
-                                              softWrap: true,
-                                              maxLines: null,
-                                            ),
+                                            child: FutureBuilder<Translation>(
+                                                future: translator.translate(
+                                                    snapshot.data['name'],
+                                                    to: context
+                                                        .locale.languageCode),
+                                                builder: (context, snapshot) {
+                                                  switch (snapshot
+                                                      .connectionState) {
+                                                    case ConnectionState
+                                                        .waiting:
+                                                      return LinearProgressIndicator(
+                                                        value: 1,
+                                                        backgroundColor:
+                                                            Colors.transparent,
+                                                      );
+                                                    default:
+                                                      if (snapshot.hasData) {
+                                                        return Text(
+                                                          snapshot.data.text,
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                              color: Color
+                                                                  .fromARGB(
+                                                                      255,
+                                                                      0,
+                                                                      0,
+                                                                      136),
+                                                              fontFamily:
+                                                                  'Ambit',
+                                                              fontSize: 25,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                          overflow: TextOverflow
+                                                              .visible,
+                                                          softWrap: true,
+                                                          maxLines: null,
+                                                        );
+                                                      } else if (snapshot
+                                                          .hasError) {
+                                                        return Center(
+                                                            child: Text(
+                                                                "Loading ..."));
+                                                      } else {
+                                                        return Center(
+                                                            child: Text(
+                                                                "Loading ..."));
+                                                      }
+                                                  }
+                                                }),
                                           ),
                                         ),
                                         InkWell(

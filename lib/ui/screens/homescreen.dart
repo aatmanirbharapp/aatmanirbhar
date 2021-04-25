@@ -40,7 +40,7 @@ class _CompanyCardViewState extends State<CompanyCardView> {
   final FirebaseFirestore store = FirebaseFirestore.instance;
   final FirebaseStorage storageRef = FirebaseStorage.instance;
   CompanyRepository companyRepo = CompanyRepository();
-  String _selection = "";
+  String _selection = "en";
   final translator = GoogleTranslator();
 
   @override
@@ -72,7 +72,7 @@ class _CompanyCardViewState extends State<CompanyCardView> {
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _isFirstLaunch().then((result) {
-        if (result) ShowCaseWidget.of(context).startShowCase([_one, _two]);
+        if (result) ShowCaseWidget.of(context).startShowCase([_one, _two,_three]);
       });
     });
     return Column(
@@ -80,7 +80,6 @@ class _CompanyCardViewState extends State<CompanyCardView> {
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
           children: [
             IconButton(
               icon: Image.asset("assets/images/sidebar.png"),
@@ -89,28 +88,35 @@ class _CompanyCardViewState extends State<CompanyCardView> {
               },
             ),
             Padding(
-              padding: const EdgeInsets.all(15),
+              padding: const EdgeInsets.all(8),
               child: TitleWidget(),
             ),
-            PopupMenuButton(
-              captureInheritedThemes: false,
-              itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                const PopupMenuItem<String>(
-                  value: "en",
-                  child: Text('English'),
-                ),
-                const PopupMenuItem<String>(
-                  value: "hi",
-                  child: Text('Hindi'),
-                ),
-              ],
-              onSelected: (String result) {
-                print(result);
-                this.setState(() {
-                  context.locale = Locale(result);
-                });
-              },
-              icon: Icon(Icons.translate),
+            Showcase(
+              key: _three,
+              description: "Switch between different languages",
+              title: "Language",
+              child: PopupMenuButton(
+                initialValue: 'en',
+                padding: EdgeInsets.only(right: 8),
+                captureInheritedThemes: false,
+                itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                  const PopupMenuItem<String>(
+                    value: "en",
+                    child: Text('English'),
+                  ),
+                  const PopupMenuItem<String>(
+                    value: "hi",
+                    child: Text('Hindi'),
+                  ),
+                ],
+                onSelected: (String result) {
+                  setState(() {
+                    _selection = result;
+                    context.locale = Locale(result);
+                  });
+                },
+                icon: Icon(Icons.language),
+              ),
             ),
           ],
         ),
@@ -124,7 +130,7 @@ class _CompanyCardViewState extends State<CompanyCardView> {
             key: _two,
             title: "Use this app to:",
             description:
-                "* Know where your money goes \n1) Find Indian alternatives for foreign products \n2) Add local companies and products \n3) Know stories about Indian companies",
+                "1) Know where your money goes \n2) Add local companies and products \n3) Know stories about Indian companies",
             child: Text(
               'home_welcome'.tr().toString(),
               style: TextStyle(
@@ -269,7 +275,7 @@ class _CompanyCardViewState extends State<CompanyCardView> {
                                                                     .elementAt(
                                                                         index)
                                                                     .data()[
-                                                                'trendingImage'])
+                                                                'trendingImage${_selection}'])
                                                         .getDownloadURL(),
                                                     builder:
                                                         (context, snapshot) {
@@ -397,6 +403,7 @@ class _CompanyCardViewState extends State<CompanyCardView> {
                                                         icon: Image.network(
                                                             innersnapshot.data),
                                                         onPressed: () async {
+                                                          print('trendingImage${_selection}');
                                                           await showDialog(
                                                               context: context,
                                                               builder: (_) =>
@@ -405,7 +412,7 @@ class _CompanyCardViewState extends State<CompanyCardView> {
                                                                               Object>(
                                                                           future: storageRef
                                                                               .ref()
-                                                                              .child("trending_company_logos/" + snapshot.data.elementAt(index).data()['trendingImage'])
+                                                                              .child("trending_company_logos/" + snapshot.data.elementAt(index).data()['trendingImage${_selection}'])
                                                                               .getDownloadURL(),
                                                                           builder: (context, snapshot) {
                                                                             if (snapshot.hasData)

@@ -1,16 +1,18 @@
 import 'package:atamnirbharapp/bloc/company.dart';
 import 'package:atamnirbharapp/ui/screens/indiancompanyscreen.dart';
 import 'package:atamnirbharapp/ui/screens/outside_india_company.dart';
-
-import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:translator/translator.dart';
+
 class AlternateCompanyHeader extends StatelessWidget {
   final Company company;
 
   AlternateCompanyHeader({Key key, this.company}) : super(key: key);
   final translator = GoogleTranslator();
   final FirebaseStorage storageRef = FirebaseStorage.instance;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -75,18 +77,22 @@ class AlternateCompanyHeader extends StatelessWidget {
                           padding: EdgeInsets.only(top: 8),
                           child: FutureBuilder<Translation>(
                               future: translator.translate(company.companyName,
-                                  from: 'en', to: 'hi'),
+                                  to: context.locale.languageCode),
                               builder: (context, snapshot) {
                                 switch (snapshot.connectionState) {
                                   case ConnectionState.waiting:
-                                    return LinearProgressIndicator(value: 1,backgroundColor: Colors.transparent,);
+                                    return LinearProgressIndicator(
+                                      value: 1,
+                                      backgroundColor: Colors.transparent,
+                                    );
                                   default:
                                     if (snapshot.hasData) {
                                       return Text(
                                         snapshot.data.text,
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
-                                            color: Color.fromARGB(255, 0, 0, 136),
+                                            color:
+                                                Color.fromARGB(255, 0, 0, 136),
                                             fontFamily: 'Ambit',
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold),

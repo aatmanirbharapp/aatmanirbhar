@@ -1,12 +1,11 @@
 import 'package:atamnirbharapp/utils/comman_widgets.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcase.dart';
-import 'package:showcaseview/showcase_widget.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:translator/translator.dart';
+
 class MiddleRow extends StatefulWidget {
   @override
   _MiddleRowState createState() => _MiddleRowState();
@@ -17,7 +16,11 @@ class MiddleRow extends StatefulWidget {
   final String secondCountry;
 
   const MiddleRow(
-      {Key key, this.firstCountry, this.makesInIndia, this.secondCountry,this.sedKey})
+      {Key key,
+      this.firstCountry,
+      this.makesInIndia,
+      this.secondCountry,
+      this.sedKey})
       : super(key: key);
 }
 
@@ -29,9 +32,8 @@ class _MiddleRowState extends State<MiddleRow> {
 
   @override
   Widget build(BuildContext context) {
-
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         GestureDetector(
           onTap: () => widget.makesInIndia == 1
@@ -73,7 +75,7 @@ class _MiddleRowState extends State<MiddleRow> {
             ],
           ),
         ),
-        GestureDetector(
+        /*GestureDetector(
           onTap: () => widget.firstCountry.contains("India")
               ? getPopUp(context, "Prefer This",
                   "We encourage the user to choose this company as India benefits from this company to a good extent.")
@@ -112,7 +114,7 @@ class _MiddleRowState extends State<MiddleRow> {
                     )
             ],
           ),
-        ),
+        ),*/
         widget.secondCountry.isEmpty
             ? GestureDetector(
                 onTap: () => getPopUp(context, "Country",
@@ -120,7 +122,8 @@ class _MiddleRowState extends State<MiddleRow> {
                 child: Showcase(
                   key: widget.sedKey,
                   title: "Country",
-                  description: "The flag shows which country gets \n maximum profit from you for this company",
+                  description:
+                      "The flag shows which country gets \n maximum profit from you for this company",
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -155,7 +158,7 @@ class _MiddleRowState extends State<MiddleRow> {
                           width: MediaQuery.of(context).size.width * 0.25,
                           child: SingleChildScrollView(
                               child: Text(
-                            widget.firstCountry,
+                            widget.firstCountry.tr().toString(),
                             maxLines: null,
                             textAlign: TextAlign.center,
                             softWrap: true,
@@ -172,8 +175,8 @@ class _MiddleRowState extends State<MiddleRow> {
                     "The country (countries) shown here benefit the most out of this company."),
                 child: CarouselSlider(
                   items: [
-                    getSecondCompany(widget.firstCountry, context),
-                    getSecondCompany(widget.secondCountry, context)
+                    getSecondCountry(widget.firstCountry, context),
+                    getSecondCountry(widget.secondCountry, context)
                   ],
                   options: CarouselOptions(autoPlay: true, aspectRatio: 1.2),
                 ))
@@ -182,7 +185,7 @@ class _MiddleRowState extends State<MiddleRow> {
   }
 }
 
-Widget getSecondCompany(String companyName, BuildContext context) {
+Widget getSecondCountry(String countryName, BuildContext context) {
   return Column(
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: [
@@ -193,12 +196,12 @@ Widget getSecondCompany(String companyName, BuildContext context) {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(100),
           ),
-          child: companyName.contains("India")
+          child: countryName.contains("India")
               ? Image.asset("assets/images/Indian_Flag.png")
               : FutureBuilder<Object>(
                   future: FirebaseStorage.instance
                       .ref()
-                      .child("Country_Flags/Flag_" + companyName + ".png")
+                      .child("Country_Flags/Flag_" + countryName + ".png")
                       .getDownloadURL(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData)
@@ -215,7 +218,7 @@ Widget getSecondCompany(String companyName, BuildContext context) {
           width: MediaQuery.of(context).size.width * 0.25,
           child: SingleChildScrollView(
               child: Text(
-            companyName,
+            countryName.replaceAll(" ", "").tr().toString(),
             maxLines: null,
             textAlign: TextAlign.center,
             softWrap: true,

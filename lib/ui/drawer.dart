@@ -14,6 +14,7 @@ import 'package:easy_localization/easy_localization.dart';
 class DrawerClass extends StatelessWidget {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   GoogleSignIn _googleSignIn = GoogleSignIn();
+
   @override
   Widget build(BuildContext context) {
     return new Drawer(

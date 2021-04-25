@@ -1,7 +1,7 @@
 import 'package:atamnirbharapp/bloc/company.dart';
 import 'package:atamnirbharapp/bloc/product.dart';
 import 'package:atamnirbharapp/bloc/product_repo.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 import 'package:atamnirbharapp/ui/components/alternate_product_header.dart';
 import 'package:atamnirbharapp/ui/drawer.dart';
 import 'package:atamnirbharapp/utils/comman_widgets.dart';
@@ -34,7 +34,7 @@ class CompanyProductList extends StatelessWidget {
         elevation: 10,
         backgroundColor: Colors.orange[50],
         centerTitle: true,
-        title: Text("Products List",
+        title: Text("products_list".tr().toString(),
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontFamily: 'Ambit',

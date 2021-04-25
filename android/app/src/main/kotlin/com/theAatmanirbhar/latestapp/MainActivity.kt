@@ -1,4 +1,4 @@
-package com.theaatmanibhar.app
+package com.theAatmanirbhar.latestapp
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:easy_localization/easy_localization.dart';
+
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -197,7 +198,7 @@ class _LoginPageState extends State<LoginPage> {
                             )),
                       ),
                     ),
-                  ),
+                  ), /*
                   Padding(
                     padding:
                         const EdgeInsets.only(left: 15, right: 15, top: 15),
@@ -251,7 +252,7 @@ class _LoginPageState extends State<LoginPage> {
                             )),
                       ),
                     ),
-                  ) /*
+                  ) */ /*
                     Padding(
                       padding: const EdgeInsets.all(20),
                       child: Center(
